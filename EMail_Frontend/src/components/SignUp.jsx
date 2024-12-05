@@ -20,44 +20,44 @@ function SignUp() {
         }
     };
 
-return (
-    <div>
-    <h2>Sign Up</h2>
-    <form onSubmit={handleSubmit}>
+    return (
         <div>
-            <label>Username</label>
-            <input
-                type="text"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-                required
-            />
-        </div>
-        <div>
-            <label>Password</label>
-            <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-            />
-        </div>
-        <button type="submit">Sign Up</button>
-            {/* Link to Login Page */}
+            <h2>Sign Up</h2>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label>Username</label>
+                    <input
+                        type="text"
+                        value={userName}
+                        onChange={(e) => setUserName(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label>Password</label>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                </div>
+                <button type="submit">Sign Up</button>
+                    {/* Link to Login Page */}
+                    
+            </form>
+
+            <p>
+                Already have an account? <Link to="/login">Login</Link>
+            </p>
+
+            <p>
+                Go View EMail Page <Link to="/email">EMail Page</Link>
+            </p>
             
-    </form>
+        </div>
 
-    <p>
-        Already have an account? <Link to="/login">Login</Link>
-    </p>
-
-    <p>
-        Go View EMail Page <Link to="/email">EMail Page</Link>
-    </p>
-        
-    </div>
-
-);
+    );
 }
 
 export default SignUp;
