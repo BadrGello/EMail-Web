@@ -25,7 +25,7 @@ return (
     <h2>Sign Up</h2>
     <form onSubmit={handleSubmit}>
         <div>
-            <label>Email</label>
+            <label>Username</label>
             <input
                 type="text"
                 value={userName}
