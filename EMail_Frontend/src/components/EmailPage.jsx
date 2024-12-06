@@ -38,7 +38,7 @@ function EmailPage() {
                     <div className='welcome'>Welcome {userName}</div>
                     <Routes>
                         <Route path="inbox" element={<Inbox/>} />
-                        {/* <Route path="compose" element={<Compose />} /> */}
+                        <Route path="compose" element={<Compose />} />
                         {/* <Route path="sent" element={<Sent />} />
                         <Route path="draft" element={<Draft />} />
                         <Route path="trash" element={<Trash />} />
