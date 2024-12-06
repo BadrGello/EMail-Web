@@ -13,7 +13,7 @@ function Login() {
             // backend endpoint
             
             alert('Login successful!');
-            navigate("/home/inbox")
+            navigate('/home', {replace: true, state:{userName}})
         } 
         catch (error) {
             alert('Error logging in');
