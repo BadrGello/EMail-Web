@@ -42,7 +42,7 @@ function SignUp() {
                         required
                     />
                 </div>
-                <button type="submit">Sign Up</button>
+                <button type="submit" id='submit-button'>Sign Up</button>
                     {/* Link to Login Page */}
                     
             </form>

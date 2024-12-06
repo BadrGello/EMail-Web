@@ -42,7 +42,7 @@ function Login() {
                         required
                     />
                     </div>
-                <button type="submit">Login</button>
+                <button type="submit" id='submit-button'>Login</button>
             </form>
             <p>
                 Don't have an account? <Link to="/">Sign Up</Link>

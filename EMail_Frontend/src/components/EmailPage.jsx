@@ -25,17 +25,17 @@ function EmailPage() {
 
     return (
         <div className='container fullpage'>
-            <div>Welcome {userName}</div>
             <div className="sidebar">
-                <button onClick={()=> {navigate("/home/compose", {replace: true, state:{userName}})}}>Compose</button>
-                <button  onClick={()=> {navigate("/home/inbox", {replace: true, state:{userName}})}}>Inbox</button>
-                <button  onClick={()=> {navigate("/home/sent", {replace: true, state:{userName}})}}>Sent</button>
-                <button  onClick={()=> {navigate("/home/drafts", {replace: true, state:{userName}})}}>Drafts</button>
-                <button  onClick={()=> {navigate("/home/trash", {replace: true, state:{userName}})}}>Trash</button>
-                <button  onClick={()=> {navigate("/home/folders", {replace: true, state:{userName}})}}>Folders</button>
-                <button  onClick={()=> {navigate("/home/contacts", {replace: true, state:{userName}})}}>Contacts</button>
+                <button onClick={()=> {navigate("/home/compose", {replace: true, state:{userName}})}} id='side-button'>Compose</button>
+                <button  onClick={()=> {navigate("/home/inbox", {replace: true, state:{userName}})}} id='side-button'>Inbox</button>
+                <button  onClick={()=> {navigate("/home/sent", {replace: true, state:{userName}})}} id='side-button'>Sent</button>
+                <button  onClick={()=> {navigate("/home/drafts", {replace: true, state:{userName}})}} id='side-button'>Drafts</button>
+                <button  onClick={()=> {navigate("/home/trash", {replace: true, state:{userName}})}} id='side-button'>Trash</button>
+                <button  onClick={()=> {navigate("/home/folders", {replace: true, state:{userName}})}} id='side-button'>Folders</button>
+                <button  onClick={()=> {navigate("/home/contacts", {replace: true, state:{userName}})}} id='side-button'>Contacts</button>
             </div>
-                <div className="homepage">
+                <div className="homepage" id='content'>
+                    <div className='welcome'>Welcome {userName}</div>
                     <Routes>
                         <Route path="inbox" element={<Inbox/>} />
                         {/* <Route path="compose" element={<Compose />} /> */}
