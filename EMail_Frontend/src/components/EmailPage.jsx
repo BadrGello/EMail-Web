@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import DefualtFolder from './DefualtFolder.jsx';
 import Compose from './Compose.jsx';
+import Contacts from './Contacts.jsx';
 import { BrowserRouter as Router, Route, Routes, useLocation , Link,useNavigate} from "react-router-dom";
 
 function EmailPage() {
@@ -29,6 +30,7 @@ function EmailPage() {
                     <Routes>
                         <Route path="/" element={<DefualtFolder/>} />
                         <Route path="compose" element={<Compose />} />
+                        <Route path="contacts" element={<Contacts />} />
                         {/* 
                         <Route path="draft" element={<Draft />} />
                         <Route path="folders" element={<Folders />} />
