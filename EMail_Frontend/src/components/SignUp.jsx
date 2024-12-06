@@ -52,7 +52,7 @@ function SignUp() {
             </p>
 
             <p>
-                Go View EMail Page <Link to="/email">EMail Page</Link>
+                Go View EMail Page <Link to="/home/inbox">EMail Page</Link>
             </p>
             
         </div>

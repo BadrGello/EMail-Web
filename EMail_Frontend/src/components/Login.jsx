@@ -13,7 +13,7 @@ function Login() {
             // backend endpoint
             
             alert('Login successful!');
-            navigate("/email")
+            navigate("/home/inbox")
         } 
         catch (error) {
             alert('Error logging in');

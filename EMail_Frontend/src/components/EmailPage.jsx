@@ -1,5 +1,9 @@
 // EmailPage.js
 import React, { useEffect, useState } from 'react';
+import Sidebar from './Sidebar.jsx';
+import Inbox from './Inbox.jsx';
+import Compose from './Compose.jsx';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function EmailPage() {
 
@@ -18,8 +22,18 @@ function EmailPage() {
 
     return (
         <div className='container fullpage'>
-        <h2>Welcome</h2>
-        
+            <Sidebar></Sidebar>
+                <div className="homepage">
+                    <Routes>
+                        <Route path="inbox" element={<Inbox />} />
+                        {/* <Route path="compose" element={<Compose />} /> */}
+                        {/* <Route path="sent" element={<Sent />} />
+                        <Route path="draft" element={<Draft />} />
+                        <Route path="trash" element={<Trash />} />
+                        <Route path="folders" element={<Folders />} />
+                        <Route path="contacts" element={<Contacts />} /> */}
+                    </Routes>
+                </div>
         </div>
     );
 }
