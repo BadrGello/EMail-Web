@@ -51,9 +51,9 @@ function SignUp() {
                 Already have an account? <Link to="/login">Login</Link>
             </p>
 
-            <p>
+            {/* <p>
                 Go View EMail Page <Link to="/home/inbox">EMail Page</Link>
-            </p>
+            </p> */}
             
         </div>
 

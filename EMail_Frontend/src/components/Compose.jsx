@@ -7,11 +7,12 @@ const Compose = () => {
 
     const [formData, setFormData] = useState({
         userName: userName, // Of sender
-        to: [''], 
+        to: [''],
         subject: '',
         body: '',
         attachments: null,
-        priority: 'Normal'
+        priority: 'Normal',
+        time: '',
     });
 
     // Handle the change for dynamic fields (To: email addresses)
@@ -26,10 +27,16 @@ const Compose = () => {
         setFormData({ ...formData, to: [...formData.to, ''] });
     };
 
+    const handleMoveToDraft = () => {
+        console.log('Saving to Drafts:', formData);
+        alert('Email saved to drafts!');
+    };
 
-    const sendEmail = (emailData) =>{
-        console.log(emailData)
-    }
+    const sendEmail = (emailData) => {
+        console.log(emailData);
+        alert('Email sent successfully!');
+        
+    };
 
     // Handle the submit
     const handleSubmit = (e) => {
@@ -108,7 +115,14 @@ const Compose = () => {
                 </select>
             </div>
 
-            <button type="submit" className="btn btn-primary">Send</button>
+            <div>
+                <button type="submit" className="btn btn-primary">
+                    Send
+                </button>
+                <button type="button" className="btn btn-secondary" onClick={handleMoveToDraft}>
+                    Move to Draft
+                </button>
+            </div>
         </form>
     );
 };
