@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useRef } from 'react';
+import { useLocation} from 'react-router-dom';
 
 const Compose = () => {
     const location = useLocation();
     const userName = location.state.userName;
 
     const [formData, setFormData] = useState({
-        userName: userName, // Of sender
+        id: null,
+        sender: userName,
         to: [''],
         subject: '',
         body: '',
-        attachments: null,
+        attachments: [],
         priority: 'Normal',
-        time: '',
+        date: '',
     });
 
     // Handle the change for dynamic fields (To: email addresses)
@@ -27,15 +28,29 @@ const Compose = () => {
         setFormData({ ...formData, to: [...formData.to, ''] });
     };
 
-    const handleMoveToDraft = () => {
-        console.log('Saving to Drafts:', formData);
-        alert('Email saved to drafts!');
+    const removeToField = (index) => {
+        const updatedTo = formData.to.filter((_, i) => i !== index);
+        setFormData({ ...formData, to: updatedTo });
     };
 
-    const sendEmail = (emailData) => {
-        console.log(emailData);
-        alert('Email sent successfully!');
-        
+    // Put the current date and time into formData
+    const setDate = async () => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            date: new Date().toISOString(), 
+        }));
+    }
+
+    const handleMoveToDraft = () => {
+        // To update date correctly (useState has issues with sync)
+        let newformData = {...formData}
+        newformData.date = new Date().toISOString();
+        console.log('Saving to Drafts:', newformData);
+        alert('Email saved to drafts!');
+
+        // To Handle
+        //Should go to inbox when done or clear all fields
+
     };
 
     // Handle the submit
@@ -44,6 +59,15 @@ const Compose = () => {
         sendEmail(formData)
             .then(() => alert("Email sent successfully"))
             .catch(error => console.error("Error sending email:", error));
+
+        // To Handle
+        //Should go to inbox when done or clear all fields
+    };
+
+    const sendEmail = (emailData) => {
+        console.log(emailData);
+        alert('Email sent successfully!');
+        
     };
 
     return (
@@ -59,6 +83,15 @@ const Compose = () => {
                             onChange={(e) => handleToChange(index, e.target.value)}
                             placeholder={`Recipient ${index + 1}`}
                         />
+                        {formData.to.length > 1 && (
+                            <button
+                                type="button"
+                                className="btn btn-danger ml-2"
+                                onClick={() => removeToField(index)}
+                            >
+                                Delete
+                            </button>
+                        )}
                         {index === formData.to.length - 1 && (
                             <button
                                 type="button"
@@ -116,10 +149,10 @@ const Compose = () => {
             </div>
 
             <div>
-                <button type="submit" className="btn btn-primary">
+                <button type="submit" className="btn btn-primary" onClick={() => {setDate(); }}>
                     Send
                 </button>
-                <button type="button" className="btn btn-secondary" onClick={handleMoveToDraft}>
+                <button type="button" className="btn btn-secondary" onClick={() => {setDate(); handleMoveToDraft(); }}>
                     Move to Draft
                 </button>
             </div>

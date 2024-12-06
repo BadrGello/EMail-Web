@@ -5,9 +5,6 @@ const BASE_URL = "http://localhost:8080/api"; // Backend server URL
 export const fetchEmails = (folder, page = 1) => 
     axios.get(`${BASE_URL}/emails`, { params: { folder, page } });
 
-export const sendEmail = (emailData) =>
-    axios.post(`${BASE_URL}/emails/send`, emailData);
-
 export const deleteEmail = (emailId) =>
     axios.delete(`${BASE_URL}/emails/${emailId}`);
 

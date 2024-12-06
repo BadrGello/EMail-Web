@@ -173,3 +173,15 @@ a:hover {
 
 
 /*_______________________________________________________________End Homepage_______________________________________________________________*/
+
+
+.emailtoolbar {
+    position: relative;
+    top: 0;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
