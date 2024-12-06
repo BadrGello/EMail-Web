@@ -63,6 +63,4 @@ public class Contact {
             return this;
         }    
     }
-    public static void main(String[] args) {
-            }
 }

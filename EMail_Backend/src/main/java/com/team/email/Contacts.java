@@ -32,14 +32,32 @@ public class Contacts {
     public Vector<Contact> SearchContactsByName(String ContactName){
         Vector<Contact> searchContacts = new Vector<>();
         for(int i=0;i<this.contacts.size();i++){
-            if(this.contacts.get(i).getName()==ContactName){
+            if(isThisNameInSearch(ContactName,this.contacts.get(i).getName())){
                 searchContacts.add(this.contacts.get(i));
             }
         }
         return searchContacts;
     }
 
-    public Vector<Contact> SearchContactsByMail(String Mail){
+    private boolean isThisNameInSearch(String SearchName,String ContactName){
+        SearchName=SearchName.toLowerCase();
+        ContactName=ContactName.toLowerCase();
+        if(SearchName.length()>ContactName.length()){
+            return false;
+        }
+        else{
+            for(int i=0;i<=ContactName.length()-SearchName.length();i++){
+                String s=ContactName.substring(i, i+SearchName.length());
+                if(s.equals(SearchName)){
+                    return true;
+                }
+            }
+                return false;
+        }
+
+    } 
+
+    public Vector<Contact> SearchContactsByEMail(String Mail){
         Vector<Contact> searchContacts = new Vector<>();
         for(int i=0;i<this.contacts.size();i++){
             Vector<String> contactMails=this.contacts.get(i).getMails();
@@ -70,5 +88,16 @@ public class Contacts {
 
     public Vector<Contact> getContacts(){
         return this.contacts;
+    }
+    public static void main(String[] args) {
+        Contacts c=new Contacts();
+        Vector<String> m=new Vector<>();
+        m.add("safe@fesf.com");
+        c.AddContact("1", "adham anass", m);
+        c.AddContact("2", "Adham ahmed", m);
+        c.AddContact("3", "ahmed anass", m);
+        Vector<Contact> s=new Vector<>();
+        s=c.SearchContactsByName("a");
+        System.out.println(s.size());
     }
 }
