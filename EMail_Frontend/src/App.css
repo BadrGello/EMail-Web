@@ -1,0 +1,98 @@
+body {
+    background-image: url("background.jpg");
+    /*background-size: cover;*/
+    margin: 0;
+    padding: 0;
+    color:#161718;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/*_______________________________________________________________Start Signup/ Login pages_______________________________________________________________*/
+.container {
+    width: 450px;
+    min-width: 400px;
+    height: 500px;
+    min-height: 450px;
+    background-color: #ffffff15;
+    margin:120px auto;
+    padding:20px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 20px 2px #3a4955ad; 
+}
+
+h2 {
+    margin:30px auto;
+    text-align: center;
+    font-size: 40px;
+}
+
+input[type='text'], input[type='password'] , button {
+    display: block;
+    padding:10px 10px;
+    border-radius:10px;
+    font-size: 20px;
+}
+
+input[type='text'], input[type='password'] {
+    margin:10px auto;
+    margin-bottom:30px;
+    padding:10px 10px;
+    width: 400px;
+    height: 20px;
+    background-color: transparent;
+    border: 2px solid rgba(0, 0, 0, 0.349);
+}
+
+input[type=text]:focus, input[type='password']:focus {
+    background-color: rgba(216, 214, 214, 0.123);
+  }
+
+
+
+label {
+    font-size: 20px;
+    margin-left: 15px;
+    margin-bottom: 15px;
+}
+
+
+button {
+    margin:40px auto;
+    height: 40px;
+    width: 420px;
+    cursor: pointer;
+    border:none;
+    background-color: #f6ebfaab;
+    box-shadow: 1px 2px 20px #3a495586; 
+}
+
+button:hover {
+    background-color: rgba(228, 222, 231, 0.671);
+}
+
+button:active {
+    background-color: rgba(209, 203, 212, 0.514);
+}
+
+p {
+    margin:20px auto;
+    text-align: center;
+    font-size: 16px;
+}
+
+a {
+    color: rgb(13, 57, 202);
+    text-decoration: none;
+
+}
+
+a:hover {
+    color: rgb(119, 16, 236);
+}
+
+/*a:visited {
+    color: rgb(122, 13, 136);
+}*/
+
+
+/*_______________________________________________________________End Signup/ Login pages_______________________________________________________________*/

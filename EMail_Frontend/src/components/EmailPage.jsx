@@ -17,7 +17,7 @@ function EmailPage() {
     }, []);
 
     return (
-        <div>
+        <div className='container fullpage'>
         <h2>Welcome</h2>
         
         </div>

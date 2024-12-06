@@ -21,10 +21,10 @@ function SignUp() {
     };
 
     return (
-        <div>
+        <div className='container'>
             <h2>Sign Up</h2>
             <form onSubmit={handleSubmit}>
-                <div>
+                <div className='username'>
                     <label>Username</label>
                     <input
                         type="text"
@@ -33,7 +33,7 @@ function SignUp() {
                         required
                     />
                 </div>
-                <div>
+                <div className='password'>
                     <label>Password</label>
                     <input
                         type="password"
