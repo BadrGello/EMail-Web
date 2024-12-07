@@ -129,39 +129,44 @@ const Contacts = () => {
     return (
         <>
         {/*Start ToolBar*/}
-        <div className="contacts toolbar" style={{display:"flex",}}>
+        <div className="contacts toolbar">
 
-            <button onClick={handleRefresh}><MdRefresh id='icon'/></button>
-            <p>Sort By: </p>
+            <button onClick={handleRefresh} id='icon-button' title="Refresh"><MdRefresh id='icon'/></button>
+            
+            <div id='sort'>
+                <p>Sort By: </p>
 
-            <select value={sortType} onChange={handleSort}>
-                <option value="Name">Name</option>
-                <option value="Number of emails">Number of emails</option>
-            </select>
+                <select value={sortType} onChange={handleSort}>
+                    <option value="Name">Name</option>
+                    <option value="Number of emails">Number of emails</option>
+                </select>
 
-            <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
-                <option value="Ascendingly">Ascendingly</option>
-                <option value="Descendingly">Descendingly</option>
-            </select>
+                <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+                    <option value="Ascendingly">Ascendingly</option>
+                    <option value="Descendingly">Descendingly</option>
+                </select>
 
-            <button onClick={handleSort}><MdSort id='icon'/></button>
+                <button onClick={handleSort} id='icon-button' title="Sort"><MdSort id='icon'/></button>
+            </div>
 
-            <p>Filter By: </p>
+            <div id='filter'>
+                <p>Filter By: </p>
 
-            <select value={filterBy} onChange={handleFilter}>
-                <option value="Name">Name</option>
-                <option value="Email">Email</option>
-            </select>
+                <select value={filterBy} onChange={handleFilter}>
+                    <option value="Name">Name</option>
+                    <option value="Email">Email</option>
+                </select>
 
-            <input 
-                type="text" 
-                value={filterText} 
-                onChange={(e) => setFilterText(e.target.value)} 
-                placeholder="Filter text"
-            />
-            <div>
-                <button onClick={handleFilter}><MdFilterAlt id='icon'/></button>
-                <button onClick={clearFilter}><MdFilterAltOff id='icon'/></button>
+                <input 
+                    type="text" 
+                    value={filterText} 
+                    onChange={(e) => setFilterText(e.target.value)} 
+                    placeholder="Filter text"
+                />
+                <div>
+                    <button onClick={handleFilter} id='icon-button' title="Filter"><MdFilterAlt id='icon'/></button>
+                    <button onClick={clearFilter} id='icon-button' title="Clear Filter"><MdFilterAltOff id='icon'/></button>
+                </div>
             </div>
 
 
@@ -170,17 +175,16 @@ const Contacts = () => {
 
 
         <div style={{ padding: "20px" }}>
-            <h2>Contacts</h2>
 
             {/*Add Contact button*/}
             {!formVisible && (
-                <button onClick={() => setFormVisible(true)}><IoMdAdd id='icon'/></button>
+                <button onClick={() => setFormVisible(true)} id='icon-button'><IoMdAdd id='icon'/></button>
             )}
 
             {/*Add/Edit contact*/}
             {formVisible && (
                 <div style={{ marginTop: "20px", padding: "10px", border: "1px solid #ccc" }}>
-                    <h3>{editingContact ? "Edit Contact" : "Add Contact"}</h3>
+                    <div className='title'>{editingContact ? "Edit Contact" : "Add Contact"}</div>
                     <div>
                         <label>Name:</label>
                         <input
@@ -191,7 +195,7 @@ const Contacts = () => {
                     </div>
 
                     <div>
-                        <h4>Emails:</h4>
+                        <div className='section'>Emails:</div>
                         {contactForm.emails.map((emailObj, index) => (
                             <div key={index} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                                 <input
@@ -203,21 +207,21 @@ const Contacts = () => {
                                     }
                                 />
                                 {contactForm.emails.length > 1 && (
-                                    <button type="button" onClick={() => removeEmailField(index)}>  {/*Delete Email*/}
-                                        <FaMinus id='icon'/>
+                                    <button type="button" id='icon-button' onClick={() => removeEmailField(index)}>  {/*Delete Email*/}
+                                         <FaMinus id='icon'/>
                                     </button>
                                 )}
                             </div>
                         ))}
-                        <button type="button" onClick={addEmailField}>
-                        <IoMdAdd id='icon'/>
+                        <button type="button" onClick={addEmailField} id='icon-button' >
+                       <IoMdAdd id='icon'/>
                         </button>
                     </div>
 
                     
 
-                    <button onClick={handleSaveContact}>
-                        {editingContact ? <MdOutlineDone id='icon'/> : <IoPersonAdd id='icon'/>}
+                    <button onClick={handleSaveContact} id='icon-button'>
+                        {editingContact ?  <MdOutlineDone id='icon' /> :  <IoPersonAdd id='icon'/>}
                     </button>
                     <button onClick={resetForm}>Cancel</button>
 
@@ -242,7 +246,7 @@ const Contacts = () => {
                             }}
                         >
                             <div>
-                                <strong><IoPersonCircleOutline id='icon'/> {contact.name}</strong>
+                                <strong id='icon-button'><IoPersonCircleOutline id='icon'/> {contact.name}</strong>
                                 <ul>
                                     {contact.emails.map((emailObj, index) => (
                                         <li
@@ -257,14 +261,14 @@ const Contacts = () => {
                                 </ul>
                             </div>
                             <div>
-                                <button onClick={() => {
+                                <button  id='icon-button' onClick={() => {
                                     setFormVisible(true);
                                     setEditingContact(contact);
                                     setContactForm(contact);
                                 }}>
                                     <CgMoreVerticalAlt id='icon'/>
                                 </button>
-                                <button onClick={() => handleDeleteContact(contact.id)}><MdDeleteOutline id='icon'/></button>
+                                <button onClick={() => handleDeleteContact(contact.id)} id='icon-button'><MdDeleteOutline id='icon'/></button>
                             </div>
                         </li>
                     ))}

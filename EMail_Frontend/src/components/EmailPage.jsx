@@ -22,7 +22,7 @@ function EmailPage() {
     const userName = location.state.userName
 
     return (
-        <div className='container fullpage'>
+        <div className='fullpage'>
             <div className="sidebar">
                 <button onClick={()=> {navigate("/home/compose", {replace: true, state:{userName}})}} id='side-button'><div id='icon-container'><FaPen /></div> Compose</button>
                 <button  onClick={()=> {navigate("/home", {replace: true, state:{userName, folder:"inbox"}})}} id='side-button'><div id='icon-container'><FaInbox /></div> Inbox</button>

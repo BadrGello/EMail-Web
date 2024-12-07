@@ -8,7 +8,7 @@ body {
 }
 
 /*_______________________________________________________________Start Signup/ Login pages_______________________________________________________________*/
-.container {
+.container, .fullpage {
     width: 450px;
     min-width: 400px;
     height: 500px;
@@ -26,14 +26,14 @@ h2 {
     font-size: 40px;
 }
 
-input[type='text'], input[type='password'] , button {
+.container input[type='text'], input[type='password'] , button {
     display: block;
     padding:10px 10px;
     border-radius:10px;
     font-size: 20px;
 }
 
-input[type='text'], input[type='password'] {
+.container input[type='text'], input[type='password'] {
     margin:10px auto;
     margin-bottom:30px;
     padding:10px 10px;
@@ -43,8 +43,9 @@ input[type='text'], input[type='password'] {
     border: 2px solid rgba(0, 0, 0, 0.349);
 }
 
-input[type=text]:focus, input[type='password']:focus {
+.container input[type=text]:focus, input[type='password']:focus {
     background-color: rgba(216, 214, 214, 0.123);
+    outline: 0;
   }
 
 
@@ -106,22 +107,20 @@ a:hover {
     position: relative;
     width:95vw;
     height:90vh;
+    min-width: fit-content;
     margin:45px;
     padding: 0;
     background-color: #ffffff65;
 }
 
 
-/*
+
 #content {
-    background-color: aqua;
     display: inline-table;
     width:100%;
     height: 100%;
     justify-content: center;
-
-
-}*/
+}
 
 .sidebar{
     position: relative;
@@ -129,11 +128,12 @@ a:hover {
     top:0;
     left:0;
     margin:0;
+    padding-top: 70px;
     background-color: rgba(12, 12, 12, 0.575);
     width: 12%;
     min-width:150px;
     max-width: 200px;
-    height:100%;
+    height:auto;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
 }
@@ -160,7 +160,7 @@ a:hover {
     border-top-right-radius:20px;
     border-bottom-right-radius:20px;
     position: relative;
-    
+    z-index: 2;
 }
 
 #side-button:focus::before {
@@ -178,17 +178,123 @@ a:hover {
     padding-right: 10px;
 }
 
+#icon-container svg{
+    vertical-align: middle;
+    padding-bottom: 6px;
+}
+
 
 /*_______________________________________________________________End Homepage_______________________________________________________________*/
 
+/*_______________________________________________________________Start Icon_______________________________________________________________*/
 
-.toolbar {
-    position: relative;
-    top: 0;
-    padding: 10px 15px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+#icon-button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    border-radius: 40px;
+    transition: 0.3s ease-out;
+    /*color:rgba(240, 248, 255, 0.699);*/
 }
 
+#icon-button:hover {
+    background-color: #37393b79;
+    color:rgb(240, 248, 255);
+}
+
+/*_______________________________________________________________End Icon_______________________________________________________________*/
+
+
+/*_______________________________________________________________Start Toolbar_______________________________________________________________*/
+
+.toolbar {
+    /*color:rgba(240, 248, 255, 0.699);*/
+    height: 40px;
+    width: 100%;
+    background-color: rgba(12, 12, 12, 0.575);
+    position: relative;
+    top: 0;
+    padding: 10px 0;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    border-top-right-radius: 10px;
+    gap:10px;
+    font-size: 16px;
+    /*border-bottom: 1px solid rgba(0, 0, 0, 0.1);*/
+}
+
+.toolbar p{
+    max-width: fit-content;
+    margin: 0;
+    color:rgba(240, 248, 255, 0.699);
+}
+
+.toolbar button{
+    display: inline;
+    margin: 5px;
+    color:rgba(240, 248, 255, 0.699);
+}
+
+
+
+.toolbar select {
+    cursor: pointer;
+    background-color: transparent;
+    color:rgba(240, 248, 255, 0.699);
+    border:none;
+    padding: 5px;
+    border-radius: 10px;
+    margin: 5px;
+    transition: 0.3s ease-out;
+}
+
+.toolbar select:hover {
+    background-color: #37393b79;
+    color:rgb(240, 248, 255);
+}
+
+
+
+
+.toolbar input[type="text"] {
+    position: relative;
+    color:rgb(240, 248, 255);
+    padding:5px 10px;
+    border: 2px solid rgba(0, 0, 0, 0.349);
+    border-radius:10px;
+    font-size: 16px;
+    background-color: transparent;
+}
+
+.toolbar input[type="text"]::placeholder{
+    color:rgba(240, 248, 255, 0.699);
+}
+
+.toolbar input[type="text"]:focus {
+    background-color: rgba(216, 214, 214, 0.123);
+    outline: 0;
+}
+
+
+
+.toolbar #filter {
+    min-width: 100px;
+    height: inherit;
+    display: flex;
+    /*background-color: aqua;*/
+    position: relative;
+    align-items: center;
+    margin-left: 80px;
+}
+
+
+
+
+.toolbar #sort {
+    display: flex;
+    /*background-color: red;*/
+    align-items: center;
+}
