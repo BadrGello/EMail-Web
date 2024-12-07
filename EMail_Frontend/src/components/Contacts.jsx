@@ -1,5 +1,13 @@
 import React, { useState } from "react";
 
+////////////////*ICONS*///////////
+import { CgMoreVerticalAlt } from 'react-icons/cg';
+import { MdDeleteOutline,MdFilterAlt, MdFilterAltOff,MdSort, MdRefresh, MdOutlineDone } from "react-icons/md";
+import { IoPersonCircleOutline, IoPersonAdd } from "react-icons/io5";
+import { IoMdAdd } from "react-icons/io";
+import { FaMinus } from "react-icons/fa";
+//////////////////////////////////
+
 //Email validation regex
 const emailValidator = (email) => {
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -12,10 +20,16 @@ const Contacts = () => {
     const [editingContact, setEditingContact] = useState(null);
     const [emailError, setEmailError] = useState("");
 
+    const [sortType, setSortType] = useState("Name"); // Default sorting by name
+    const [sortOrder, setSortOrder] = useState("Ascendingly");
+    const [filterBy, setFilterBy] = useState("Name");
+
+    const [filterText, setFilterText] = useState('');
+
     //Contacts displayed
     const [contactForm, setContactForm] = useState({
         name: "",
-        emails: [{ email: "", default: true }],
+        emails: [{ email: ""}],
     });
 
     //Handle contact input changes
@@ -28,13 +42,6 @@ const Contacts = () => {
         const updatedEmails = [...contactForm.emails];
         updatedEmails[index][key] = value;
 
-        //Ensure only one email is default
-        if (key === "default" && value === true) {
-            updatedEmails.forEach((email, i) => {
-                if (i !== index) email.default = false;
-            });
-        }
-
         //Clear email error if email becomes valid
         if (key === "email" && emailValidator(value)) {
             setEmailError("");
@@ -46,24 +53,30 @@ const Contacts = () => {
     const addEmailField = () => {
         setContactForm({
             ...contactForm,
-            emails: [...contactForm.emails, { email: "", default: false }],
+            emails: [...contactForm.emails, { email: ""}],
         });
     };
 
     const removeEmailField = (index) => {
-        const updatedEmails = contactForm.emails.filter((_, i) => i !== index);
-        if (contactForm.emails[index].default && updatedEmails.length > 0) {
-            updatedEmails[0].default = true;
+        if (contactForm.emails.length === 1) {
+            alert("A contact must have at least one email.");
+            return;
         }
+        const updatedEmails = contactForm.emails.filter((_, i) => i !== index);
+        
         setContactForm({ ...contactForm, emails: updatedEmails });
     };
 
     //Add or Edit Contact
     const handleSaveContact = () => {
+        if (!contactForm.name.trim()) {
+            setEmailError("Enter a name please.");
+            return;
+        }
         //Check if all emails are valid before saving
         const invalidEmail = contactForm.emails.find((emailObj) => !emailValidator(emailObj.email));
         if (invalidEmail) {
-            setEmailError("Please enter valid email addresses.");
+            setEmailError("Invalid Email address/es.");
             return;
         }
 
@@ -83,23 +96,85 @@ const Contacts = () => {
 
     // Delete Contact
     const handleDeleteContact = (id) => {
-        setContacts(contacts.filter((contact) => contact.id !== id));
+        if (window.confirm("Delete contact?")) {
+            setContacts(contacts.filter((contact) => contact.id !== id));
+        }
     };
+    
 
     const resetForm = () => {
-        setContactForm({ name: "", emails: [{ email: "", default: true }] });
+        setContactForm({ name: "", emails: [{ email: ""}] });
         setFormVisible(false);
         setEditingContact(null);
         setEmailError("");
     };
 
+    const handleRefresh = () => {
+        console.log("refresh")
+    }  
+
+    const handleSort = () => {
+        console.log(sortType, sortOrder, filterText, filterBy)
+    };
+    
+    const handleFilter = () => {
+        console.log("filter");
+    };
+
+    const clearFilter = () => {
+        console.log("clear filter");
+    };
+    
+
     return (
+        <>
+        {/*Start ToolBar*/}
+        <div className="contacts toolbar" style={{display:"flex",}}>
+
+            <button onClick={handleRefresh}><MdRefresh id='icon'/></button>
+            <p>Sort By: </p>
+
+            <select value={sortType} onChange={handleSort}>
+                <option value="Name">Name</option>
+                <option value="Number of emails">Number of emails</option>
+            </select>
+
+            <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+                <option value="Ascendingly">Ascendingly</option>
+                <option value="Descendingly">Descendingly</option>
+            </select>
+
+            <button onClick={handleSort}><MdSort id='icon'/></button>
+
+            <p>Filter By: </p>
+
+            <select value={filterBy} onChange={handleFilter}>
+                <option value="Name">Name</option>
+                <option value="Email">Email</option>
+            </select>
+
+            <input 
+                type="text" 
+                value={filterText} 
+                onChange={(e) => setFilterText(e.target.value)} 
+                placeholder="Filter text"
+            />
+            <div>
+                <button onClick={handleFilter}><MdFilterAlt id='icon'/></button>
+                <button onClick={clearFilter}><MdFilterAltOff id='icon'/></button>
+            </div>
+
+
+        </div>
+        {/*End ToolBar*/}
+
+
         <div style={{ padding: "20px" }}>
             <h2>Contacts</h2>
 
             {/*Add Contact button*/}
             {!formVisible && (
-                <button onClick={() => setFormVisible(true)}>Add Contact</button>
+                <button onClick={() => setFormVisible(true)}><IoMdAdd id='icon'/></button>
             )}
 
             {/*Add/Edit contact*/}
@@ -127,28 +202,22 @@ const Contacts = () => {
                                         handleEmailUpdate(index, "email", e.target.value)  /*Input Email*/
                                     }
                                 />
-                                <input
-                                    type="radio"
-                                    checked={emailObj.default}
-                                    onChange={() => handleEmailUpdate(index, "default", true)}  /*Set Default Email*/
-                                />
-                                <label>Default</label>
                                 {contactForm.emails.length > 1 && (
                                     <button type="button" onClick={() => removeEmailField(index)}>  {/*Delete Email*/}
-                                        Remove
+                                        <FaMinus id='icon'/>
                                     </button>
                                 )}
                             </div>
                         ))}
                         <button type="button" onClick={addEmailField}>
-                            Add Email
+                        <IoMdAdd id='icon'/>
                         </button>
                     </div>
 
                     
 
                     <button onClick={handleSaveContact}>
-                        {editingContact ? "Save Changes" : "Add Contact"}
+                        {editingContact ? <MdOutlineDone id='icon'/> : <IoPersonAdd id='icon'/>}
                     </button>
                     <button onClick={resetForm}>Cancel</button>
 
@@ -173,7 +242,7 @@ const Contacts = () => {
                             }}
                         >
                             <div>
-                                <strong>{contact.name}</strong>
+                                <strong><IoPersonCircleOutline id='icon'/> {contact.name}</strong>
                                 <ul>
                                     {contact.emails.map((emailObj, index) => (
                                         <li
@@ -182,7 +251,7 @@ const Contacts = () => {
                                                 color: emailObj.default ? "red" : "black",
                                             }}
                                         >
-                                            {emailObj.email} {emailObj.default && "(Default)"}
+                                            {emailObj.email}
                                         </li>
                                     ))}
                                 </ul>
@@ -193,15 +262,16 @@ const Contacts = () => {
                                     setEditingContact(contact);
                                     setContactForm(contact);
                                 }}>
-                                    Edit
+                                    <CgMoreVerticalAlt id='icon'/>
                                 </button>
-                                <button onClick={() => handleDeleteContact(contact.id)}>Delete</button>
+                                <button onClick={() => handleDeleteContact(contact.id)}><MdDeleteOutline id='icon'/></button>
                             </div>
                         </li>
                     ))}
                 </ul>
             )}
         </div>
+        </>
     );
 };
 

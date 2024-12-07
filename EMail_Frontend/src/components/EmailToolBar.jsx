@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const EmailToolbar = ({ onRefreshClick, onMoveClick, onDeleteClick, onSortChange, onOrderChange, onFilterChange, onFilterTextChange, onSortClick, onFilterClick, sortType, sortOrder, filterBy, filterText }) => {
     return (
-        <div className="emailtoolbar">
+        <div className="email toolbar">
 
             <button onClick={onRefreshClick}>Refresh</button>
             <button onClick={onMoveClick}>Move to Folder</button>
