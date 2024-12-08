@@ -7,10 +7,15 @@ import java.util.Vector;
 
 public class Contacts {
     private Vector<Contact> contacts=new Vector<>();
+
+    public void loadData(){
+        //load data from dataBase when sign in
+    }
     
     public void AddContact(String ID, String contactName ,Vector<String> mails){
         Contact newContact = new Contact(ID, contactName, mails);
         contacts.add(newContact);
+        //should save at dataBase
     }
 
     public void EditContact(String ID, String contactName ,Vector<String> mails){
@@ -19,6 +24,7 @@ public class Contacts {
                 contacts.set(i,contacts.get(i).Edit(contactName, mails));
             }
         }
+        //should save at database
     }
 
     public void DeleteContact(String ID){
@@ -27,6 +33,7 @@ public class Contacts {
                 contacts.remove(i);
             }
         }
+        //should save at database
     }
 
     public Vector<Contact> SearchContactsByName(String ContactName){
@@ -82,22 +89,13 @@ public class Contacts {
         };
     }
 
-    public void SortContacts(){
-        Collections.sort(this.contacts, s());
+    public Vector<Contact> SortContacts(){
+        Vector<Contact> tempContacts= (Vector<Contact>) this.contacts.clone();
+        Collections.sort(tempContacts, s());
+        return tempContacts;
     }
 
     public Vector<Contact> getContacts(){
         return this.contacts;
-    }
-    public static void main(String[] args) {
-        Contacts c=new Contacts();
-        Vector<String> m=new Vector<>();
-        m.add("safe@fesf.com");
-        c.AddContact("1", "adham anass", m);
-        c.AddContact("2", "Adham ahmed", m);
-        c.AddContact("3", "ahmed anass", m);
-        Vector<Contact> s=new Vector<>();
-        s=c.SearchContactsByName("a");
-        System.out.println(s.size());
     }
 }
