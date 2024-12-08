@@ -1,7 +1,7 @@
 // EmailPage.js
 import React, { useEffect, useState } from 'react';
 import DefualtFolder from './DefualtFolder.jsx';
-import Compose from './Compose.jsx';
+import ComposeModal from './Compose.jsx';
 import Contacts from './Contacts.jsx';
 import { BrowserRouter as Router, Route, Routes, useLocation , Link,useNavigate} from "react-router-dom";
 
@@ -21,10 +21,18 @@ function EmailPage() {
     const navigate = useNavigate();
     const userName = location.state.userName
 
+    const [modalOpen, setModalOpen] = useState(false); // State to control the modal visibility
+
+    const handleComposeClick = () => {
+        setModalOpen(true); // Open the modal when the Compose button is clicked
+        console.log("Opening Modal")
+    };
+
+
     return (
         <div className='fullpage'>
             <div className="sidebar">
-                <button onClick={()=> {navigate("/home/compose", {replace: true, state:{userName}})}} id='side-button'><div id='icon-container'><FaPen /></div> Compose</button>
+                <button onClick={handleComposeClick} id='side-button'><div id='icon-container'><FaPen /></div> Compose</button>
                 <button  onClick={()=> {navigate("/home", {replace: true, state:{userName, folder:"inbox"}})}} id='side-button'><div id='icon-container'><FaInbox /></div> Inbox</button>
                 <button  onClick={()=> {navigate("/home", {replace: true, state:{userName, folder:"sent"}})}} id='side-button'><div id='icon-container'><IoIosSend /></div> Sent</button>
                 <button  onClick={()=> {navigate("/home/drafts", {replace: true, state:{userName}})}} id='side-button'><div id='icon-container'><GoFile /></div> Drafts</button>
@@ -38,7 +46,7 @@ function EmailPage() {
                 <div className="homepage" id='content'>
                     <Routes>
                         <Route path="/" element={<DefualtFolder/>} />
-                        <Route path="compose" element={<Compose />} />
+                        {/* <Route path="compose" element={<Compose />} /> */}
                         <Route path="contacts" element={<Contacts />} />
                         {/* 
                         <Route path="draft" element={<Draft />} />
@@ -46,6 +54,8 @@ function EmailPage() {
                         <Route path="contacts" element={<Contacts />} /> */}
                     </Routes>
                 </div>
+
+                {modalOpen && <ComposeModal userName={userName} closeModal={() => setModalOpen(false)} />}
         </div>
     );
 }

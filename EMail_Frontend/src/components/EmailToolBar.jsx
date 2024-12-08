@@ -27,10 +27,10 @@ const EmailToolbar = ({ onRefreshClick, onMoveClick, onDeleteClick, onSortChange
                 {/* Sorting Options */}
                 <select value={sortType} onChange={onSortChange}>
                     <option value="Date">Date</option>
-                    <option value="Priority">Date</option>
+                    <option value="Priority">Priority</option>
                     <option value="Sender">Sender</option>
                     <option value="Subject">Subject</option>
-                    <option value="Attachment Size">Date</option>
+                    <option value="Attachment Size">Attachment Size</option>
                 </select>
 
                 <select value={sortOrder} onChange={onOrderChange}>
