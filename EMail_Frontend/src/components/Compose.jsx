@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Box, Button, TextField, Select, MenuItem, InputLabel, FormControl, Typography, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-const ComposeModal = ({ userName, closeModal }) => {
+const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) => {
     const [formData, setFormData] = useState({
         id: null,
         sender: userName,
@@ -13,6 +13,17 @@ const ComposeModal = ({ userName, closeModal }) => {
         priority: 'Normal',
         date: '',
     });
+
+    // (drafts folder)
+    const [initialFormState, setInitialFormState] = useState({});
+
+    // Set initial formData if it's provided (i.e., an existing draft) (drafts folder)
+    useEffect(() => {
+        if (initialFormData) {
+            setFormData(initialFormData);
+            setInitialFormState(initialFormData);
+        }
+    }, [initialFormData]);
 
     // const [open, setOpen] = useState(false); // State for controlling modal visibility
 
@@ -50,15 +61,15 @@ const ComposeModal = ({ userName, closeModal }) => {
         setFormData({ ...formData, to: updatedTo });
     };
 
-    // Set the current date and time into formData
-    const setDate = () => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            date: new Date().toISOString(), 
-        }));
-    };
-
     const handleMoveToDraft = () => {
+
+         // Check if form data is unchanged from the initial draft (drafts folder)
+         if (JSON.stringify(formData) === JSON.stringify(initialFormState)) {
+            console.log("No changes made. Closing without saving.");
+            closeModal();
+            return;
+        }
+
         if (isFormEmpty()){
             console.log("Empty Form")
             closeModal()
@@ -67,6 +78,7 @@ const ComposeModal = ({ userName, closeModal }) => {
 
         let newformData = {...formData}
         newformData.date = new Date().toISOString();
+        onEditOrSend("Edit"); // Drafts Folder
         console.log('Saving to Drafts:', newformData);
         alert('Email saved to drafts!');
         closeModal(); // Close the modal after saving to drafts
@@ -80,11 +92,14 @@ const ComposeModal = ({ userName, closeModal }) => {
             alert("Make Sure You Filled The Following Fields: To - Subject - Body ")
             return
         }
-
-        console.log("Sending", formData);
+        
+        let newformData = {...formData}
+        newformData.date = new Date().toISOString();
+        onEditOrSend("Send");  // Drafts Folder
+        console.log("Sending", newformData);
         alert('Email sent successfully!');
         closeModal();
-        setDate();  // Set the current date before sending  
+        
         
     };
 
@@ -216,6 +231,13 @@ const ComposeModal = ({ userName, closeModal }) => {
                                 multiple
                                 onChange={(e) => setFormData({ ...formData, attachments: e.target.files })}
                             />
+                            {formData.attachments.length > 0 && (
+                                <ul>
+                                    {Array.from(formData.attachments).map((file, index) => (
+                                        <li key={index}>{file.name}</li>
+                                    ))}
+                                </ul>
+                            )}
                         </div>
 
                         <div className="form-group">
