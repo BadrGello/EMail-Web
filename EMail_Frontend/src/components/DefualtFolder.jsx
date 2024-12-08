@@ -73,7 +73,7 @@ const DefualtFolder = () => {
 
     const [selectedEmails, setSelectedEmails] = useState([]);
     const [sortType, setSortType] = useState('Date');
-    const [sortOrder, setSortOrder] = useState('Ascend');
+    const [sortOrder, setSortOrder] = useState('Ascendingly');
     const [filterBy, setFilterBy] = useState('Subject');
     const [filterText, setFilterText] = useState('');
 
