@@ -16,6 +16,10 @@ public class MailFolders {
     private Map<String,Vector<Mail>> UserFolders =new HashMap<>();
     private Vector<Mail> sortedMails=new Vector<>();;
     
+
+    public MailFolders() {
+    }
+    
     public void loadData(){
         //load data from dataBase when sign in
     }

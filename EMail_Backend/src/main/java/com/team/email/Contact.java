@@ -10,6 +10,10 @@ public class Contact {
     private String Name;
     private Vector<String> Emails=new Vector<>();
 
+    public Contact() {
+    }
+
+
     public Contact(String Id,String name,Vector<String> Mails){
         if(ValidMails(Mails)){
             this.ID=Id;

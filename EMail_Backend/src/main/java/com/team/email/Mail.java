@@ -13,6 +13,10 @@ public class Mail {
     private String deletedDate;
     Vector<String> attachments;
 
+    public Mail() {
+    }
+
+
     public Mail(Vector<String> attachments,String sender,Vector<String> recipients,String subject ,int priority ,String body,String date,String folderBeforeDelete,String deltedDate){
             this.attachments=attachments;
             this.sender=sender;

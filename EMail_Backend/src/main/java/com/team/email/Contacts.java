@@ -9,6 +9,10 @@ public class Contacts {
     private Vector<Contact> contacts=new Vector<>();
     private Vector<Contact> sortedContacts=new Vector<>();
 
+
+    public Contacts() {
+    }
+    
     public void loadData(){
         //load data from dataBase when sign in
     }

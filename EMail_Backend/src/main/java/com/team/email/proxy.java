@@ -7,6 +7,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Vector;
 
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties.Io;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class proxy implements UserInterface {
@@ -50,15 +52,19 @@ public class proxy implements UserInterface {
         }
     }
 
-    public void loadUser(){
+    public void loadUser(String path) throws IOException{
+        
         if(this.access){
-            User.UserBuilder UserBuilder = null;
-            user=new User(UserBuilder );
-            //load user in this.user
+            try {
+                this.user = user.load(path);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         else{
             System.out.println("no access");
         }
+
     }
 
     public void makeAccount(String userName,String password) {
