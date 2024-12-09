@@ -7,6 +7,7 @@ import java.util.Vector;
 
 public class Contacts {
     private Vector<Contact> contacts=new Vector<>();
+    private Vector<Contact> sortedContacts=new Vector<>();
 
     public void loadData(){
         //load data from dataBase when sign in
@@ -38,9 +39,9 @@ public class Contacts {
 
     public Vector<Contact> SearchContactsByName(String ContactName){
         Vector<Contact> searchContacts = new Vector<>();
-        for(int i=0;i<this.contacts.size();i++){
-            if(isThisNameInSearch(ContactName,this.contacts.get(i).getName())){
-                searchContacts.add(this.contacts.get(i));
+        for(int i=0;i<this.sortedContacts.size();i++){
+            if(isThisNameInSearch(ContactName,this.sortedContacts.get(i).getName())){
+                searchContacts.add(this.sortedContacts.get(i));
             }
         }
         return searchContacts;
@@ -66,11 +67,11 @@ public class Contacts {
 
     public Vector<Contact> SearchContactsByEMail(String Mail){
         Vector<Contact> searchContacts = new Vector<>();
-        for(int i=0;i<this.contacts.size();i++){
-            Vector<String> contactMails=this.contacts.get(i).getMails();
+        for(int i=0;i<this.sortedContacts.size();i++){
+            Vector<String> contactMails=this.sortedContacts.get(i).getMails();
             for(int j=0;j<contactMails.size();j++){
                 if(contactMails.get(j)==Mail){
-                    searchContacts.add(contacts.get(i));
+                    searchContacts.add(this.sortedContacts.get(i));
                     break;
                 }
             } 
@@ -89,13 +90,17 @@ public class Contacts {
         };
     }
 
-    public Vector<Contact> SortContacts(){
-        Vector<Contact> tempContacts= (Vector<Contact>) this.contacts.clone();
-        Collections.sort(tempContacts, s());
-        return tempContacts;
+    public void SortContacts(){
+        this.sortedContacts = (Vector<Contact>) this.contacts.clone();
+        Collections.sort(this.sortedContacts, s());
+        
     }
 
     public Vector<Contact> getContacts(){
         return this.contacts;
+    }
+
+    public Vector<Contact> getSortedContacts(){
+        return this.sortedContacts;
     }
 }

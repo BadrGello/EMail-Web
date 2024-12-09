@@ -427,29 +427,5 @@ public class MailFolders {
     public Vector<Mail> getSortedMail(){
         return this.sortedMails;
     }
-    
-    public static void main(String[] args) {
-        Vector<String> recipients=new Vector<>();
-        MailFolders f=new MailFolders();
-        System.out.println(f.getSentFolder().size());
-        f.sendMail(recipients, "me", recipients, "g",4 , "", "1");
-        f.sendMail(recipients, "me", recipients, "a",2 , "", "2");
-        f.sendMail(recipients, "me", recipients, "b",4 , "", "3");
-        f.sendMail(recipients, "me", recipients, "d",2 , "", "5");
-        f.sendMail(recipients, "me", recipients, "f",4 , "", "7");
-        f.sendMail(recipients, "me", recipients, "c",1 , "", "4");
-        f.sendMail(recipients, "me", recipients, "e",3 , "", "6");
-        
-        f.sortBySubject("sent");
-        Vector<Mail>s=f.searchByImportance( 4,"sent");
-        //System.out.println(f.getSentFolder().size());
-        System.out.println(s.get(0).getSubject());
-        System.out.println(s.get(1).getSubject());
-        System.out.println( s.get(2).getSubject());
-        //System.out.println(s.get(3).getPriority());
-        //System.out.println((int) s.get(4).getPriority());
-       // System.out.println(s.get(5).getPriority());
-        //System.out.println(s.get(6).getPriority());
-    }
 
 }

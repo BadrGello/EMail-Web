@@ -1,19 +1,21 @@
 package com.team.email;
 
-public class User {
+public class User implements UserInterface {
     private String id;
     private String userName;
     private String password;
     private String email;
     private Contacts contacts;
+    private MailFolders mailFolders;
     // More to be added when Mail created
 
-    private User (UserBuilder builder){
+    User (UserBuilder builder){
         this.id = builder.id;
         this.userName = builder.userName;
         this.password = builder.password;
         this.email = builder.email;
         this.contacts = builder.contacts;
+        this.mailFolders = builder.mailFolders;
 
     }
     public static class UserBuilder{
@@ -22,6 +24,7 @@ public class User {
     private String password;
     private String email;
     private Contacts contacts;
+    private MailFolders mailFolders;
 
     public UserBuilder(String userName, String password, String email){
        this.userName = userName;
