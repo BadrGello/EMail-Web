@@ -2,6 +2,9 @@ package com.team.email;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Vector;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,6 +73,15 @@ public class proxy implements UserInterface {
         catch (IOException e) {
             System.out.println(e);
         }
+            String currentDir = System.getProperty("user.dir");
+            String folderName = userName; 
+            Path folderPath = Paths.get(currentDir, folderName);
+            try {
+                Files.createDirectories(folderPath); 
+                System.out.println("Folder created at: " + folderPath);
+            } catch (IOException e) {
+                System.err.println("An error occurred while creating the folder: " + e.getMessage());
+            }
         }
         else{
             System.out.print("this username is used");
@@ -82,6 +94,6 @@ public class proxy implements UserInterface {
     
     public static void main(String[] args) {
         proxy p=new proxy();
-        p.getAccess("adham1", "0001");
+        p.makeAccount("adham4", "0003");
     }
 }

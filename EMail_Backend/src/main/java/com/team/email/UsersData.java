@@ -3,8 +3,8 @@ package com.team.email;
 import java.util.Vector;
 
 public class UsersData {
-    public  Vector<String> UserNames;
-    public  Vector<String> passwords;
+    private  Vector<String> UserNames;
+    private  Vector<String> passwords;
 
     // Public no-argument constructor (needed for Jackson)
     public UsersData() {
