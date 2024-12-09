@@ -74,7 +74,12 @@ public class Mail {
     public Mail regMail(){
         Mail trashMail=new Mail(this.attachments,this.sender,this.recipients,this.subject,this.priority,this.body,this.date,"","");
         return trashMail;
-    }        
+    } 
+    
+    public Mail cloneMail (){
+        Mail mail = new Mail(this.attachments,this.sender,this. recipients,this. subject ,this. priority ,this. body,this. date,this. folderBeforeDelete,this.deletedDate);
+        return mail;
+    }
 
 
 }
