@@ -111,6 +111,7 @@ a:hover {
     margin:45px;
     padding: 0;
     background-color: #ffffff65;
+    overflow: auto;
 }
 
 
@@ -131,14 +132,15 @@ a:hover {
     padding-top: 70px;
     background-color: rgba(12, 12, 12, 0.575);
     width: 12%;
-    min-width:150px;
+    min-width:200px;
     max-width: 200px;
     height:auto;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
+    overflow-y: auto;
 }
 
-#side-button {
+#side-button, #folder-button {
     cursor: pointer;
     width:95%;
     height:50px;
@@ -154,7 +156,7 @@ a:hover {
     text-align: left;
 }
 
-#side-button:hover ,#side-button:focus{
+#side-button:hover ,#side-button:focus, #folder-button:focus, #folder-button:hover{
     background-color: #37393b79;
     color:rgb(240, 248, 255);
     border-top-right-radius:20px;
@@ -183,6 +185,60 @@ a:hover {
     padding-bottom: 6px;
 }
 
+/*folders*/
+
+#line {
+    width:80%;
+    height: 2px;
+    background-color: #37393b8f;
+    margin: 10px auto;
+    border-radius: 10px;
+}
+
+#foldar-name-input {
+    margin-left: 5px;
+    width: 75%;
+    color:rgb(240, 248, 255);
+    padding:5px 10px;
+    border: 2px solid rgba(0, 0, 0, 0.349);
+    border-radius:10px;
+    font-size: 14px;
+    background-color: transparent;
+    outline: 0;
+}
+
+#foldar-name-input input[type="text"]::placeholder{
+    color:rgba(240, 248, 255, 0.699);
+}
+
+#folder-button {
+    font-size: 15px;
+    padding-left: 30px;
+    vertical-align: middle;
+}
+
+#folder-button:focus::before {
+    content:"";
+    margin: -4px 0;
+    height: 25px;
+    width: 5px;
+    background-color: rgb(0, 162, 255);
+    position: absolute;
+    left:0;
+    border-radius: 20px;
+}
+
+#add-button {
+    padding-left: 10px;
+}
+
+#folder-options {
+    display: flex;
+    margin-top: 10px;
+    margin-left: 5px;
+    gap: 60px;
+}
+
 
 /*_______________________________________________________________End Homepage_______________________________________________________________*/
 
@@ -196,7 +252,7 @@ a:hover {
     cursor: pointer;
     border-radius: 40px;
     transition: 0.3s ease-out;
-    /*color:rgba(240, 248, 255, 0.699);*/
+    color:rgba(240, 248, 255, 0.699);
 }
 
 #icon-button:hover {
@@ -298,3 +354,11 @@ a:hover {
     /*background-color: red;*/
     align-items: center;
 }
+
+/*_______________________________________________________________End Toolbar_______________________________________________________________*/
+
+
+/*_______________________________________________________________Start Folders Tab_______________________________________________________________*/
+
+
+/*_______________________________________________________________End Folders Tab_______________________________________________________________*/

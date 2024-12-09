@@ -266,9 +266,9 @@ const Contacts = () => {
                                     setEditingContact(contact);
                                     setContactForm(contact);
                                 }}>
-                                    <CgMoreVerticalAlt id='icon'/>
+                                    <CgMoreVerticalAlt/>
                                 </button>
-                                <button onClick={() => handleDeleteContact(contact.id)} id='icon-button'><MdDeleteOutline id='icon'/></button>
+                                <button onClick={() => handleDeleteContact(contact.id)} id='icon-button'><MdDeleteOutline/></button>
                             </div>
                         </li>
                     ))}

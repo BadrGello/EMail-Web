@@ -2,11 +2,7 @@ import React, { useState } from 'react';
 
 
 ////////////////*ICONS*///////////
-import { CgMoreVerticalAlt } from 'react-icons/cg';
-import { MdDeleteOutline,MdFilterAlt, MdFilterAltOff,MdSort, MdRefresh, MdOutlineDone } from "react-icons/md";
-import { IoPersonCircleOutline, IoPersonAdd } from "react-icons/io5";
-import { IoMdAdd } from "react-icons/io";
-import { FaMinus } from "react-icons/fa";
+import { MdFilterAlt,MdSort, MdRefresh } from "react-icons/md";
 import { IoTrashBin } from "react-icons/io5";
 import { MdDriveFileMove } from "react-icons/md";
 //////////////////////////////////
