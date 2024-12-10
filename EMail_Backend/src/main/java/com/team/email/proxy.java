@@ -7,9 +7,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Vector;
 
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties.Io;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.team.email.User.UserBuilder;
 
 public class proxy implements UserInterface {
 
@@ -82,9 +81,26 @@ public class proxy implements UserInterface {
             String currentDir = System.getProperty("user.dir");
             String folderName = userName; 
             Path folderPath = Paths.get(currentDir, folderName);
+            
             try {
                 Files.createDirectories(folderPath); 
                 System.out.println("Folder created at: " + folderPath);
+                Contacts c=new Contacts();
+                MailFolders f=new MailFolders();
+                User.UserBuilder userBuilder=new UserBuilder(userName, password);
+                userBuilder.setContacts(c);
+                userBuilder.setMailFolders(f);
+                User user1 = userBuilder.build();
+                user1.setEmail("null@example.com");
+                user1.setId("1");
+                Path filePath = Paths.get(folderPath.toString(),"User.json");
+                try{
+                user1.save(filePath.toString());
+                }
+                catch(Exception e){
+                    System.out.println(e);
+                }
+                userBuilder.build();
             } catch (IOException e) {
                 System.err.println("An error occurred while creating the folder: " + e.getMessage());
             }
@@ -100,6 +116,6 @@ public class proxy implements UserInterface {
     
     public static void main(String[] args) {
         proxy p=new proxy();
-        p.makeAccount("adham4", "0003");
+        p.makeAccount("adham1", "0003");
     }
 }

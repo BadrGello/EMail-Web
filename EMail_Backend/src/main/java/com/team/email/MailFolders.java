@@ -1,5 +1,7 @@
 package com.team.email;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +32,20 @@ public class MailFolders {
         Mail mail =new Mail(attachments,sender,recipients,subject, priority, body,date,"","");
         this.sentFolder.add(mail);
         for(int i=0;i<recipients.size();i++){
+            Mail tempMail = mail.cloneMail();
             String recipient=recipients.get(i);
+            String currentDir = System.getProperty("user.dir");
+            Path folderPath = Paths.get(currentDir, recipient);
+            Path filePath = Paths.get(folderPath.toString(), "User.json");
+            User reciever = new User();
+            try{
+            reciever = reciever.load(filePath.toString());
+            reciever.recievMail(tempMail);
+            reciever.save(filePath.toString());
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
             //save the mail in each inbox folder for each recipient and in sent folder in sender folder (in database)
         }
     }
