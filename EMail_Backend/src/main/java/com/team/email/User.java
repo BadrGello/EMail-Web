@@ -34,9 +34,13 @@ public class User implements UserInterface {
         this.mailFolders = builder.mailFolders;
 
     }
-     public void save(String filePath) throws Exception {
+     public void save() throws Exception {
+        String currentDir = System.getProperty("user.dir");
+        currentDir =Paths.get(currentDir, "dataBase").toString(); 
+        Path folderPath = Paths.get(currentDir, this.userName);
+        Path filePath = Paths.get(folderPath.toString(), "User.json");
         ObjectMapper objectMapper = new ObjectMapper();
-        File jsonFile = new File(filePath);
+        File jsonFile = new File(filePath.toString());
         objectMapper.writeValue(jsonFile, this);
         validateSchema(jsonFile);
 
@@ -44,20 +48,108 @@ public class User implements UserInterface {
     }
 
  
-    public User load(String filePath) throws Exception {
-
+    public User load(String userName) throws Exception {
+        String currentDir = System.getProperty("user.dir");
+        currentDir =Paths.get(currentDir, "dataBase").toString(); 
+        Path folderPath = Paths.get(currentDir, this.userName);
+        Path filePath = Paths.get(folderPath.toString(), "User.json");
         ObjectMapper objectMapper = new ObjectMapper();
-        File jsonFile = new File(filePath);
-        //validateSchema(jsonFile); 
+        File jsonFile = new File(filePath.toString());
+        validateSchema(jsonFile); 
         return objectMapper.readValue(jsonFile, User.class);
     }
 
     public void recievMail(Mail mail){
         this.mailFolders.getInboxFolder().add(mail);
+        try{
+        this.save();
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
     }
 
     public void sendMail(Vector<String> attachments,Vector<String> recipients,String subject ,int priority ,String body,String date){
         this.mailFolders.sendMail(attachments, this.userName, recipients, subject, priority, body, date);
+        try{
+            this.save();
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
+    }
+    public void makeDraft(Vector<String> attachments,String sender,Vector<String> recipients,String subject ,int priority ,String body,String date){
+        this.mailFolders.makeDraft(attachments, sender, recipients, subject, priority, body, date);
+        try{
+            this.save();
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
+    }
+    public void MoveToTrash(String folderName,String date,String DeleteDate){
+        this.mailFolders.MoveToTrash(folderName, date, DeleteDate);
+        try{
+            this.save();
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
+        
+    }
+    public void returnFromTrash(String date){
+        this.mailFolders.returnFromTrash(date);
+        try{
+            this.save();
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
+    }
+    public void deleteMail(String folderName,String date){
+        this.mailFolders.deleteMail(folderName, date);
+        try{
+            this.save();
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
+    }
+    public void moveToFolder(String oldFolder,String newFolder,String date){
+        this.mailFolders.moveToFolder(oldFolder, newFolder, date);
+        try{
+            this.save();
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
+    }
+    public void addUserFolder(String folderName){
+        this.mailFolders.addUserFolder(folderName);
+        try{
+            this.save();
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
+    }
+    public void renameUserFolder(String oldFolder,String newFolder){
+        this.mailFolders.renameUserFolder(oldFolder, newFolder);
+        try{
+            this.save();
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
+    }
+    public void deleteUserFolder(String folderName){
+        this.mailFolders.deleteUserFolder(folderName);
+        try{
+            this.save();
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
     }
 
     public String getId() {
@@ -169,15 +261,11 @@ public class User implements UserInterface {
         //System.out.println(user.getUserName());
         User user1 = new User();
         String recipient="adham";
-        String currentDir = System.getProperty("user.dir");
-        Path folderPath = Paths.get(currentDir, recipient);
-        Path filePath = Paths.get(folderPath.toString(), "User.json");
-        user1=user1.load(filePath.toString());
+        user1=user1.load(recipient);
         System.out.println("load done");
         Vector<String> s=new Vector<>();
         s.add("adham1");
         user1.sendMail(s , s, "", 1, "", "");
-        user1.save(filePath.toString());
 
     }
 }

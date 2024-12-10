@@ -79,23 +79,23 @@ public class proxy implements UserInterface {
             System.out.println(e);
         }
             String currentDir = System.getProperty("user.dir");
-            String folderName = userName; 
+            String folderName = userName;
+            currentDir =Paths.get(currentDir, "dataBase").toString(); 
             Path folderPath = Paths.get(currentDir, folderName);
             
             try {
                 Files.createDirectories(folderPath); 
                 System.out.println("Folder created at: " + folderPath);
-                Contacts c=new Contacts();
-                MailFolders f=new MailFolders();
+                Contacts emptyContacts=new Contacts();
+                MailFolders emptyFolders=new MailFolders();
                 User.UserBuilder userBuilder=new UserBuilder(userName, password);
-                userBuilder.setContacts(c);
-                userBuilder.setMailFolders(f);
+                userBuilder.setContacts(emptyContacts);
+                userBuilder.setMailFolders(emptyFolders);
                 User user1 = userBuilder.build();
                 user1.setEmail("null@example.com");
                 user1.setId("1");
-                Path filePath = Paths.get(folderPath.toString(),"User.json");
                 try{
-                user1.save(filePath.toString());
+                user1.save();
                 }
                 catch(Exception e){
                     System.out.println(e);
@@ -116,6 +116,6 @@ public class proxy implements UserInterface {
     
     public static void main(String[] args) {
         proxy p=new proxy();
-        p.makeAccount("adham1", "0003");
+        p.makeAccount("adham3", "0003");
     }
 }

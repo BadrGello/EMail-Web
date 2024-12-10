@@ -39,9 +39,8 @@ public class MailFolders {
             Path filePath = Paths.get(folderPath.toString(), "User.json");
             User reciever = new User();
             try{
-            reciever = reciever.load(filePath.toString());
+            reciever = reciever.load(recipient);
             reciever.recievMail(tempMail);
-            reciever.save(filePath.toString());
             }
             catch(Exception e){
                 System.out.println(e);
