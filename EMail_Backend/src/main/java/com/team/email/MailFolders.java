@@ -322,6 +322,50 @@ public class MailFolders {
 
     }
 
+    public Vector<Mail> searchByAll(String text,String folderName){
+        Vector<Mail> searchMails=new Vector<>();
+        Vector<Mail> tempMails =this.sortedMails;
+        for(int i=0;i<tempMails.size();i++){
+
+            if( this.isThisNameInSearch(text, tempMails.get(i).getDate())){
+                searchMails.add(tempMails.get(i));
+            }
+
+            else if( this.isThisNameInSearch(text, tempMails.get(i).getSender()) && folderName != "sent"){
+                searchMails.add(tempMails.get(i));
+            }
+
+            else if( this.isThisNameInSearch(text, tempMails.get(i).getSubject())){
+                searchMails.add(tempMails.get(i));
+            }
+
+            else if( this.isThisNameInSearch(text, tempMails.get(i).getBody())){
+                searchMails.add(tempMails.get(i));
+            }
+
+            else{
+            int j=0;
+            if(folderName!="inbox"){
+            for(j=0;j<tempMails.get(i).getRecipients().size();j++){
+                if( this.isThisNameInSearch(text, tempMails.get(i).getRecipients().get(j))){
+                    searchMails.add(tempMails.get(i));
+                    break;
+                }
+            }
+            }
+            if(j==tempMails.get(i).getRecipients().size()){
+            for(j=0;j<tempMails.get(i).getAttachment().size();j++){
+                if( this.isThisNameInSearch(text, tempMails.get(i).getAttachment().get(j))){
+                    searchMails.add(tempMails.get(i));
+                    break;
+                }
+            }
+            }
+            
+        }
+        }
+        return searchMails;
+    }
     
     public Vector<Mail> searchByDate(String date,String folderName){
         Vector<Mail> searchMails=new Vector<>();
@@ -343,6 +387,7 @@ public class MailFolders {
         for(int i=0;i<tempMails.size();i++){
             if( this.isThisNameInSearch(sender, tempMails.get(i).getSender())){
                 searchMails.add(tempMails.get(i));
+                break;
             }
         }
         return searchMails;
@@ -410,6 +455,7 @@ public class MailFolders {
             for(int j=0;j<tempMails.get(i).getAttachment().size();j++){
                 if( this.isThisNameInSearch(attachment, tempMails.get(i).getAttachment().get(j))){
                     searchMails.add(tempMails.get(i));
+                    break;
                 }
             }
         }
