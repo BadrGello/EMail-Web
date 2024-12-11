@@ -75,7 +75,8 @@ const Drafts = () => {
     
     const handleEditOrSend = () => {
         // In both, remove from drafts folder
-        alert("Edited or Sent, Should Be Removed From Drafts Folder")
+        // send to back to delete the draft that was just sent/edited. (The rest of details should be already handled by Compose.jsx itself)
+        alert("Edited or Sent, Should Be Removed From Drafts Folder", )
     }
 
     const handleSelectDraft = (draftId) => {

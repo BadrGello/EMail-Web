@@ -10,7 +10,7 @@ function SignUp() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            //backend endpoint
+            // send to backend email and password and await a response
             
             alert('Sign-up successful!');
             navigate("/login")
@@ -25,7 +25,7 @@ function SignUp() {
             <h2>Sign Up</h2>
             <form onSubmit={handleSubmit}>
                 <div className='username'>
-                    <label>Username</label>
+                    <label>Email</label>
                     <input
                         type="text"
                         value={userName}

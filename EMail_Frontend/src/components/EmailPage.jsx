@@ -58,33 +58,6 @@ function EmailPage() {
         // Leave this function empty
     }
 
-    // Test Case for initail Form Data when working with drafts
-    const initialFormData = {
-        id: null,
-        sender: 'BADR BADR',
-        to: ['ahmed', 'mo', 'bubble'],
-        subject: 'Yeah',
-        body: '',
-        attachments: [{
-            "name": "file1.txt",
-            "size": 1024,
-            "type": "text/plain",
-            "lastModified": 1618457890000,
-            "lastModifiedDate": "Mon, 15 Mar 2021 17:24:50 GMT",
-            "webkitRelativePath": ""
-          },
-          {
-            "name": "file2.jpg",
-            "size": 2048,
-            "type": "image/jpeg",
-            "lastModified": 1618457891000,
-            "lastModifiedDate": "Mon, 15 Mar 2021 17:25:00 GMT",
-            "webkitRelativePath": ""
-          }],
-        priority: 'Low',
-        date: '',
-      };
-
     return (
         <div className='fullpage'>
             <div className="sidebar">

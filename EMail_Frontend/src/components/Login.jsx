@@ -10,7 +10,7 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // backend endpoint
+            // send to backend email and password and await a response
             
             alert('Login successful!');
             navigate('/home', {replace: true, state:{userName}})
@@ -25,7 +25,7 @@ function Login() {
             <h2>Login</h2>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label>Username</label>
+                    <label>Email</label>
                     <input
                         type="text"
                         value={userName}

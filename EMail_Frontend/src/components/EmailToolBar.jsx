@@ -26,7 +26,7 @@ const EmailToolbar = ({ onRefreshClick, onMoveClick, onDeleteClick, onSortChange
                     <option value="Priority">Priority</option>
                     <option value="Sender">Sender</option>
                     <option value="Subject">Subject</option>
-                    <option value="Attachment Size">Attachment Size</option>
+                    <option value="Body">Body</option>
                 </select>
 
                 <select value={sortOrder} onChange={onOrderChange}>
@@ -42,6 +42,7 @@ const EmailToolbar = ({ onRefreshClick, onMoveClick, onDeleteClick, onSortChange
 
             {/* Filtering Options */}
             <select value={filterBy} onChange={onFilterChange}>
+                <option value="All">All</option>
                 <option value="Subject">Subject</option>
                 <option value="Sender">Sender</option>
             </select>

@@ -77,6 +77,8 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
             return;
         }
 
+        // send to backend userName and newformData (move to draft (new email and move it to draft)) and await a response
+
         let newformData = {...formData}
         newformData.date = new Date().toISOString();
         onEditOrSend("Edit"); // Drafts Folder
@@ -94,6 +96,9 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
             return
         }
         
+        // send to backend userName and newformData (send email) and await a response
+
+
         let newformData = {...formData}
         newformData.date = new Date().toISOString();
         onEditOrSend("Send");  // Drafts Folder
