@@ -4,10 +4,12 @@ import EmailToolBar from './EmailToolBar';
 import EmailModal from './EmailModal';
 
 const DefualtFolder = () => {
+    // If "sender" is userName, it'll display To: recipients
     const [emails, setEmails] = useState([
         {
             id: 1,
-            sender: 'alice@example.com',
+            sender: 'badr',
+            to: ['bobly@ex.com', 'whoa@no.com'],
             subject: 'Meeting Reminder',
             date: '2024-12-05',
             body: 'Don\'t forget our meeting tomorrow at 10 AM.',
@@ -18,6 +20,7 @@ const DefualtFolder = () => {
         {
             id: 2,
             sender: 'bob@example.com',
+            to: null,
             subject: 'Urgent: Submit Documents',
             date: '2024-12-04',
             body: 'Please submit the required documents by EOD.',
@@ -28,6 +31,7 @@ const DefualtFolder = () => {
         {
             id: 3,
             sender: 'carol@example.com',
+            to: null,
             subject: 'Invoice #12345',
             date: '2024-12-03',
             body: 'Here is your invoice for the recent transaction.',
@@ -38,6 +42,7 @@ const DefualtFolder = () => {
         {
             id: 4,
             sender: 'dave@example.com',
+            to: null,
             subject: 'Party Invitation',
             date: '2024-12-01',
             body: 'You are invited to a party at my place!',
@@ -48,6 +53,7 @@ const DefualtFolder = () => {
         {
             id: 5,
             sender: 'eve@example.com',
+            to: null,
             subject: 'Black Friday Deals!',
             date: '2024-11-29',
             body: 'Check out our exclusive Black Friday deals.',
@@ -58,6 +64,7 @@ const DefualtFolder = () => {
         {
             id: 6,
             sender: 'frank@example.com',
+            to: null,
             subject: 'Re: Project Updates',
             date: '2024-12-02',
             body: 'Here are the updates on the project status.',
@@ -115,6 +122,11 @@ const DefualtFolder = () => {
         alert('Filter applied');
     };
 
+    const handleClearFilter = () => {
+        setFilterText('')
+        alert('Clear Filter')
+    };
+
     const [currentEmail, setCurrentEmail] = useState(null); // Email to show in modal
     const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
 
@@ -139,6 +151,7 @@ const DefualtFolder = () => {
                 onDeleteClick={handleDelete}
                 onSortClick={handleSort}
                 onFilterClick={handleFilter}
+                onClearFilterClick={handleClearFilter}
 
                 onSortChange={(e) => setSortType(e.target.value)} //Change sort type
                 onOrderChange={(e) => setSortOrder(e.target.value)} //Change order type 
@@ -169,7 +182,7 @@ const DefualtFolder = () => {
                                     onChange={() => handleSelectEmail(email.id)} 
                                 />
                                 <span onClick={() => handleEmailClick(email)}>
-                                    {email.subject} - {email.sender} - {email.date}
+                                    {email.subject} - {email.sender === userName ? "To: " + email.to.join(', ') : "From: " + email.sender} - {email.date}
                                 </span>
                             </li>
                         ))}
@@ -180,6 +193,7 @@ const DefualtFolder = () => {
                 email={currentEmail} 
                 isOpen={isModalOpen} 
                 onClose={handleModalClose} 
+                userName={userName}
             />
         </>
     );

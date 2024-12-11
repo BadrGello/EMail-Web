@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Box, Typography, Button } from '@mui/material';
 
-const EmailModal = ({ email, isOpen, onClose }) => {
+const EmailModal = ({ email, isOpen, onClose, userName }) => {
     const handleDownload = (attachment) => {
         const link = document.createElement('a');
         link.href = attachment; // Replace with real file URL
@@ -21,7 +21,12 @@ const EmailModal = ({ email, isOpen, onClose }) => {
                     Email Details
                 </Typography>
                 <Typography variant="body1">
-                    <strong>Sender:</strong> {email?.sender}
+                <Typography variant="body1">
+                    <strong>
+                        {email?.sender === userName ? 'To:' : 'From:'}
+                    </strong>{' '}
+                    {email?.sender === userName ? email?.to.join(', ') : email?.sender}
+                </Typography>
                 </Typography>
                 <Typography variant="body1">
                     <strong>Date:</strong> {email?.date}

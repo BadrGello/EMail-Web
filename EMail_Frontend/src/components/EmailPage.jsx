@@ -53,6 +53,11 @@ function EmailPage() {
         console.log("Opening Modal")
     };
 
+    const handleEditOrSend = () => {
+        console.log("")
+        // Leave this function empty
+    }
+
     // Test Case for initail Form Data when working with drafts
     const initialFormData = {
         id: null,
@@ -136,7 +141,7 @@ function EmailPage() {
                     </Routes>
                 </div>
 
-                {modalOpen && <ComposeModal userName={userName} closeModal={() => setModalOpen(false)} initialFormData={initialFormData} />}
+                {modalOpen && <ComposeModal userName={userName} closeModal={() => setModalOpen(false)} onEditOrSend={handleEditOrSend}/>}
         </div>
     );
 }

@@ -6,14 +6,15 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
     const [formData, setFormData] = useState({
         id: null,
         sender: userName,
-        to: [''],
+        to: [''], //recipients
         subject: '',
         body: '',
         attachments: [],
         priority: 'Normal',
+        folder: 'inbox',
         date: '',
     });
-
+    
     // (drafts folder)
     const [initialFormState, setInitialFormState] = useState({});
 

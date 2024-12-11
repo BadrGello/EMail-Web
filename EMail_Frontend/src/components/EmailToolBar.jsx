@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 
 
 ////////////////*ICONS*///////////
-import { MdFilterAlt,MdSort, MdRefresh } from "react-icons/md";
+import { MdFilterAlt,MdSort, MdRefresh, MdFilterNone, MdFilterAltOff } from "react-icons/md";
 import { IoTrashBin } from "react-icons/io5";
 import { MdDriveFileMove } from "react-icons/md";
 //////////////////////////////////
 
 
 
-const EmailToolbar = ({ onRefreshClick, onMoveClick, onDeleteClick, onSortChange, onOrderChange, onFilterChange, onFilterTextChange, onSortClick, onFilterClick, sortType, sortOrder, filterBy, filterText }) => {
+const EmailToolbar = ({ onRefreshClick, onMoveClick, onDeleteClick, onSortChange, onOrderChange, onFilterChange, onFilterTextChange, onSortClick, onFilterClick, onClearFilterClick, sortType, sortOrder, filterBy, filterText }) => {
     return (
         <div className="email toolbar">
 
@@ -53,6 +53,7 @@ const EmailToolbar = ({ onRefreshClick, onMoveClick, onDeleteClick, onSortChange
                 placeholder="Filter text"
             />
             <button onClick={onFilterClick}id='icon-button' title="Filter"><MdFilterAlt id='icon'/></button>
+            <button onClick={onClearFilterClick}id='icon-button' title="Clear Filter"><MdFilterAltOff id='icon'/></button>
 
             </div>
         </div>
