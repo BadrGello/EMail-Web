@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Box, Button, TextField, Select, MenuItem, InputLabel, FormControl, Typography, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import axios from 'axios'
+
+const EndPoints = {
+    Base: "http://localhost:8080/api",
+    sendEmail: "http://localhost:8080/api" + '/sendEmail',
+    sendDraft: "http://localhost:8080/api" + '/sendDraft',
+}
+
 
 const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) => {
     const [formData, setFormData] = useState({
@@ -14,6 +22,11 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
         folder: 'inbox',
         date: '',
     });
+    
+    const emailValidator = (email) => {
+        const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return regex.test(email);
+    };
     
     // (drafts folder)
     const [initialFormState, setInitialFormState] = useState({});
@@ -45,10 +58,23 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
         );
     };
 
+    const [errors, setErrors] = useState({}); // State to track validation errors
+
     // Handle the change for dynamic fields (To: email addresses)
     const handleToChange = (index, value) => {
         const updatedTo = [...formData.to];
         updatedTo[index] = value;
+
+        // Validate the email address
+        const updatedErrors = { ...errors };
+        if (!emailValidator(value) && value.trim() !== '') {
+            updatedErrors[`to-${index}`] = 'Invalid email address';
+        } else {
+            delete updatedErrors[`to-${index}`];
+        }
+
+        setErrors(updatedErrors);
+
         setFormData({ ...formData, to: updatedTo });
     };
 
@@ -62,7 +88,7 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
         setFormData({ ...formData, to: updatedTo });
     };
 
-    const handleMoveToDraft = () => {
+    const handleMoveToDraft = async () => {
 
          // Check if form data is unchanged from the initial draft (drafts folder)
          if (JSON.stringify(formData) === JSON.stringify(initialFormState)) {
@@ -81,18 +107,46 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
 
         let newformData = {...formData}
         newformData.date = new Date().toISOString();
-        onEditOrSend("Edit"); // Drafts Folder
-        console.log('Saving to Drafts:', newformData);
-        alert('Email saved to drafts!');
-        closeModal(); // Close the modal after saving to drafts
+        newformData.id = newformData.date;
+
+        onEditOrSend("Edit"); // Drafts Folder function
+
+        const requestData = {
+            userName: userName,
+            formData: newformData,
+        };
+
+        console.log("Drafting, " , requestData)
+
+        try {
+            const response = await axios.post(EndPoints.sendDraft, requestData); // Send data to backend
+    
+            console.log('Draft saved:', response.data);
+            alert('Email saved to drafts!');
+            closeModal();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while saving the draft');
+        }
+
     };
 
     // Handle form submit
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (Object.keys(errors).length > 0) {
+            // Check if there's exactly one error
+            if (Object.keys(errors).length === 1) {
+                alert("Invalid email address");
+            } else {
+                alert("Invalid email addresses");
+            }
+            return; // Stop further execution if there are errors
+        }
+
         if (isFormNotComplete()){
-            alert("Make Sure You Filled The Following Fields: To - Subject - Body ")
+            alert("Make sure you fill the following fields: To - Subject - Body ")
             return
         }
         
@@ -101,10 +155,27 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
 
         let newformData = {...formData}
         newformData.date = new Date().toISOString();
+        newformData.id = newformData.date;
+
         onEditOrSend("Send");  // Drafts Folder
-        console.log("Sending", newformData);
-        alert('Email sent successfully!');
-        closeModal();
+
+        const requestData = {
+            userName: userName,
+            formData: newformData,
+        };
+
+        console.log("Sending, " , requestData)
+
+        try {
+            const response = await axios.post(EndPoints.sendEmail, requestData); // Send data to backend
+    
+            console.log('Email sent:', response.data);
+            alert('Email sent successfully!');
+            closeModal();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while sending the email');
+        }
         
         
     };
@@ -183,6 +254,8 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
                                         value={email}
                                         onChange={(e) => handleToChange(index, e.target.value)}
                                         margin="normal"
+                                        error={!!errors[`to-${index}`]}
+                                        helperText={errors[`to-${index}`]}
                                     />
                                     {formData.to.length > 1 && (
                                         <Button

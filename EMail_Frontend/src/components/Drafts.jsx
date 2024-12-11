@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
 import EmailToolBar from './EmailToolBar';
 import ComposeModal from "./Compose";
+import axios from "axios";
 
 const FormData = {
     id: null,
@@ -14,9 +15,16 @@ const FormData = {
     date: '',
 }
 
+const EndPoints = {
+    Base: "http://localhost:8080/api",
+    deleteDrafts: "http://localhost:8080/api" + '/deleteEmails',
+    getDrafts: "http://localhost:8080/api" + '/getEmails', //refresh, sort and filter
+}
+
+
 const Drafts = () => {
     const [drafts, setDrafts] = useState([{
-        id: 1,
+        id: '2024-12-08T10:00:00Z',
         sender: 'john.doe@example.com',
         to: ['jane.doe@example.com'],
         subject: 'Meeting Reminder',
@@ -26,7 +34,7 @@ const Drafts = () => {
         date: '2024-12-08T10:00:00Z'
       },
       {
-        id: 2,
+        id: '2024-12-07T14:30:00Z',
         sender: 'alice.smith@example.com',
         to: ['bob.jones@example.com'],
         subject: 'Project Update',
@@ -36,7 +44,7 @@ const Drafts = () => {
         date: '2024-12-07T14:30:00Z'
       },
       {
-        id: 3,
+        id: '2024-12-06T09:15:00Z',
         sender: 'mark.brown@example.com',
         to: ['linda.green@example.com', 'idk@idk', 'yesss'],
         subject: 'Invoice for Services Rendered',
@@ -68,15 +76,19 @@ const Drafts = () => {
     const [selectedDrafts, setSelectedDrafts] = useState([]);
     const [sortType, setSortType] = useState('Date');
     const [sortOrder, setSortOrder] = useState('Ascendingly');
-    const [filterBy, setFilterBy] = useState('Subject');
+    const [filterBy, setFilterBy] = useState('All');
     const [filterText, setFilterText] = useState('');
 
     const [modalOpen, setModalOpen] = useState(false); // State to control the modal visibility
     
+    // Done
     const handleEditOrSend = () => {
         // In both, remove from drafts folder
         // send to back to delete the draft that was just sent/edited. (The rest of details should be already handled by Compose.jsx itself)
-        alert("Edited or Sent, Should Be Removed From Drafts Folder", )
+
+        alert("Edited or Sent, Should Be Removed From Drafts Folder")
+        console.log(currentDraft)
+        handleDelete([currentDraft.id])
     }
 
     const handleSelectDraft = (draftId) => {
@@ -87,30 +99,93 @@ const Drafts = () => {
         );
     };
 
-    const handleRefresh = () => {
-        console.log("Refresh");
-        // Fetch drafts based on userName and currentFolder (inbox, trash, sent)
+    // Fetch drafts based on userName and currentFolder (inbox, trash, sent)
+    // Done
+    const handleRefresh = async () => {
+        console.log("Fetching drafts...");
+
+        console.log(
+                {
+                    user: userName,
+                    folder: currentFolder,
+
+                    sortType: sortType,
+                    sortOrder: sortOrder,
+                    filterType: filterBy,
+                    filterText: filterText, 
+                }
+        )
+
+        try {
+            const response = await axios.get(EndPoints.getDrafts, {
+                params: {
+                    user: userName,
+                    folder: currentFolder,
+
+                    sortType: sortType,
+                    sortOrder: sortOrder,
+                    filterType: filterBy,
+                    filterText: filterText, 
+                }
+            });
+            setDrafts(response.data.drafts);  // Assuming response contains an array of drafts
+        } catch (error) {
+            console.error("Error fetching drafts:", error);
+        }
     };
 
     const handleMoveToFolder = () => {
-        // console.log("Move To Folder", selectedDrafts);
-        alert("Can't Move Drafts To Another Folder")
+        alert("Can't move drafts to another folder")
     };
 
-    const handleDelete = () => {
-        console.log("Delete", selectedDrafts);
-        // Delete the selected drafts
-        setDrafts(prevDrafts => prevDrafts.filter(draft => !selectedDrafts.includes(draft.id)));
+    // Done
+    const handleDelete = async (drafts) => {
+        console.log("Deleting.. ", drafts);
+        
+        try {
+            const response = await axios.post(EndPoints.deleteDrafts, {
+                user: userName,
+                folder: currentFolder,
+    
+                emailIds: drafts,  // Send the list of selected draft IDs to delete
+            });
+            if (response.status === 200) {
+                handleRefresh();
+            } else {
+                console.error("Error deleting drafts");
+            }
+        } catch (error) {
+            console.error("Error deleting drafts:", error);
+        }
     };
 
+    // Done
     const handleSort = () => {
         alert('Sort applied');
+        handleRefresh()
         console.log(sortType, sortOrder, filterText, filterBy);
     };
 
+    // Done
     const handleFilter = () => {
         alert('Filter applied');
+        handleRefresh()
     };
+
+    // Done
+    const [triggerNextAction, setTriggerNextAction] = useState(false);
+    const handleClearFilter = () => {
+        setFilterText('')
+        setTriggerNextAction(true);
+        
+    };
+    // This useEffect to handle issues of sync of setFilterText(''), so it clears the text first then it refresh
+    useEffect(() => {
+        if (triggerNextAction) {
+            handleRefresh()
+            setTriggerNextAction(false);
+        }
+    }, [filterText, triggerNextAction]);
 
     const [currentDraft, setCurrentDraft] = useState(null); // Draft to show in modal
     const handleDraftClick = (draft) => {
@@ -123,9 +198,10 @@ const Drafts = () => {
             <EmailToolBar 
                 onRefreshClick={handleRefresh}
                 onMoveClick={handleMoveToFolder}
-                onDeleteClick={handleDelete}
+                onDeleteClick={() => {handleDelete(selectedDrafts)}}
                 onSortClick={handleSort}
                 onFilterClick={handleFilter}
+                onClearFilterClick={handleClearFilter}
                 onSortChange={(e) => setSortType(e.target.value)}  // Change sort type
                 onOrderChange={(e) => setSortOrder(e.target.value)} // Change order type
                 onFilterChange={(e) => setFilterBy(e.target.value)} // Change filter type
