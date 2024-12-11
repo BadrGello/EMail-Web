@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, useLocation , Link,useNavigate} from "react-router-dom";
+import axios from "axios";
 
 ////////////////*ICONS*///////////
 import { MdOutlineDone } from "react-icons/md";
@@ -49,6 +50,7 @@ const Folders = ({ folders, setFolders }) => {
 
     //Delete
     const deleteFolder = async (folderName) => {
+        // Is it passing a folderName or folderId ??
         if (window.confirm("Delete this folder?")) {
             console.log("Deleting.. ", folderName);
             try {

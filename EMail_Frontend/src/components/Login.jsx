@@ -1,6 +1,7 @@
 // Login.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Import Link here
+import axios from 'axios';
 
 function Login() {
     const [userName, setUserName] = useState('');
@@ -11,12 +12,18 @@ function Login() {
         e.preventDefault();
         try {
             // send to backend email and password and await a response
-            
+            // Comment this if there's no connection to backend
+            // const response = await axios.post('http://localhost:8080/api/login', {
+            //     email: userName,
+            //     password: password,
+            // });
+
             alert('Login successful!');
             navigate('/home', {replace: true, state:{userName}})
         } 
         catch (error) {
-            alert('Error logging in');
+            console.error('Error logging in:', error.response?.data || error.message);
+            alert('Error logging in: ' + (error.response?.data?.message || error.message));
         }
     };
 
@@ -45,7 +52,7 @@ function Login() {
                 <button type="submit" id='submit-button'>Login</button>
             </form>
             <p>
-                Don't have an account? <Link to="/">Sign Up</Link>
+                Don't have an account? <Link to="/signup">Sign Up</Link>
             </p>
         </div>
     );

@@ -81,6 +81,10 @@ const Drafts = () => {
 
     const [modalOpen, setModalOpen] = useState(false); // State to control the modal visibility
     
+    useEffect(() => {
+        handleRefresh();
+    }, [userName]);
+
     // Done
     const handleEditOrSend = () => {
         // In both, remove from drafts folder
@@ -128,7 +132,7 @@ const Drafts = () => {
                     filterText: filterText, 
                 }
             });
-            setDrafts(response.data.drafts);  // Assuming response contains an array of drafts
+            setDrafts(response.data.emails);  // Assuming response contains an array of drafts
         } catch (error) {
             console.error("Error fetching drafts:", error);
         }

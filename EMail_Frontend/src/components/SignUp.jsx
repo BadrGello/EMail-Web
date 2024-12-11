@@ -1,6 +1,7 @@
 // SignUp.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Import Link here
+import axios from 'axios';
 
 function SignUp() {
     const [userName, setUserName] = useState('');
@@ -11,12 +12,17 @@ function SignUp() {
         e.preventDefault();
         try {
             // send to backend email and password and await a response
-            
+            const response = await axios.post('http://localhost:8080/api/signup', {
+                email: userName,
+                password: password,
+            });
+
             alert('Sign-up successful!');
-            navigate("/login")
+            navigate("/")
         } 
         catch (error) {
-            alert('Error signing up');
+            console.error('Error signing up:', error.response?.data || error.message);
+            alert('Error signing up: ' + (error.response?.data?.message || error.message));
         }
     };
 
@@ -48,13 +54,9 @@ function SignUp() {
             </form>
 
             <p>
-                Already have an account? <Link to="/login">Login</Link>
+                Already have an account? <Link to="/">Login</Link>
             </p>
 
-            {/* <p>
-                Go View EMail Page <Link to="/home/inbox">EMail Page</Link>
-            </p> */}
-            
         </div>
 
     );

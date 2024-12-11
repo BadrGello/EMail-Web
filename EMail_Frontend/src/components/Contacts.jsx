@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useLocation } from 'react-router-dom';
 
 ////////////////*ICONS*///////////
 import { CgMoreVerticalAlt } from 'react-icons/cg';
@@ -21,6 +23,7 @@ const EndPoints = {
     getContacts: "http://localhost:8080/api/contacts",
     deleteContact: "http://localhost:8080/api/contacts/delete",
     addContact: "http://localhost:8080/api/contacts/add",
+    editContact: "http://localhost:8080/api/contacts/edit"
 };
 
 
@@ -34,6 +37,9 @@ const Contacts = () => {
     const [sortOrder, setSortOrder] = useState("Ascendingly");
     const [filterBy, setFilterBy] = useState("All");
     const [filterText, setFilterText] = useState('');
+
+    const location = useLocation()
+    const userName = location.state.userName
 
     //Contacts displayed
     const [contactForm, setContactForm] = useState({
@@ -119,11 +125,17 @@ const Contacts = () => {
             if (editingContact !== null) {
                 //Editing existing contact
                 const response = await axios.post(EndPoints.editContact, { ...contactForm, id: editingContact.id });
-                setContacts(contacts.map(contact => contact.id === editingContact.id ? response.data : contact));
+                // setContacts(contacts.map(contact => contact.id === editingContact.id ? response.data : contact));
+                // Best just to fetch all contacts again
+                fetchContacts();
+
             } else {
                 //Adding new contact
                 const response = await axios.post(EndPoints.addContact, contactForm);
-                setContacts([...contacts, response.data]);
+                // setContacts([...contacts, response.data]);
+                // Best just to fetch all contacts again
+                fetchContacts();
+
             }
             resetForm();
         } catch (error) {
@@ -136,7 +148,10 @@ const Contacts = () => {
         if (window.confirm("Delete contact?")) {
             try {
                 await axios.delete(`${EndPoints.deleteContact}/${id}`);
-                setContacts(contacts.filter(contact => contact.id !== id));
+                // setContacts(contacts.filter(contact => contact.id !== id));
+                // Best just to fetch all contacts again
+                fetchContacts();
+
             } catch (error) {
                 console.error("Error deleting contact:", error);
             }
@@ -166,6 +181,7 @@ const Contacts = () => {
         fetchContacts();
     };
 
+    // There might be an issue with syncing "set" useState here
     const clearFilter = () => {
         console.log("Clear filter..");
         setFilterBy("All");
@@ -184,7 +200,7 @@ const Contacts = () => {
             <div id='sort'>
                 <p>Sort By: </p>
 
-                <select value={sortType} onChange={handleSort}>
+                <select value={sortType} onChange={(e) => setSortType(e.target.value)}>
                     <option value="Name">Name</option>
                     <option value="Number of emails">Number of emails</option>
                 </select>
@@ -200,8 +216,8 @@ const Contacts = () => {
             <div id='filter'>
                 <p>Filter By: </p>
 
-                <select value={filterBy} onChange={handleFilter}>
-                <option value="All">All</option>
+                <select value={filterBy} onChange={(e) => setFilterBy(e.target.value)}>
+                    <option value="All">All</option>
                     <option value="Name">Name</option>
                     <option value="Email">Email</option>
                 </select>

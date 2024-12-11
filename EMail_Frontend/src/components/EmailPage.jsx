@@ -6,6 +6,7 @@ import Contacts from './Contacts.jsx';
 import Drafts from './Drafts.jsx';
 import Folders from './Folders.jsx';
 import { BrowserRouter as Router, Route, Routes, useLocation , Link,useNavigate} from "react-router-dom";
+import axios from 'axios';
 
 ////////////////*ICONS*///////////
 import { TiContacts } from "react-icons/ti";
@@ -130,7 +131,7 @@ function EmailPage() {
                 <button  onClick={()=> {navigate("/home/contacts", {replace: true, state:{userName}})}} id='side-button'><div id='icon-container'><TiContacts /></div> Contacts</button>
 
                 {/* Handle Log Out */}
-                <button  onClick={()=> {navigate("/login", {replace: true, state:{userName}})}} id='side-button'><div id='icon-container'><CiLogout /></div> Log Out</button>
+                <button  onClick={()=> {navigate("/", {replace: true, state:{userName}})}} id='side-button'><div id='icon-container'><CiLogout /></div> Log Out</button>
             </div>
 
             <div className='fullcontent'>

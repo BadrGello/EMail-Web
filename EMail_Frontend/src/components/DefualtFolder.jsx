@@ -2,6 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import EmailToolBar from './EmailToolBar';
 import EmailModal from './EmailModal';
+import axios from 'axios';
+
+const EndPoints = {
+    Base: "http://localhost:8080/api",
+    deleteEmails: "http://localhost:8080/api" + '/deleteEmails',
+    getEmails: "http://localhost:8080/api" + '/getEmails', //refresh, sort and filter
+    moveEmails: "http://localhost:8080/api" + '/moveEmails',
+}
 
 const DefualtFolder = () => {
     // If "sender" is userName, it'll display To: recipients
@@ -81,17 +89,13 @@ const DefualtFolder = () => {
     const [selectedEmails, setSelectedEmails] = useState([]);
     const [sortType, setSortType] = useState('Date');
     const [sortOrder, setSortOrder] = useState('Ascendingly');
-    const [filterBy, setFilterBy] = useState('Subject');
+    const [filterBy, setFilterBy] = useState('All');
     const [filterText, setFilterText] = useState('');
 
-    // useEffect(() => {
-    //     const loadEmails = async () => {
-    //         const emailsData = await fetchEmails(userName);
-    //         setEmails(emailsData);
-    //     };
-    //     loadEmails();
-    // }, [userName]);
-
+    useEffect(() => {
+        handleRefresh();
+    }, [userName, currentFolder]);
+    
     const handleSelectEmail = (emailId) => {
         setSelectedEmails(prevSelected => 
             prevSelected.includes(emailId) 
@@ -100,32 +104,93 @@ const DefualtFolder = () => {
         );
     };
 
-    const handleRefresh = () => {
-        console.log("Refresh")
-        // Fetch emails based on userName and currentFolder (inbox, trash, sent)
-    }
+    // Done
+    const handleRefresh = async () => {
+        console.log("Fetching emails...");
 
+        console.log(
+                {
+                    user: userName,
+                    folder: currentFolder,
+
+                    sortType: sortType,
+                    sortOrder: sortOrder,
+                    filterType: filterBy,
+                    filterText: filterText, 
+                }
+        )
+
+        try {
+            const response = await axios.get(EndPoints.getEmails, {
+                params: {
+                    user: userName,
+                    folder: currentFolder,
+
+                    sortType: sortType,
+                    sortOrder: sortOrder,
+                    filterType: filterBy,
+                    filterText: filterText, 
+                }
+            });
+            setEmails(response.data.emails);  // Assuming response contains an array of emails
+        } catch (error) {
+            console.error("Error fetching emails:", error);
+        }
+    };
+
+    // STILL NOT DONE
     const handleMoveToFolder = () => {
         console.log("Move To Folder", selectedEmails)
     }
 
-    const handleDelete = () => {
+    // Done
+    const handleDelete = async () => {
         console.log("Delete", selectedEmails)
+
+        try {
+            const response = await axios.post(EndPoints.deleteEmails, {
+                user: userName,
+                folder: currentFolder,
+    
+                emailIds: selectedEmails,  // Send the list of selected draft IDs to delete
+            });
+            if (response.status === 200) {
+                handleRefresh();
+            } else {
+                console.error("Error deleting emails");
+            }
+        } catch (error) {
+            console.error("Error deleting emails:", error);
+        }
     }   
 
+    // Done
     const handleSort = () => {
         alert('Sort applied');
+        handleRefresh()
         console.log(sortType, sortOrder, filterText, filterBy)
     };
 
+    // Done
     const handleFilter = () => {
         alert('Filter applied');
+        handleRefresh()
     };
 
+    // Done
+    const [triggerNextAction, setTriggerNextAction] = useState(false);
     const handleClearFilter = () => {
         setFilterText('')
-        alert('Clear Filter')
+        setTriggerNextAction(true);
+        
     };
+    // This useEffect to handle issues of sync of setFilterText(''), so it clears the text first then it refresh
+    useEffect(() => {
+        if (triggerNextAction) {
+            handleRefresh()
+            setTriggerNextAction(false);
+        }
+    }, [filterText, triggerNextAction]);
 
     const [currentEmail, setCurrentEmail] = useState(null); // Email to show in modal
     const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
