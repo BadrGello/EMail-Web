@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, useLocation , Link,useNavigate} from "react-router-dom";
 
 ////////////////*ICONS*///////////
@@ -7,6 +7,14 @@ import { FaXmark, FaPlus } from "react-icons/fa6";
 import { FiTrash } from "react-icons/fi";
 import { CgMoreVerticalAlt } from 'react-icons/cg';
 //////////////////////////////////
+
+const EndPoints = {
+    Base: "http://localhost:8080/api",
+    getFolders: "http://localhost:8080/api/folders",
+    deleteFolder: "http://localhost:8080/api/folders/delete",
+    addFolder: "http://localhost:8080/api/folders/add",
+    editFolder: "http://localhost:8080/api/folders/edit",
+};
 
 
 const Folders = ({ folders, setFolders }) => {
@@ -22,25 +30,61 @@ const Folders = ({ folders, setFolders }) => {
     const [addFolderOpen, setAddFolderOpen] = useState(false);
     const [newFolderName, setNewFolderName] = useState("");
     
-    
+    useEffect(() => {
+        fetchFolders();
+    }, [userName]);
 
-    const deleteFolder = (id) => {
-        if (window.confirm("Delete this folder?")) {
-            setFolders(folders.filter((folder) => folder.id !== id));
+
+    //Fetch / Refresh
+    const fetchFolders = async () => {
+        console.log("Fetching folders..");
+        try {
+            const response = await axios.get(EndPoints.getFolders, { params: { user: userName } });
+            setFolders(response.data.folders);
+        } catch (error) {
+            console.error("Error fetching folders:", error);
         }
     };
 
 
-    const saveEdit = () => {
+    //Delete
+    const deleteFolder = async (folderName) => {
+        if (window.confirm("Delete this folder?")) {
+            console.log("Deleting.. ", folderName);
+            try {
+                const response = await axios.post(`${EndPoints.deleteFolder}/${folderName}`, {
+                    user: userName,
+                    folder: currentFolder,
+                });
+                if (response.status === 200) {
+                    fetchFolders(); //refresh
+                }
+            } catch (error) {
+                console.error("Error deleting folder:", error);
+            }
+        }
+    };
+
+
+    //Rename
+    const saveEdit = async () => {
         if (editingFolderName.trim() === "") {
             alert("Folder name cannot be empty.");
             return;
         }
-        setFolders(
-            folders.map((folder) =>
-                folder.id === editingFolderId ? { ...folder, name: editingFolderName } : folder
-            )
-        );
+        console.log("Editing.. ");
+        try {
+            const response = await axios.post(`${EndPoints.editFolder}/${editingFolderId}`, {
+                user: userName,
+                folderName: editingFolderName,
+            });
+            if (response.status === 200) {
+                fetchFolders(); //refresh
+                setEditingFolderId(null);
+            }
+        } catch (error) {
+            console.error("Error editing folder:", error);
+        }
         cancelEdit();
     };
 
@@ -59,14 +103,25 @@ const Folders = ({ folders, setFolders }) => {
         setAddFolderOpen(!addFolderOpen);
     };
 
-    const addFolder = () => {
+    //Add Folder
+    const addFolder = async () => {
         if (newFolderName.trim() === "") {
             alert("Folder name cannot be empty.");
             return;
         }
-        setFolders([...folders, { id: Date.now(), name: newFolderName }]);
-        setNewFolderName("");
-        toggleAddFolder();
+        console.log("Adding.. ", newFolderName);
+        try {
+            const response = await axios.post(EndPoints.addFolder, {
+                user: userName,
+                folderName: newFolderName,
+            });
+            if (response.status === 200) {
+                fetchFolders(); //refresh
+                setNewFolderName('');
+            }
+        } catch (error) {
+            console.error("Error adding folder:", error);
+        }
     };
 
     return (

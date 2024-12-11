@@ -18,6 +18,13 @@ import { MdOutlineDone } from "react-icons/md";
 import { FaXmark } from "react-icons/fa6";
 //////////////////////////////////
 
+
+const EndPoints = {
+    Base: "http://localhost:8080/api",
+    getFolders: "http://localhost:8080/api/folders",
+    addFolder: "http://localhost:8080/api/folders/add",
+};
+
 function EmailPage() {
 
     // When we login, we get the userName that was passed
@@ -36,14 +43,34 @@ function EmailPage() {
         setAddFolderOpen(!addFolderOpen);
     };
 
-    const addFolder = () => {
+    const addFolder = async () => {
         if (newFolderName.trim() === "") {
             alert("Folder name cannot be empty.");
             return;
         }
-        setFolders([...folders, { id: Date.now(), name: newFolderName }]);
-        setNewFolderName("");
-        toggleAddFolder();
+        console.log("Adding.. ", newFolderName);
+        try {
+            const response = await axios.post(EndPoints.addFolder, {
+                user: userName,
+                folderName: newFolderName,
+            });
+            if (response.status === 200) {
+                fetchFolders(); //refresh
+                setNewFolderName('');
+            }
+        } catch (error) {
+            console.error("Error adding folder:", error);
+        }
+    };
+
+    const fetchFolders = async () => {
+        console.log("Fetching folders..");
+        try {
+            const response = await axios.get(EndPoints.getFolders, { params: { user: userName } });
+            setFolders(response.data.folders);
+        } catch (error) {
+            console.error("Error fetching folders:", error);
+        }
     };
 
 
@@ -59,7 +86,7 @@ function EmailPage() {
     }
 
     return (
-        <div className='fullpage'>
+        <div className="page">
             <div className="sidebar">
                 <button onClick={handleComposeClick} id='side-button'><div id='icon-container'><FaPen /></div> Compose</button>
                 <button  onClick={()=> {navigate("/home", {replace: true, state:{userName, folder:"inbox"}})}} id='side-button'><div id='icon-container'><FaInbox /></div> Inbox</button>
@@ -81,7 +108,7 @@ function EmailPage() {
                         ))}
                         
                         {/*Add new folder button*/}
-                        <button id="icon-button" onClick={toggleAddFolder} title="Add Folder"><FaPlus /> </button>
+                        <button className='add-folder-side' id="icon-button" onClick={toggleAddFolder} title="Add Folder"><FaPlus /> </button>
                     </div>
 
                     <div id='line'></div>
@@ -105,6 +132,8 @@ function EmailPage() {
                 {/* Handle Log Out */}
                 <button  onClick={()=> {navigate("/login", {replace: true, state:{userName}})}} id='side-button'><div id='icon-container'><CiLogout /></div> Log Out</button>
             </div>
+
+            <div className='fullcontent'>
                 <div className="homepage" id='content'>
                     <Routes>
                         <Route path="/" element={<DefualtFolder/>} />
@@ -115,6 +144,7 @@ function EmailPage() {
                 </div>
 
                 {modalOpen && <ComposeModal userName={userName} closeModal={() => setModalOpen(false)} onEditOrSend={handleEditOrSend}/>}
+        </div>
         </div>
     );
 }

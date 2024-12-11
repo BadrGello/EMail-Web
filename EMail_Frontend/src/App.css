@@ -8,7 +8,7 @@ body {
 }
 
 /*_______________________________________________________________Start Signup/ Login pages_______________________________________________________________*/
-.container, .fullpage {
+.container, .fullcontent {
     width: 450px;
     min-width: 400px;
     height: 500px;
@@ -102,18 +102,26 @@ a:hover {
 
 /*_______________________________________________________________Start Homepage_______________________________________________________________*/
 
-.fullpage {
+
+.page {
+    display: flex;
+    height:870px;
+}
+
+.fullcontent {
     display: flex;
     position: relative;
     width:95vw;
-    height:90vh;
+    height:100%;
     min-width: fit-content;
     margin:45px;
     padding: 0;
     background-color: #ffffff65;
     overflow: auto;
+    margin-left: 0;
+    border-top-left-radius:0;
+    border-bottom-left-radius:0;
 }
-
 
 
 #content {
@@ -124,20 +132,21 @@ a:hover {
 }
 
 .sidebar{
-    position: relative;
-    display: block;
-    top:0;
-    left:0;
+    display: inline-block;
     margin:0;
+    margin-top: 45px;
+    margin-left: 20px;
     padding-top: 70px;
     background-color: rgba(12, 12, 12, 0.575);
     width: 12%;
     min-width:200px;
     max-width: 200px;
-    height:auto;
+    height:92%;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     overflow-y: auto;
+    box-shadow: 0px 5px 20px 2px #3a4955ad; 
+    box-shadow-left: 0;
 }
 
 #side-button, #folder-button {
@@ -195,6 +204,12 @@ a:hover {
     border-radius: 10px;
 }
 
+.add-folder-side{
+    position: relative;
+    margin-left:135px;
+
+}
+
 #foldar-name-input {
     margin-left: 5px;
     width: 75%;
@@ -235,8 +250,8 @@ a:hover {
 #folder-options {
     display: flex;
     margin-top: 10px;
-    margin-left: 5px;
-    gap: 60px;
+    margin-left: 20px;
+    gap: 70px;
 }
 
 
@@ -244,7 +259,7 @@ a:hover {
 
 /*_______________________________________________________________Start Icon_______________________________________________________________*/
 
-#icon-button {
+#icon-button, .content-icon {
     width: 40px;
     height: 40px;
     border: none;
@@ -255,7 +270,7 @@ a:hover {
     color:rgba(240, 248, 255, 0.699);
 }
 
-#icon-button:hover {
+#icon-button:hover, .content-icon:hover {
     background-color: #37393b79;
     color:rgb(240, 248, 255);
 }
@@ -305,9 +320,10 @@ a:hover {
     border-radius: 10px;
     margin: 5px;
     transition: 0.3s ease-out;
+    outline: 0;
 }
 
-.toolbar select:hover {
+.toolbar select:hover, .toolbar select:focus {
     background-color: #37393b79;
     color:rgb(240, 248, 255);
 }
@@ -358,7 +374,95 @@ a:hover {
 /*_______________________________________________________________End Toolbar_______________________________________________________________*/
 
 
-/*_______________________________________________________________Start Folders Tab_______________________________________________________________*/
+/*_______________________________________________________________Start Contacts Tab_______________________________________________________________*/
 
 
-/*_______________________________________________________________End Folders Tab_______________________________________________________________*/
+/*Editing / Adding*/
+.formContact{
+    margin:50px 150px;
+}
+
+.title{
+    font-weight: bold;
+    font-size: 20px;
+    margin:30px -60px;
+    color: #161718cc;
+}
+
+.formContact label{
+    margin: 20px 30px;
+    margin-left: 0;
+}
+
+
+.content-icon svg{
+    color: #161718cc;
+}
+
+.content-icon{
+    margin:10px;
+}
+
+.content-icon #icon-remove{
+    display: flex;
+    position: relative;
+}
+
+#icon-add{
+    display: flex;
+    position: relative;
+    margin-left: 322px;
+}
+
+#edit-options{
+    display: flex;
+    gap:300px;
+    margin-top: 50px;
+}
+
+#emails-list-edit {
+    display: flex;
+    flex: 1 1 45%;
+    flex-wrap: wrap;
+    margin-left:93px;
+}
+
+.formContact input{
+    display: inline-block;
+    position: relative;
+    color:rgb(240, 248, 255);
+    padding:5px 10px;
+    border: 2px solid rgba(0, 0, 0, 0.349);
+    border-radius:10px;
+    font-size: 16px;
+    background-color: transparent;
+    margin:20px 0;
+}
+
+.formContact input[type="text"]{
+    margin-left: 7px;
+}
+
+
+/*Contacts List*/
+
+.contacts ul{
+    list-style-type: none;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+.contacts li{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border : 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.contacts #contact-card{
+    display: flex;
+}
+
+/*_______________________________________________________________End Contacts Tab_______________________________________________________________*/

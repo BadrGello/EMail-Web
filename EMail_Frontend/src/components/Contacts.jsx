@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 ////////////////*ICONS*///////////
 import { CgMoreVerticalAlt } from 'react-icons/cg';
@@ -6,6 +6,7 @@ import { MdDeleteOutline,MdFilterAlt, MdFilterAltOff,MdSort, MdRefresh, MdOutlin
 import { IoPersonCircleOutline, IoPersonAdd } from "react-icons/io5";
 import { IoMdAdd } from "react-icons/io";
 import { FaMinus } from "react-icons/fa";
+import { FaXmark } from "react-icons/fa6";
 //////////////////////////////////
 
 //Email validation regex
@@ -14,16 +15,24 @@ const emailValidator = (email) => {
     return regex.test(email);
 };
 
+
+const EndPoints = {
+    Base: "http://localhost:8080/api",
+    getContacts: "http://localhost:8080/api/contacts",
+    deleteContact: "http://localhost:8080/api/contacts/delete",
+    addContact: "http://localhost:8080/api/contacts/add",
+};
+
+
 const Contacts = () => {
     const [contacts, setContacts] = useState([]);
     const [formVisible, setFormVisible] = useState(false);
     const [editingContact, setEditingContact] = useState(null);
     const [emailError, setEmailError] = useState("");
 
-    const [sortType, setSortType] = useState("Name"); // Default sorting by name
+    const [sortType, setSortType] = useState("Name"); //Default sorting by name
     const [sortOrder, setSortOrder] = useState("Ascendingly");
-    const [filterBy, setFilterBy] = useState("Name");
-
+    const [filterBy, setFilterBy] = useState("All");
     const [filterText, setFilterText] = useState('');
 
     //Contacts displayed
@@ -32,7 +41,31 @@ const Contacts = () => {
         emails: [{ email: ""}],
     });
 
-    //Handle contact input changes
+    useEffect(() => {
+        fetchContacts();
+    }, []);
+
+    //Fetch / Refresh / Sort / Filter
+    const fetchContacts = async () => {
+        console.log("Fetching Contacts.. ");
+        try {
+            const response = await axios.get(EndPoints.getContacts, {
+                params: {
+                    user: userName,
+
+                    sortType: sortType,
+                    sortOrder: sortOrder,
+                    filterType: filterBy,
+                    filterText: filterText, 
+                }
+            });
+            setContacts(response.data);
+        } catch (error) {
+            console.error("Error fetching contacts:", error);
+        }
+    };
+
+    //Handle contact input form changes
     const handleFormChange = (key, value) => {
         setContactForm({ ...contactForm, [key]: value });
     };
@@ -68,7 +101,8 @@ const Contacts = () => {
     };
 
     //Add or Edit Contact
-    const handleSaveContact = () => {
+    const handleSaveContact = async () => {
+        setEmailError("");
         if (!contactForm.name.trim()) {
             setEmailError("Enter a name please.");
             return;
@@ -80,24 +114,32 @@ const Contacts = () => {
             return;
         }
 
-        if (editingContact !== null) {
-            const updatedContacts = contacts.map((contact) =>
-                contact.id === editingContact.id ? { ...editingContact, ...contactForm } : contact
-            );
-            setContacts(updatedContacts);
-        } else {
-            setContacts([
-                ...contacts,
-                { id: Date.now(), ...contactForm }, //New Contact
-            ]);
+        console.log("Saving Contact.. ");
+        try {
+            if (editingContact !== null) {
+                //Editing existing contact
+                const response = await axios.post(EndPoints.editContact, { ...contactForm, id: editingContact.id });
+                setContacts(contacts.map(contact => contact.id === editingContact.id ? response.data : contact));
+            } else {
+                //Adding new contact
+                const response = await axios.post(EndPoints.addContact, contactForm);
+                setContacts([...contacts, response.data]);
+            }
+            resetForm();
+        } catch (error) {
+            console.error("Error saving contact:", error);
         }
-        resetForm();
     };
 
-    // Delete Contact
-    const handleDeleteContact = (id) => {
+    //Delete Contact
+    const handleDeleteContact = async (id) => {
         if (window.confirm("Delete contact?")) {
-            setContacts(contacts.filter((contact) => contact.id !== id));
+            try {
+                await axios.delete(`${EndPoints.deleteContact}/${id}`);
+                setContacts(contacts.filter(contact => contact.id !== id));
+            } catch (error) {
+                console.error("Error deleting contact:", error);
+            }
         }
     };
     
@@ -110,19 +152,25 @@ const Contacts = () => {
     };
 
     const handleRefresh = () => {
-        console.log("refresh")
+        console.log("Refreshing.. ");
+        fetchContacts();
     }  
 
-    const handleSort = () => {
-        console.log(sortType, sortOrder, filterText, filterBy)
+    const handleSort = async () => {
+        console.log("Sorting.. " + sortType, sortOrder )
+        fetchContacts();
     };
     
-    const handleFilter = () => {
-        console.log("filter");
+    const handleFilter = async () => {
+        console.log("filtering.. " + filterText, filterBy );
+        fetchContacts();
     };
 
     const clearFilter = () => {
-        console.log("clear filter");
+        console.log("Clear filter..");
+        setFilterBy("All");
+        setFilterText("");
+        fetchContacts();
     };
     
 
@@ -153,6 +201,7 @@ const Contacts = () => {
                 <p>Filter By: </p>
 
                 <select value={filterBy} onChange={handleFilter}>
+                <option value="All">All</option>
                     <option value="Name">Name</option>
                     <option value="Email">Email</option>
                 </select>
@@ -174,57 +223,43 @@ const Contacts = () => {
         {/*End ToolBar*/}
 
 
-        <div style={{ padding: "20px" }}>
+        <div>
 
             {/*Add Contact button*/}
             {!formVisible && (
-                <button onClick={() => setFormVisible(true)} id='icon-button'><IoMdAdd id='icon'/></button>
+                <button onClick={() => setFormVisible(true)} className='content-icon' id='icon-button'><IoMdAdd id='icon'/></button>
             )}
 
             {/*Add/Edit contact*/}
             {formVisible && (
-                <div style={{ marginTop: "20px", padding: "10px", border: "1px solid #ccc" }}>
+                <div className="formContact">
                     <div className='title'>{editingContact ? "Edit Contact" : "Add Contact"}</div>
                     <div>
                         <label>Name:</label>
-                        <input
-                            type="text"
-                            value={contactForm.name}
-                            onChange={(e) => handleFormChange("name", e.target.value)}  /* Input Name */
-                        />
+                        <input type="text" placeholder="Enter name" value={contactForm.name} onChange={(e) => handleFormChange("name", e.target.value)}  /* Input Name */ />
                     </div>
 
                     <div>
-                        <div className='section'>Emails:</div>
+                        <label>Emails:</label>
+                        <div>
                         {contactForm.emails.map((emailObj, index) => (
-                            <div key={index} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                                <input
-                                    type="email"
-                                    placeholder="Enter email"
-                                    value={emailObj.email}
-                                    onChange={(e) =>
-                                        handleEmailUpdate(index, "email", e.target.value)  /*Input Email*/
-                                    }
-                                />
+                            <div id='emails-list-edit'>
+                                <input type="email" placeholder="Enter email" value={emailObj.email} onChange={(e) => handleEmailUpdate(index, "email", e.target.value)  /*Input Email*/ } />
                                 {contactForm.emails.length > 1 && (
-                                    <button type="button" id='icon-button' onClick={() => removeEmailField(index)}>  {/*Delete Email*/}
-                                         <FaMinus id='icon'/>
-                                    </button>
+                                    <button type="button" className='content-icon' id='icon-remove' onClick={() => removeEmailField(index)}>  {/*Delete Email*/} <FaMinus id='icon'/> </button>
                                 )}
                             </div>
                         ))}
-                        <button type="button" onClick={addEmailField} id='icon-button' >
-                       <IoMdAdd id='icon'/>
-                        </button>
+                        </div>
+                        <button type="button" onClick={addEmailField} className='content-icon' id='icon-add' title='Add Email'> <IoMdAdd id='icon'/> </button>
                     </div>
 
                     
-
-                    <button onClick={handleSaveContact} id='icon-button'>
-                        {editingContact ?  <MdOutlineDone id='icon' /> :  <IoPersonAdd id='icon'/>}
-                    </button>
-                    <button onClick={resetForm}>Cancel</button>
-
+                    <div id='edit-options'>
+                    <button onClick={resetForm} className='content-icon' id='icon-cancel' title="Cancel"><FaXmark /></button>
+                    <button onClick={handleSaveContact} className='content-icon' id='icon-done'> {editingContact ?  <MdOutlineDone id='icon' /> :  <IoPersonAdd id='icon'/>} </button>
+                    </div>
+                    
                     {/*Show email error incase invalid input*/}
                     {emailError && <p style={{ color: "red" }}>{emailError}</p>}
                 </div>
@@ -232,42 +267,17 @@ const Contacts = () => {
 
             {/*Contacts List*/}
             {!formVisible && (
-                <ul style={{ listStyleType: "none", padding: "0", marginTop: "20px" }}>
+                <ul>
                     {contacts.map((contact) => (
-                        <li
-                            key={contact.id}
-                            style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                                padding: "10px",
-                                border: "1px solid #ccc",
-                                marginBottom: "10px",
-                            }}
-                        >
-                            <div>
+                        <li key={contact.id} >
+                            <div id='contact-card'>
                                 <strong id='icon-button'><IoPersonCircleOutline id='icon'/> {contact.name}</strong>
                                 <ul>
                                     {contact.emails.map((emailObj, index) => (
-                                        <li
-                                            key={index}
-                                            style={{
-                                                color: emailObj.default ? "red" : "black",
-                                            }}
-                                        >
-                                            {emailObj.email}
-                                        </li>
+                                        <li key={index} > {emailObj.email} </li>
                                     ))}
                                 </ul>
-                            </div>
-                            <div>
-                                <button  id='icon-button' onClick={() => {
-                                    setFormVisible(true);
-                                    setEditingContact(contact);
-                                    setContactForm(contact);
-                                }}>
-                                    <CgMoreVerticalAlt/>
-                                </button>
+                                <button  id='icon-button' onClick={() => { setFormVisible(true); setEditingContact(contact); setContactForm(contact); }}> <CgMoreVerticalAlt/> </button>
                                 <button onClick={() => handleDeleteContact(contact.id)} id='icon-button'><MdDeleteOutline/></button>
                             </div>
                         </li>
