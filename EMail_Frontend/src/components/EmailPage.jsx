@@ -89,6 +89,9 @@ function EmailPage() {
     return (
         <div className="page">
             <div className="sidebar">
+                <div id='welcome'>
+                    Welcome {userName}
+                </div>
                 <button onClick={handleComposeClick} id='side-button'><div id='icon-container'><FaPen /></div> Compose</button>
                 <button  onClick={()=> {navigate("/home", {replace: true, state:{userName, folder:"inbox"}})}} id='side-button'><div id='icon-container'><FaInbox /></div> Inbox</button>
                 <button  onClick={()=> {navigate("/home", {replace: true, state:{userName, folder:"sent"}})}} id='side-button'><div id='icon-container'><IoIosSend /></div> Sent</button>
