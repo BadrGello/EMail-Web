@@ -239,10 +239,11 @@ const Drafts = () => {
             </div>
 
             {/* Draft List */}
-            <div>
+            <div className='list'>
                 <ul>
                     {drafts
                         .map((draft) => (
+                            <>
                             <li key={draft.id}>
                                 <input 
                                     type="checkbox" 
@@ -253,6 +254,8 @@ const Drafts = () => {
                                     {draft.to} - {draft.subject} - {draft.date}
                                 </span>
                             </li>
+                            <div id='list-seperator'></div>
+                            </>
                         ))}
                 </ul>
             </div>

@@ -270,13 +270,14 @@ const DefualtFolder = () => {
             </div>
 
             {/* Email List */}
-            <div>
+            <div className='list'>
                 <ul>
                     {emails
                         // .filter(email => 
                         //     email[filterBy]?.toLowerCase().includes(filterText.toLowerCase())
                         // )
                         .map((email) => (
+                            <>
                             <li key={email.id}>
                                 <input 
                                     type="checkbox" 
@@ -287,7 +288,10 @@ const DefualtFolder = () => {
                                     {email.subject} - {email.sender === userName ? "To: " + email.to.join(', ') : "From: " + email.sender} - {email.date}
                                 </span>
                             </li>
+                            <div id='list-seperator'></div>
+                            </>
                         ))}
+                        
                 </ul>
             </div>
 
