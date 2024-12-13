@@ -92,8 +92,8 @@ public class proxy implements UserInterface {
                 userBuilder.setContacts(emptyContacts);
                 userBuilder.setMailFolders(emptyFolders);
                 User user1 = userBuilder.build();
-                user1.setEmail("null@example.com");
-                user1.setId("1");
+       
+              
                 try{
                 user1.save();
                 }
