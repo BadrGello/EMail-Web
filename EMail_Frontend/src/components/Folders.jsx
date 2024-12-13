@@ -54,7 +54,7 @@ const Folders = ({ folders, setFolders }) => {
         if (window.confirm("Delete this folder?")) {
             console.log("Deleting.. ", folderName);
             try {
-                const response = await axios.post(`${EndPoints.deleteFolder}/${folderName}`, {
+                const response = await axios.post(EndPoints.deleteFolder, {
                     user: userName,
                     folder: currentFolder,
                 });
@@ -76,7 +76,7 @@ const Folders = ({ folders, setFolders }) => {
         }
         console.log("Editing.. ");
         try {
-            const response = await axios.post(`${EndPoints.editFolder}/${editingFolderId}`, {
+            const response = await axios.post(EndPoints.editFolder, {
                 user: userName,
                 folderName: editingFolderName,
             });

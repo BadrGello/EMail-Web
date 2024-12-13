@@ -9,6 +9,8 @@ const EndPoints = {
     deleteEmails: "http://localhost:8080/api" + '/deleteEmails',
     getEmails: "http://localhost:8080/api" + '/getEmails', //refresh, sort and filter
     moveEmails: "http://localhost:8080/api" + '/moveEmails',
+
+    getFolders: "http://localhost:8080/api/folders",
 }
 
 const DefualtFolder = () => {
@@ -91,11 +93,25 @@ const DefualtFolder = () => {
     const [sortOrder, setSortOrder] = useState('Ascendingly');
     const [filterBy, setFilterBy] = useState('All');
     const [filterText, setFilterText] = useState('');
-
+    
     useEffect(() => {
         handleRefresh();
     }, [userName, currentFolder]);
     
+    const [folders, setFolders] = useState(['college', 'games', 'important']); //List of custom folders
+    // const [folders, setFolders] = useState([]); //List of custom folders
+
+    const fetchFolders = async () => {
+        console.log("Fetching folders..");
+        try {
+            const response = await axios.get(EndPoints.getFolders, { params: { user: userName } });
+            setFolders(response.data.folders);
+        } catch (error) {
+            console.error("Error fetching folders:", error);
+        }
+    };
+
+
     const handleSelectEmail = (emailId) => {
         setSelectedEmails(prevSelected => 
             prevSelected.includes(emailId) 
@@ -136,11 +152,30 @@ const DefualtFolder = () => {
         } catch (error) {
             console.error("Error fetching emails:", error);
         }
+
+        fetchFolders();
     };
 
-    // STILL NOT DONE
-    const handleMoveToFolder = () => {
-        console.log("Move To Folder", selectedEmails)
+    // Done
+    const handleMoveToFolder = async (folder) => {
+        console.log("Move To Folder ", folder, " the following emails: ", selectedEmails)
+
+        try {
+            const response = await axios.post(EndPoints.moveEmails, {
+                user: userName,
+                folder: currentFolder,
+    
+                emailIds: selectedEmails,  // Send the list of selected emails IDs to move
+            });
+            if (response.status === 200) {
+                handleRefresh();
+            } else {
+                console.error("Error moving emails");
+            }
+        } catch (error) {
+            console.error("Error moving emails:", error);
+        }
+
     }
 
     // Done
@@ -226,6 +261,8 @@ const DefualtFolder = () => {
                 sortOrder={sortOrder}
                 filterBy={filterBy}
                 filterText={filterText}
+
+                folders={folders}
             />
             
             <div>

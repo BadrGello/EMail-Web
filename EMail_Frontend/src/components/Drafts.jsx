@@ -19,6 +19,8 @@ const EndPoints = {
     Base: "http://localhost:8080/api",
     deleteDrafts: "http://localhost:8080/api" + '/deleteEmails',
     getDrafts: "http://localhost:8080/api" + '/getEmails', //refresh, sort and filter
+
+    getFolders: "http://localhost:8080/api/folders",
 }
 
 
@@ -85,6 +87,18 @@ const Drafts = () => {
         handleRefresh();
     }, [userName]);
 
+    const [folders, setFolders] = useState(null); //List of custom folders
+
+    // const fetchFolders = async () => {
+    //     console.log("Fetching folders..");
+    //     try {
+    //         const response = await axios.get(EndPoints.getFolders, { params: { user: userName } });
+    //         setFolders(response.data.folders);
+    //     } catch (error) {
+    //         console.error("Error fetching folders:", error);
+    //     }
+    // };
+
     // Done
     const handleEditOrSend = () => {
         // In both, remove from drafts folder
@@ -136,9 +150,11 @@ const Drafts = () => {
         } catch (error) {
             console.error("Error fetching drafts:", error);
         }
+
+        // fetchFolders();
     };
 
-    const handleMoveToFolder = () => {
+    const handleMoveToFolder = (folder) => {
         alert("Can't move drafts to another folder")
     };
 
@@ -214,6 +230,8 @@ const Drafts = () => {
                 sortOrder={sortOrder}
                 filterBy={filterBy}
                 filterText={filterText}
+
+                folders={folders}
             />
 
             <div>

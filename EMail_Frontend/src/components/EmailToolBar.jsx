@@ -9,14 +9,62 @@ import { MdDriveFileMove } from "react-icons/md";
 
 
 
-const EmailToolbar = ({ onRefreshClick, onMoveClick, onDeleteClick, onSortChange, onOrderChange, onFilterChange, onFilterTextChange, onSortClick, onFilterClick, onClearFilterClick, sortType, sortOrder, filterBy, filterText }) => {
+const EmailToolbar = ({ onRefreshClick, onMoveClick, onDeleteClick, onSortChange, onOrderChange, onFilterChange, onFilterTextChange, onSortClick, onFilterClick, onClearFilterClick, sortType, sortOrder, filterBy, filterText, folders }) => {
+    
+    const [isDropdownVisible, setDropdownVisible] = useState(false);
+
+    const toggleDropdown = () => {
+        if (folders === null){
+            alert("Can't move drafts to another folder")
+            return
+        }
+        setDropdownVisible((prev) => !prev);
+    };
+
+    const handleFolderSelect = (folder) => {
+        onMoveClick(folder); // Call the onMoveClick function with the selected folder
+        setDropdownVisible(false); // Close the dropdown after selection
+    };
+
     return (
         <div className="email toolbar">
 
             <button onClick={onRefreshClick} id='icon-button' title="Refresh"><MdRefresh id='icon'/></button>
-            <button onClick={onMoveClick} id='icon-button' title="Move"><MdDriveFileMove /></button>
+            {/* <button onClick={handleMoveClick} id='icon-button' title="Move"><MdDriveFileMove /></button> */}
+
+            {/* Move Button with Dropdown */}
+            <div id="move-folder" style={{ position: 'relative', display: 'inline-block' }}>
+                <button onClick={toggleDropdown} id='icon-button' title="Move">
+                    <MdDriveFileMove id="icon" />
+                </button>
+                {isDropdownVisible && (
+                    <ul className="dropdown-menu" style={{
+                        position: 'absolute',
+                        top: '100%',
+                        left: 0,
+                        listStyle: 'none',
+                        padding: '0.5em',
+                        margin: 0,
+                        border: '1px solid #ccc',
+                        backgroundColor: '#fff',
+                        boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+                        zIndex: 1000
+                    }}>
+                        {folders.map((folder) => (
+                            <li 
+                                key={folder} 
+                                style={{ padding: '0.5em', cursor: 'pointer' }}
+                                onClick={() => handleFolderSelect(folder)}
+                            >
+                                {folder}
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+
             <button onClick={onDeleteClick} id='icon-button' title="Delete"><IoTrashBin /></button>
-            
+
             <div id='sort'>
                 <p>Sort By: </p>
 
