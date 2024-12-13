@@ -47,17 +47,17 @@ public class User implements UserInterface {
         System.out.println("User saved");
     }
 
- 
     public User load(String userName) throws Exception {
         String currentDir = System.getProperty("user.dir");
         currentDir =Paths.get(currentDir, "dataBase").toString(); 
-        Path folderPath = Paths.get(currentDir, this.userName);
+        Path folderPath = Paths.get(currentDir, userName);
         Path filePath = Paths.get(folderPath.toString(), "User.json");
         ObjectMapper objectMapper = new ObjectMapper();
         File jsonFile = new File(filePath.toString());
         validateSchema(jsonFile); 
         return objectMapper.readValue(jsonFile, User.class);
     }
+    
 
     public void recievMail(Mail mail){
         this.mailFolders.getInboxFolder().add(mail);
@@ -68,7 +68,8 @@ public class User implements UserInterface {
             System.out.println(e);
         }
     }
-
+    
+    @Override
     public void sendMail(Vector<String> attachments,Vector<String> recipients,String subject ,int priority ,String body,String date){
         this.mailFolders.sendMail(attachments, this.userName, recipients, subject, priority, body, date);
         try{
@@ -78,6 +79,8 @@ public class User implements UserInterface {
                 System.out.println(e);
             }
     }
+    
+    @Override
     public void makeDraft(Vector<String> attachments,String sender,Vector<String> recipients,String subject ,int priority ,String body,String date){
         this.mailFolders.makeDraft(attachments, sender, recipients, subject, priority, body, date);
         try{
@@ -87,6 +90,8 @@ public class User implements UserInterface {
                 System.out.println(e);
             }
     }
+    
+    @Override
     public void MoveToTrash(String folderName,String date,String DeleteDate){
         this.mailFolders.MoveToTrash(folderName, date, DeleteDate);
         try{
@@ -97,6 +102,8 @@ public class User implements UserInterface {
             }
         
     }
+
+    @Override
     public void returnFromTrash(String date){
         this.mailFolders.returnFromTrash(date);
         try{
@@ -106,6 +113,8 @@ public class User implements UserInterface {
                 System.out.println(e);
             }
     }
+    
+    @Override
     public void deleteMail(String folderName,String date){
         this.mailFolders.deleteMail(folderName, date);
         try{
@@ -115,6 +124,8 @@ public class User implements UserInterface {
                 System.out.println(e);
             }
     }
+    
+    @Override
     public void moveToFolder(String oldFolder,String newFolder,String date){
         this.mailFolders.moveToFolder(oldFolder, newFolder, date);
         try{
@@ -124,6 +135,8 @@ public class User implements UserInterface {
                 System.out.println(e);
             }
     }
+    
+    @Override
     public void addUserFolder(String folderName){
         this.mailFolders.addUserFolder(folderName);
         try{
@@ -133,6 +146,8 @@ public class User implements UserInterface {
                 System.out.println(e);
             }
     }
+    
+    @Override
     public void renameUserFolder(String oldFolder,String newFolder){
         this.mailFolders.renameUserFolder(oldFolder, newFolder);
         try{
@@ -142,6 +157,8 @@ public class User implements UserInterface {
                 System.out.println(e);
             }
     }
+    
+    @Override
     public void deleteUserFolder(String folderName){
         this.mailFolders.deleteUserFolder(folderName);
         try{

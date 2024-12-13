@@ -5,13 +5,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team.email.User.UserBuilder;
 
 public class proxy implements UserInterface {
-
+    private static final proxy AppProxy=new proxy();
     private User user;
     private boolean access=false;
     private Vector<String> UserNames;
@@ -51,33 +53,20 @@ public class proxy implements UserInterface {
         }
     }
 
-    public void loadUser(String path) throws IOException{
-        
-        if(this.access){
+    public void loadUser(String userName) {
             try {
-                this.user = user.load(path);
+                this.user = new User();
+                this.user = user.load(userName);
             } catch (Exception e) {
-                e.printStackTrace();
+                System.err.println(e);
             }
-        }
-        else{
-            System.out.println("no access");
-        }
+        
 
     }
 
     public void makeAccount(String userName,String password) {
         ObjectMapper objectMapper = new ObjectMapper();
         if(!UserNames.contains(userName)){
-        this.UserNames.add(userName);
-        this.passwords.add(password);
-        UsersData usersData=new UsersData(this.UserNames, this.passwords);
-        try{
-        objectMapper.writeValue(new File("usersData.json"), usersData);
-        }
-        catch (IOException e) {
-            System.out.println(e);
-        }
             String currentDir = System.getProperty("user.dir");
             String folderName = userName;
             currentDir =Paths.get(currentDir, "dataBase").toString(); 
@@ -100,7 +89,15 @@ public class proxy implements UserInterface {
                 catch(Exception e){
                     System.out.println(e);
                 }
-                userBuilder.build();
+                this.UserNames.add(userName);
+                this.passwords.add(password);
+                UsersData usersData=new UsersData(this.UserNames, this.passwords);
+                try{
+                objectMapper.writeValue(new File("usersData.json"), usersData);
+                }
+                catch (IOException e) {
+                    System.out.println(e);
+                }
             } catch (IOException e) {
                 System.err.println("An error occurred while creating the folder: " + e.getMessage());
             }
@@ -113,9 +110,77 @@ public class proxy implements UserInterface {
     public User getUser(){
         return this.user;
     }
+
+    @Override
+    public void sendMail(Vector<String> attachments,Vector<String> recipients,String subject ,int priority ,String body,String date){
+        this.user.sendMail(attachments, recipients, subject, priority, body, date);
+    }
+
+    @Override
+    public void makeDraft(Vector<String> attachments,String sender,Vector<String> recipients,String subject ,int priority ,String body,String date){
+        this.user.makeDraft(attachments, sender, recipients, subject, priority, body, date);
+    }
+
+    @Override
+    public void MoveToTrash(String folderName,String date,String DeleteDate){
+        this.user.MoveToTrash(folderName, date, DeleteDate);
+    }
+
+    @Override
+    public void returnFromTrash(String date){
+        this.user.returnFromTrash(date);
+    }
+
+    @Override
+    public void deleteMail(String folderName,String date){
+        this.user.deleteMail(folderName, date);
+    }
+
+    @Override
+    public void moveToFolder(String oldFolder,String newFolder,String date){
+        this.user.moveToFolder(oldFolder, newFolder, date);
+    }
     
+    @Override
+    public void addUserFolder(String folderName){
+        this.user.addUserFolder(folderName);
+    }
+
+    @Override
+    public void renameUserFolder(String oldFolder,String newFolder){
+        this.user.renameUserFolder(oldFolder, newFolder);
+    }
+
+    @Override
+    public void deleteUserFolder(String folderName){
+        this.user.deleteUserFolder(folderName);
+    }
+
+    @Override
+    public MailFolders getMailFolders(){
+        return this.user.getMailFolders();
+    }
+
+    @Override
+    public Contacts getContacts() {
+        return this.user.getContacts();
+    }
+
+    public Set<String> getFolderNames(){
+        return this.user.getMailFolders().getFolderNames();
+    }
+
+    public Map<String,Vector<Mail>> getUserFolders(){
+        return this.user.getMailFolders().getUserFolders();
+    }
+
+    public static proxy getInstance(){
+        return AppProxy;
+    }
     public static void main(String[] args) {
         proxy p=new proxy();
-        p.makeAccount("adham3", "0003");
+        p.loadUser("adham4");
+        p.deleteUserFolder("as");
     }
+
 }

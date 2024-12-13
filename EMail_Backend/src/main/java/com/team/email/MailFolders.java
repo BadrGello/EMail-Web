@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 public class MailFolders {
@@ -225,6 +226,7 @@ public class MailFolders {
 
     public void deleteUserFolder(String folderName){
         this.UserFolders.remove(folderName);
+        System.out.println(this.UserFolders.keySet().size());
         for(int i=0;i<this.trashFolder.size();i++){
             if(this.trashFolder.get(i).getFolderNameBeforeDelete()==folderName){
                 this.trashFolder.remove(i);
@@ -300,6 +302,17 @@ public class MailFolders {
 
         Collections.sort(this.sortedMails, sorter.BodyCompare());
         
+    }
+    public void reverseOrder(){
+        int start=0;
+        int end = this.sortedMails.size()-1;
+        while (start < end) {
+            Mail temp = sortedMails.get(start);
+            sortedMails.set(start, sortedMails.get(end));
+            sortedMails.set(end, temp);
+            start++;
+            end--;
+        }
     }
 
 /////////////////search Methods/////////////////////////////////////
@@ -503,9 +516,15 @@ public class MailFolders {
     public Vector<Mail> getOtherFolder(String folderName){
         return this.UserFolders.get(folderName);
     }
+    public Set<String> getFolderNames(){
+        return this.UserFolders.keySet();
+    }
 
     public Vector<Mail> getSortedMail(){
         return this.sortedMails;
+    }
+    public Map<String,Vector<Mail>> getUserFolders(){
+        return this.UserFolders;
     }
 
 }

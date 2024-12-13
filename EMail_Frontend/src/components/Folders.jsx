@@ -40,8 +40,9 @@ const Folders = ({ folders, setFolders }) => {
     const fetchFolders = async () => {
         console.log("Fetching folders..");
         try {
-            const response = await axios.get(EndPoints.getFolders, { params: { user: userName } });
-            setFolders(response.data.folders);
+            const response = await axios.get(EndPoints.getFolders, { params: { userName: userName } });
+            console.log(response)
+            setFolders(response.data);
         } catch (error) {
             console.error("Error fetching folders:", error);
         }
@@ -54,9 +55,11 @@ const Folders = ({ folders, setFolders }) => {
         if (window.confirm("Delete this folder?")) {
             console.log("Deleting.. ", folderName);
             try {
-                const response = await axios.post(EndPoints.deleteFolder, {
-                    user: userName,
-                    folder: currentFolder,
+                const response = await axios.post(EndPoints.deleteFolder, null, {
+                    params: {
+                        userName: userName,
+                        folderName: folderName,
+                    },
                 });
                 if (response.status === 200) {
                     fetchFolders(); //refresh
@@ -77,7 +80,7 @@ const Folders = ({ folders, setFolders }) => {
         console.log("Editing.. ");
         try {
             const response = await axios.post(EndPoints.editFolder, {
-                user: userName,
+                userName: userName,
                 folderName: editingFolderName,
             });
             if (response.status === 200) {
@@ -113,9 +116,11 @@ const Folders = ({ folders, setFolders }) => {
         }
         console.log("Adding.. ", newFolderName);
         try {
-            const response = await axios.post(EndPoints.addFolder, {
-                user: userName,
-                folderName: newFolderName,
+            const response = await axios.post(EndPoints.addFolder, null, {
+                params: {
+                    userName: userName,
+                    folderName: newFolderName,
+                },
             });
             if (response.status === 200) {
                 fetchFolders(); //refresh

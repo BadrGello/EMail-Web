@@ -104,8 +104,9 @@ const DefualtFolder = () => {
     const fetchFolders = async () => {
         console.log("Fetching folders..");
         try {
-            const response = await axios.get(EndPoints.getFolders, { params: { user: userName } });
-            setFolders(response.data.folders);
+            const response = await axios.get(EndPoints.getFolders, { params: { userName: userName } });
+            console.log(response)
+            setFolders(response.data);
         } catch (error) {
             console.error("Error fetching folders:", error);
         }
@@ -139,8 +140,8 @@ const DefualtFolder = () => {
         try {
             const response = await axios.get(EndPoints.getEmails, {
                 params: {
-                    user: userName,
-                    folder: currentFolder,
+                    userName: userName,
+                    folderName: currentFolder,
 
                     sortType: sortType,
                     sortOrder: sortOrder,

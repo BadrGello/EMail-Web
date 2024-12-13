@@ -51,9 +51,11 @@ function EmailPage() {
         }
         console.log("Adding.. ", newFolderName);
         try {
-            const response = await axios.post(EndPoints.addFolder, {
-                user: userName,
-                folderName: newFolderName,
+            const response = await axios.post(EndPoints.addFolder, null, {
+                params: {
+                    userName: userName,
+                    folderName: newFolderName,
+                },
             });
             if (response.status === 200) {
                 fetchFolders(); //refresh
@@ -67,7 +69,8 @@ function EmailPage() {
     const fetchFolders = async () => {
         console.log("Fetching folders..");
         try {
-            const response = await axios.get(EndPoints.getFolders, { params: { user: userName } });
+            const response = await axios.get(EndPoints.getFolders, { params: { userName: userName } });
+            console.log(response)
             setFolders(response.data.folders);
         } catch (error) {
             console.error("Error fetching folders:", error);
