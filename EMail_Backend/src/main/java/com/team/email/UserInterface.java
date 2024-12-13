@@ -4,8 +4,8 @@ import java.util.Vector;
 
 public interface UserInterface {
     
-    public void sendMail(Vector<String> attachments,Vector<String> recipients,String subject ,int priority ,String body,String date);
-    public void makeDraft(Vector<String> attachments,String sender,Vector<String> recipients,String subject ,int priority ,String body,String date);
+    public void sendMail(Vector<Attachment> attachments,Vector<String> recipients,String subject ,int priority ,String body,String date);
+    public void makeDraft(Vector<Attachment> attachments,String sender,Vector<String> recipients,String subject ,int priority ,String body,String date);
     public void MoveToTrash(String folderName,String date,String DeleteDate);
     public void returnFromTrash(String date);
     public void deleteMail(String folderName,String date);
