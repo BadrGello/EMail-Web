@@ -476,23 +476,18 @@ public class MailFolders {
     }
 
 ///////////////filter methods//////////////////////////////////////
-    public Vector<Mail> filterBySender (Vector<Mail> mails, Vector<String> senders){
+    public Vector<Mail> filterBySender (Vector<Mail> mails, String senders){
         SenderCriteria senderCriteria = new SenderCriteria();
         Vector<Mail> filtered = senderCriteria.meetCriteria(mails, senders);
         return filtered;
     }
 
-    public Vector<Mail> filterBySubject (Vector<Mail> mails, Vector<String> subjects){
+    public Vector<Mail> filterBySubject (Vector<Mail> mails, String subjects){
         SubjectCriteria subjectCriteria = new SubjectCriteria();
         Vector<Mail> filtered = subjectCriteria.meetCriteria(mails, subjects);
         return filtered;
     }
     
-    public Vector<Mail> filterBySubjectAndSender (Vector<Mail> mails,Vector<String> senders, Vector<String> subjects){
-        AndCriteria andCriteria = new AndCriteria();
-        Vector<Mail> filtered = andCriteria.meetCriteria(mails,senders, subjects);
-        return filtered;
-    }
     
      
 ///////////////return folders methods//////////////////////////////    

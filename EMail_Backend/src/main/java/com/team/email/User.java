@@ -13,10 +13,9 @@ import org.json.JSONTokener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class User implements UserInterface {
-    private String id;
+ 
     private String userName;
     private String password;
-    private String email;
     private Contacts contacts;
     private MailFolders mailFolders;
 
@@ -26,10 +25,9 @@ public class User implements UserInterface {
     }
    
     private User (UserBuilder builder){
-        this.id = builder.id;
+    
         this.userName = builder.userName;
         this.password = builder.password;
-        this.email = builder.email;
         this.contacts = builder.contacts;
         this.mailFolders = builder.mailFolders;
 
@@ -169,14 +167,6 @@ public class User implements UserInterface {
             }
     }
 
-    public String getId() {
-        return this.id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getUserName() {
         return this.userName;
     }
@@ -193,13 +183,6 @@ public class User implements UserInterface {
         this.password = password;
     }
 
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public Contacts getContacts() {
         return this.contacts;
@@ -233,10 +216,9 @@ public class User implements UserInterface {
         schema.validate(jsonObject); 
     }
     public static class UserBuilder{
-    private String id;
+
     private String userName;
     private String password;
-    private String email;
     private Contacts contacts;
     private MailFolders mailFolders;
 
@@ -248,10 +230,7 @@ public class User implements UserInterface {
         this.contacts = contacts;
         return this;
     }
-    public UserBuilder setID (String id){
-        this.id = id;
-        return this;    
-    }
+
     public UserBuilder setMailFolders(MailFolders mailFolders){
         this.mailFolders= mailFolders;
         return this;
