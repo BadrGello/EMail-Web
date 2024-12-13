@@ -52,14 +52,10 @@ public class Controller {
                     return ResponseEntity.ok( appProxy.getUser().getMailFolders().searchByAll(filterText, folderName));
                     
                 case "Subject":
-                    text =new Vector<>();
-                    text.add(filterText);
-                    return ResponseEntity.ok(appProxy.getUser().getMailFolders().filterBySubject( appProxy.getUser().getMailFolders().getSortedMail(), text));
+                    return ResponseEntity.ok(appProxy.getUser().getMailFolders().filterBySubject( appProxy.getUser().getMailFolders().getSortedMail(), filterText));
                     
                 case "Sender":
-                    text =new Vector<>();
-                    text.add(filterText);
-                    return ResponseEntity.ok(appProxy.getUser().getMailFolders().filterBySender( appProxy.getUser().getMailFolders().getSortedMail(), text));
+                    return ResponseEntity.ok(appProxy.getUser().getMailFolders().filterBySender( appProxy.getUser().getMailFolders().getSortedMail(), filterText));
                           
             }
         }
