@@ -112,12 +112,12 @@ public class proxy implements UserInterface {
     }
 
     @Override
-    public void sendMail(Vector<String> attachments,Vector<String> recipients,String subject ,int priority ,String body,String date){
+    public void sendMail(Vector<Attachment> attachments,Vector<String> recipients,String subject ,int priority ,String body,String date){
         this.user.sendMail(attachments, recipients, subject, priority, body, date);
     }
 
     @Override
-    public void makeDraft(Vector<String> attachments,String sender,Vector<String> recipients,String subject ,int priority ,String body,String date){
+    public void makeDraft(Vector<Attachment> attachments,String sender,Vector<String> recipients,String subject ,int priority ,String body,String date){
         this.user.makeDraft(attachments, sender, recipients, subject, priority, body, date);
     }
 

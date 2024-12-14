@@ -11,13 +11,13 @@ public class Mail {
     private String date;
     private String folderBeforeDelete;
     private String deletedDate;
-    Vector<String> attachments;
+    Vector<Attachment> attachments;
 
     public Mail() {
     }
 
 
-    public Mail(Vector<String> attachments,String sender,Vector<String> recipients,String subject ,int priority ,String body,String date,String folderBeforeDelete,String deltedDate){
+    public Mail(Vector<Attachment> attachments,String sender,Vector<String> recipients,String subject ,int priority ,String body,String date,String folderBeforeDelete,String deltedDate){
             this.attachments=attachments;
             this.sender=sender;
             this.recipients=recipients;
@@ -99,7 +99,7 @@ public class Mail {
         return this.deletedDate;
     }  
     
-    public Vector<String> getAttachment(){
+    public Vector<Attachment> getAttachment(){
         return this.attachments;
     }
 

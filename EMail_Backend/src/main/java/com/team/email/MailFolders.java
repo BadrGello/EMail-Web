@@ -29,7 +29,7 @@ public class MailFolders {
 
 ////////////user direct methods with mails//////////////////////////////////
     
-    public void sendMail(Vector<String> attachments,String sender,Vector<String> recipients,String subject ,int priority ,String body,String date){
+    public void sendMail(Vector<Attachment> attachments,String sender,Vector<String> recipients,String subject ,int priority ,String body,String date){
         Mail mail =new Mail(attachments,sender,recipients,subject, priority, body,date,"","");
         this.sentFolder.add(mail);
         for(int i=0;i<recipients.size();i++){
@@ -50,7 +50,7 @@ public class MailFolders {
         }
     }
 
-    public void makeDraft(Vector<String> attachments,String sender,Vector<String> recipients,String subject ,int priority ,String body,String date){
+    public void makeDraft(Vector<Attachment> attachments,String sender,Vector<String> recipients,String subject ,int priority ,String body,String date){
         Mail mail =new Mail(attachments,sender,recipients,subject, priority, body,date,"","");
         this.draftFolder.add(mail);
         //save it in database in sender (dont save it in recipients)
@@ -366,9 +366,9 @@ public class MailFolders {
                 }
             }
             }
-            if(j==tempMails.get(i).getRecipients().size()){
+            if(j==tempMails.get(i).getAttachment().size()){
             for(j=0;j<tempMails.get(i).getAttachment().size();j++){
-                if( this.isThisNameInSearch(text, tempMails.get(i).getAttachment().get(j))){
+                if( this.isThisNameInSearch(text, tempMails.get(i).getAttachment().get(j).getName())){
                     searchMails.add(tempMails.get(i));
                     break;
                 }
@@ -466,7 +466,7 @@ public class MailFolders {
 
         for(int i=0;i<tempMails.size();i++){
             for(int j=0;j<tempMails.get(i).getAttachment().size();j++){
-                if( this.isThisNameInSearch(attachment, tempMails.get(i).getAttachment().get(j))){
+                if( this.isThisNameInSearch(attachment, tempMails.get(i).getAttachment().get(j).getName())){
                     searchMails.add(tempMails.get(i));
                     break;
                 }

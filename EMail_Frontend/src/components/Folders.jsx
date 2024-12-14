@@ -12,9 +12,9 @@ import { CgMoreVerticalAlt } from 'react-icons/cg';
 const EndPoints = {
     Base: "http://localhost:8080/api",
     getFolders: "http://localhost:8080/api/folders",
-    deleteFolder: "http://localhost:8080/api/folders/delete",
-    addFolder: "http://localhost:8080/api/folders/add",
-    editFolder: "http://localhost:8080/api/folders/edit",
+    deleteFolder: "http://localhost:8080/api/folders" + '/delete',
+    addFolder: "http://localhost:8080/api/folders" + '/add',
+    editFolder: "http://localhost:8080/api/folders" + '/edit',
 };
 
 
@@ -25,8 +25,6 @@ const Folders = ({ folders, setFolders }) => {
     const navigate = useNavigate();
     const userName = location.state.userName
 
-    
-    const [editingFolderId, setEditingFolderId] = useState(null);
     const [editingFolderName, setEditingFolderName] = useState("");
     const [addFolderOpen, setAddFolderOpen] = useState(false);
     const [newFolderName, setNewFolderName] = useState("");
@@ -40,11 +38,12 @@ const Folders = ({ folders, setFolders }) => {
     const fetchFolders = async () => {
         console.log("Fetching folders..");
         try {
+            console.log("params: { userName: " + userName + "}");
             const response = await axios.get(EndPoints.getFolders, { params: { userName: userName } });
-            console.log(response)
+            console.log(response.data)
             setFolders(response.data);
         } catch (error) {
-            console.error("Error fetching folders:", error);
+            console.error("Error fetching folders:", error.response.data);
         }
     };
 
@@ -72,7 +71,7 @@ const Folders = ({ folders, setFolders }) => {
 
 
     //Rename
-    const saveEdit = async () => {
+    const saveEdit = async (folderName) => {
         if (editingFolderName.trim() === "") {
             alert("Folder name cannot be empty.");
             return;
@@ -81,7 +80,8 @@ const Folders = ({ folders, setFolders }) => {
         try {
             const response = await axios.post(EndPoints.editFolder, {
                 userName: userName,
-                folderName: editingFolderName,
+                folderName: folderName,
+                newFolderName: editingFolderName,
             });
             if (response.status === 200) {
                 fetchFolders(); //refresh
@@ -95,13 +95,11 @@ const Folders = ({ folders, setFolders }) => {
 
 
     const cancelEdit = () => {
-        setEditingFolderId(null);
         setEditingFolderName("");
     };
 
     const startEdit = (folder) => {
-        setEditingFolderId(folder.id);
-        setEditingFolderName(folder.name);
+        setEditingFolderName(folder);
     };
 
     const toggleAddFolder = () => {
@@ -137,23 +135,26 @@ const Folders = ({ folders, setFolders }) => {
             {/*Add / Edit*/}
             <div className="custom-folders">
                 {folders.map((folder) => (
-                    <div key={folder.id} className="folder-item">
-                        {editingFolderId === folder.id ? (
-                            <div id="folders-list">
-                                <input type="text" value={editingFolderName} onChange={(e) => setEditingFolderName(e.target.value)} autoFocus placeholder="Edit folder name" />
+                    <div key={folder} className="folder-item">
+                        {editingFolderName === folder ? (
+                            <div id="folders-edit">
+                                <input id='folder-name-input' type="text" value={editingFolderName} onChange={(e) => setEditingFolderName(e.target.value)} autoFocus placeholder="Edit folder name" />
                                 <div id="folder-option">
-                                    <button onClick={saveEdit} title="Save" id="icon-button"><MdOutlineDone /></button>
+                                    <button onClick={saveEdit(folder)} title="Save" id="icon-button"><MdOutlineDone /></button>
                                     <button onClick={cancelEdit} title="Cancel" id="icon-button"><FaXmark /></button>
                                 </div>
                             </div>
                         ) : (
-                            <div id="folders-list">
-                                <button onClick={() => navigate("/home", { replace: true, state: { userName, folder: folder.name }, }) } id="folder-button" title={`Open ${folder.name}`} > {folder.name} </button>
+                            <>
+                            <div id="folders-card">
+                                <button onClick={() => navigate("/home", { replace: true, state: { userName, folder }, }) } id="folder-name" title={`Open ${folder}`} > {folder} </button>
                                 <div id='folder-option'>
                                     <button onClick={() => startEdit(folder)} title="Edit" id="icon-button" > <CgMoreVerticalAlt /> </button>
-                                    <button onClick={() => deleteFolder(folder.id)} title="Delete" id="icon-button" > <FiTrash /> </button>
+                                    <button onClick={() => deleteFolder(folder)} title="Delete" id="icon-button" > <FiTrash /> </button>
                                 </div>
                             </div>
+                            <div id='list-seperator'></div>
+                            </>
                         )}
                     </div>
                 ))}
@@ -162,7 +163,7 @@ const Folders = ({ folders, setFolders }) => {
 
 
             {/*Add new folder button*/}
-            <div className="add-folder-section">
+            <div className="add-folder-section" id='folder-option'>
                 <button id="icon-button" onClick={toggleAddFolder} title="Add Folder">
                     <FaPlus />
                 </button>
@@ -170,10 +171,10 @@ const Folders = ({ folders, setFolders }) => {
                 {/*Add Folder Modal*/}
                 {addFolderOpen && (
                     <div className="add-folder-modal">
-                        <input id='foldar-name-input' type="text" value={newFolderName} onChange={(e) => setNewFolderName(e.target.value)} placeholder="New Folder Name" maxLength={10} autoFocus />
+                        <input id='folder-name-input' type="text" value={newFolderName} onChange={(e) => setNewFolderName(e.target.value)} placeholder="New Folder Name" maxLength={10} autoFocus />
                         <div className="modal-buttons">
-                            <button onClick={toggleAddFolder} title="Cancel" id='icon-button'> <FaXmark /> </button>
                             <button onClick={addFolder} title="Save" id='icon-button'> <MdOutlineDone /> </button>
+                            <button onClick={toggleAddFolder} title="Cancel" id='icon-button'> <FaXmark /> </button>
                         </div>
                     </div>
                 )}

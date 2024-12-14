@@ -223,7 +223,7 @@ a:hover {
 
 }
 
-#foldar-name-input {
+#folder-name-input, #folders-edit input {
     margin-left: 5px;
     width: 75%;
     color:rgb(240, 248, 255);
@@ -235,7 +235,7 @@ a:hover {
     outline: 0;
 }
 
-#foldar-name-input input[type="text"]::placeholder{
+#folder-name-input input[type="text"]::placeholder, #folders-edit input[type="text"]::placeholder{
     color:rgba(240, 248, 255, 0.699);
 }
 
@@ -480,6 +480,80 @@ a:hover {
 
 /*_______________________________________________________________End Contacts Tab_______________________________________________________________*/
 
+
+/*_______________________________________________________________Start Folders Tab_______________________________________________________________*/
+
+#folders-card {
+    /*background-color: aqua;*/
+    height: 80px;
+    display: flex;
+    position: relative;
+    margin: 15px 20px;
+    transition: 0.3s ease-in;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+#folders-card:hover {
+    background-color: rgba(39, 41, 41, 0.205);
+}
+
+#folders-card #folder-name{
+    background-color: transparent;
+    cursor: pointer;
+    border: none;
+    color: rgb(51, 52, 53);
+}
+
+#folder-option {
+    position: absolute;
+    right: 0;
+    margin-right: 10px;
+}
+
+#folder-option svg{
+    color: rgba(46, 45, 45, 0.87);
+    transition: 0.3s ease-in;
+}
+#folder-option #icon-button:hover svg{
+    color: rgb(219, 209, 209);
+}
+
+.add-folder-section #icon-button {
+    margin-top: 30px;
+    position: relative;
+    left:0;
+}
+
+.add-folder-section{
+    position: relative;
+    left:0;
+    margin-left: 50px;
+    width:50%;
+}
+.add-folder-section input{
+    margin: 10px 0;
+}
+
+
+/*edit*/
+
+#folders-edit{
+    height: 80px;
+    display: flex;
+    margin: 15px 20px;    
+}
+
+#folders-edit input{
+    height: 20px;
+    width:30%;
+}
+
+/*_______________________________________________________________End Folders List_______________________________________________________________*/
+
+
+
 /*_______________________________________________________________Start Emails List_______________________________________________________________*/
 
 .list ul {
@@ -500,6 +574,7 @@ a:hover {
 
 .list li span{
     margin-bottom: 5px;
+    color: rgb(51, 52, 53);
 }
 
 .list li:hover {

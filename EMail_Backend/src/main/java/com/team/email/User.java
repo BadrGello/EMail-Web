@@ -68,7 +68,7 @@ public class User implements UserInterface {
     }
     
     @Override
-    public void sendMail(Vector<String> attachments,Vector<String> recipients,String subject ,int priority ,String body,String date){
+    public void sendMail(Vector<Attachment> attachments,Vector<String> recipients,String subject ,int priority ,String body,String date){
         this.mailFolders.sendMail(attachments, this.userName, recipients, subject, priority, body, date);
         try{
             this.save();
@@ -79,7 +79,7 @@ public class User implements UserInterface {
     }
     
     @Override
-    public void makeDraft(Vector<String> attachments,String sender,Vector<String> recipients,String subject ,int priority ,String body,String date){
+    public void makeDraft(Vector<Attachment> attachments,String sender,Vector<String> recipients,String subject ,int priority ,String body,String date){
         this.mailFolders.makeDraft(attachments, sender, recipients, subject, priority, body, date);
         try{
             this.save();
@@ -261,7 +261,7 @@ public class User implements UserInterface {
         System.out.println("load done");
         Vector<String> s=new Vector<>();
         s.add("adham1");
-        user1.sendMail(s , s, "", 1, "", "");
+        //user1.sendMail(s , s, "", 1, "", "");
 
     }
 }
