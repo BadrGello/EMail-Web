@@ -36,7 +36,7 @@ function EmailPage() {
     const [modalOpen, setModalOpen] = useState(false);
 
 
-    const [folders, setFolders] = useState([]); //List of custom folders
+    const [folders, setFolders] = useState(["games","school"]); //List of custom folders
     const [newFolderName, setNewFolderName] = useState("");
     const [addFolderOpen, setAddFolderOpen] = useState(false);
 
@@ -71,7 +71,7 @@ function EmailPage() {
         try {
             const response = await axios.get(EndPoints.getFolders, { params: { userName: userName } });
             console.log(response)
-            setFolders(response.data.folders);
+            setFolders(response.data);
         } catch (error) {
             console.error("Error fetching folders:", error);
         }

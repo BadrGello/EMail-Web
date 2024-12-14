@@ -57,7 +57,7 @@ const Contacts = () => {
         try {
             const response = await axios.get(EndPoints.getContacts, {
                 params: {
-                    user: userName,
+                    userName: userName,
 
                     sortType: sortType,
                     sortOrder: sortOrder,

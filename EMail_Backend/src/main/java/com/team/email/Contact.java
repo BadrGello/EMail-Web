@@ -13,6 +13,20 @@ public class Contact {
     public Contact() {
     }
 
+    public void setID(String ID) {
+        this.ID = ID;
+    }
+    public void setName(String Name) {
+        this.Name = Name;
+    }
+
+    public Vector<String> getEmails() {
+        return this.Emails;
+    }
+
+    public void setEmails(Vector<String> Emails) {
+        this.Emails = Emails;
+    }
 
     public Contact(String Id,String name,Vector<String> Mails){
         if(ValidMails(Mails)){

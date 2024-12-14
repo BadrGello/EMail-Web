@@ -177,10 +177,17 @@ public class proxy implements UserInterface {
     public static proxy getInstance(){
         return AppProxy;
     }
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         proxy p=new proxy();
+        //p.makeAccount("adham4", "0003");
         p.loadUser("adham4");
-        p.deleteUserFolder("as");
+        //p.getMailFolders().getUserFolders().keySet();
+        //Vector<String> s=new Vector<>();
+        //s.add("null@gg.com");
+        //p.getContacts().AddContact("1", "hello", s);
+        //p.addUserFolder("adham2");
+        //System.out.println(p.getContacts().getSortedContacts().get(0).getName());
+        p.getUser().save();
     }
 
 }

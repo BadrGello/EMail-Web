@@ -83,6 +83,24 @@ public class Contacts {
         return searchContacts;
     }
 
+    public Vector<Contact> SearchContactsByAll(String text){
+        Vector<Contact> searchContacts = new Vector<>();
+        for(int i=0;i<this.sortedContacts.size();i++){
+            if(isThisNameInSearch(text,this.sortedContacts.get(i).getName())){
+                searchContacts.add(this.sortedContacts.get(i));
+            }
+            else {
+                Vector<String> contactMails=this.sortedContacts.get(i).getMails();
+                for(int j=0;j<contactMails.size();j++){
+                    if(contactMails.get(j)==text){
+                        searchContacts.add(this.sortedContacts.get(i));
+                        break;
+                    }
+                } 
+            }
+    }
+    return searchContacts;
+}
     private Comparator<Contact> s() {
         return new Comparator<Contact>() {
             @Override
@@ -95,6 +113,7 @@ public class Contacts {
     }
 
     public void SortContacts(){
+        System.out.println("done");
         this.sortedContacts = (Vector<Contact>) this.contacts.clone();
         Collections.sort(this.sortedContacts, s());
         

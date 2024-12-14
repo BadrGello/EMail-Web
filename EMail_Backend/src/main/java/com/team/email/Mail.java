@@ -28,6 +28,43 @@ public class Mail {
             this.folderBeforeDelete=folderBeforeDelete;
             this.deletedDate=deltedDate;
     }
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+    public void setBody(String body) {
+        this.body = body;
+    }
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+    public void setRecipients(Vector<String> recipients) {
+        this.recipients = recipients;
+    }
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getFolderBeforeDelete() {
+        return this.folderBeforeDelete;
+    }
+
+    public void setFolderBeforeDelete(String folderBeforeDelete) {
+        this.folderBeforeDelete = folderBeforeDelete;
+    }
+    public void setDeletedDate(String deletedDate) {
+        this.deletedDate = deletedDate;
+    }
+
+    public Vector<String> getAttachments() {
+        return this.attachments;
+    }
+
+    public void setAttachments(Vector<String> attachments) {
+        this.attachments = attachments;
+    }
 
     
     public String getSender(){

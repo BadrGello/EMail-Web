@@ -40,7 +40,7 @@ public class User implements UserInterface {
         ObjectMapper objectMapper = new ObjectMapper();
         File jsonFile = new File(filePath.toString());
         objectMapper.writeValue(jsonFile, this);
-        validateSchema(jsonFile);
+        //validateSchema(jsonFile);
 
         System.out.println("User saved");
     }
@@ -52,7 +52,7 @@ public class User implements UserInterface {
         Path filePath = Paths.get(folderPath.toString(), "User.json");
         ObjectMapper objectMapper = new ObjectMapper();
         File jsonFile = new File(filePath.toString());
-        validateSchema(jsonFile); 
+        //validateSchema(jsonFile); 
         return objectMapper.readValue(jsonFile, User.class);
     }
     

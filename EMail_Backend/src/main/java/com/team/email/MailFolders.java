@@ -514,6 +514,7 @@ public class MailFolders {
     public Set<String> getFolderNames(){
         return this.UserFolders.keySet();
     }
+    public void setFolderNames(Set<String> folderNames){}
 
     public Vector<Mail> getSortedMail(){
         return this.sortedMails;

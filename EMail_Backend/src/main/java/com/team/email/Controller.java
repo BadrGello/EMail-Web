@@ -21,50 +21,91 @@ import org.springframework.web.bind.annotation.RestController;
 public class Controller {
     proxy appProxy=proxy.getInstance();
     
-    @GetMapping("/getEmails")
-    @ResponseBody
-    public ResponseEntity<Vector<Mail>> getFolder(@RequestParam String userName,@RequestParam String folderName,@RequestParam String sortType,@RequestParam String sortOrder,@RequestParam String filterType,@RequestParam String filterText){
-        appProxy.loadUser(userName);
-        switch(sortType){
-            case "Date":
-                appProxy.getUser().getMailFolders().sortByDate(folderName);
-                break;
-            case "Priority":
-                appProxy.getUser().getMailFolders().sortByImportance(folderName);
-                break;
-            case "Sender":
-                appProxy.getUser().getMailFolders().sortBySender(folderName);
-                break;
-            case "Subject":
-                appProxy.getUser().getMailFolders().sortBySubject(folderName);
-                break;
-            case "Body":
-                appProxy.getUser().getMailFolders().sortByBody(folderName);
-                break;
-        }
-        if(sortOrder=="Descendingly"){
-            appProxy.getUser().getMailFolders().reverseOrder();
-        }
-        if(filterText!=""){
-            Vector<String> text =new Vector<>();
-            switch(sortType){
-                case "All":
-                    return ResponseEntity.ok( appProxy.getUser().getMailFolders().searchByAll(filterText, folderName));
+    //@GetMapping("/getEmails")
+    //@ResponseBody
+    //public ResponseEntity<Vector<Mail>> getFolder(@RequestParam String userName,@RequestParam String folderName,@RequestParam String sortType,@RequestParam String sortOrder,@RequestParam String filterType,@RequestParam String filterText){
+      //  appProxy.loadUser(userName);
+        //switch(sortType){
+        //    case "Date":
+          //      appProxy.getUser().getMailFolders().sortByDate(folderName);
+            //    break;
+            //case "Priority":
+              //  appProxy.getUser().getMailFolders().sortByImportance(folderName);
+              //  break;
+        //    case "Sender":
+          //      appProxy.getUser().getMailFolders().sortBySender(folderName);
+            //    break;
+      //      case "Subject":
+        //        appProxy.getUser().getMailFolders().sortBySubject(folderName);
+          //      break;
+            //case "Body":
+        //        appProxy.getUser().getMailFolders().sortByBody(folderName);
+         //       break;
+      //  }
+       // if(sortOrder=="Descendingly"){
+        //    appProxy.getUser().getMailFolders().reverseOrder();
+        //}
+       // if(filterText!=""){
+         //   Vector<String> text =new Vector<>();
+           // switch(sortType){
+             //   case "All":
+               //     return ResponseEntity.ok( appProxy.getUser().getMailFolders().searchByAll(filterText, folderName));
                     
-                case "Subject":
-                    return ResponseEntity.ok(appProxy.getUser().getMailFolders().filterBySubject( appProxy.getUser().getMailFolders().getSortedMail(), filterText));
+             //   case "Subject":
+               //     return ResponseEntity.ok(appProxy.getUser().getMailFolders().filterBySubject( appProxy.getUser().getMailFolders().getSortedMail(), filterText));
                     
-                case "Sender":
-                    return ResponseEntity.ok(appProxy.getUser().getMailFolders().filterBySender( appProxy.getUser().getMailFolders().getSortedMail(), filterText));
+              //  case "Sender":
+                //    return ResponseEntity.ok(appProxy.getUser().getMailFolders().filterBySender( appProxy.getUser().getMailFolders().getSortedMail(), filterText));
                           
+         //   }
+     //   }
+     //   else{
+       //     return ResponseEntity.ok( appProxy.getUser().getMailFolders().getSortedMail());
+    //    }
+      //      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        //.body(new Vector<>());
+    //}
+
+    @GetMapping("/contacts")
+    @ResponseBody
+    public ResponseEntity<Vector<Contact>> getContacts(@RequestParam String userName,@RequestParam String sortType,@RequestParam String sortOrder,@RequestParam String filterType,
+    @RequestParam String filterText) {
+        System.out.println("user:"+userName+"sortType:"+sortType);
+        try {
+            switch (sortType) {
+                case "Name":
+                    appProxy.loadUser(userName);
+                    appProxy.getContacts().SortContacts();
+                    break;
+                
+                case "number of emails":
+                    
+                    break;
             }
-        }
-        else{
-            return ResponseEntity.ok( appProxy.getUser().getMailFolders().getSortedMail());
-        }
+            if(sortOrder =="Descendingly"){
+
+            } 
+            if (filterText !=""){
+                return ResponseEntity.ok(this.appProxy.getContacts().getSortedContacts());
+            }
+
+                switch(filterType){
+                    case "Name":
+                        return ResponseEntity.ok(appProxy.getContacts().SearchContactsByName(filterText));
+                    case "Emails":
+                        return ResponseEntity.ok(appProxy.getContacts().SearchContactsByEMail(filterText));
+                    case "All":
+                        return ResponseEntity.ok(appProxy.getContacts().SearchContactsByAll(filterText));
+                }
+                return ResponseEntity.ok(this.appProxy.getContacts().getSortedContacts());
+            
+        } catch (Exception e) {
+            // Log the error using a logging framework
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(new Vector<>());
+                    .body(new Vector<>()); // Return an empty vector
+        }
     }
+    
 
     @GetMapping("/folders")
     @ResponseBody
