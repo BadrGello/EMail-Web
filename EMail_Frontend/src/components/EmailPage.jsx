@@ -36,7 +36,7 @@ function EmailPage() {
     const [modalOpen, setModalOpen] = useState(false);
 
 
-    const [folders, setFolders] = useState([]); //List of custom folders
+    const [folders, setFolders] = useState(["games","school"]); //List of custom folders
     const [newFolderName, setNewFolderName] = useState("");
     const [addFolderOpen, setAddFolderOpen] = useState(false);
 
@@ -111,7 +111,7 @@ function EmailPage() {
                     <div className="custom-folders">
                         <div id='line'></div>
                         {folders.map((folder) => (
-                            <button key={folder.id} onClick={() => { navigate("/home", { replace: true, state: { userName, folder: folder.name } }) }} id='folder-button'>{folder.name}</button> 
+                            <button key={folder} onClick={() => { navigate("/home", { replace: true, state: { userName, folder } }) }} id='folder-button'>{folder}</button> 
                         ))}
                         
                         {/*Add new folder button*/}
@@ -123,7 +123,7 @@ function EmailPage() {
                     {/*Add Folder Modal*/}
                     {addFolderOpen && (
                         <div className="add-folder-modal">
-                            <input type="text" value={newFolderName} onChange={(e) => setNewFolderName(e.target.value)} placeholder="New Folder Name" maxLength={10} id='foldar-name-input'/>
+                            <input type="text" value={newFolderName} onChange={(e) => setNewFolderName(e.target.value)} placeholder="New Folder Name" maxLength={10} id='folder-name-input'/>
                             <div id='folder-options'>
                                 <button onClick={toggleAddFolder} title='Cancel' id='icon-button'><FaXmark /></button>
                                 <button onClick={addFolder} title='Save' id='icon-button'><MdOutlineDone /></button>
