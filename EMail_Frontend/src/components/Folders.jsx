@@ -43,7 +43,7 @@ const Folders = ({ folders, setFolders }) => {
             console.log(response.data)
             setFolders(response.data);
         } catch (error) {
-            console.error("Error fetching folders:", error.response.data);
+            console.error("Error fetching folders:", error);
         }
     };
 
@@ -85,7 +85,6 @@ const Folders = ({ folders, setFolders }) => {
             });
             if (response.status === 200) {
                 fetchFolders(); //refresh
-                setEditingFolderId(null);
             }
         } catch (error) {
             console.error("Error editing folder:", error);
@@ -140,7 +139,7 @@ const Folders = ({ folders, setFolders }) => {
                             <div id="folders-edit">
                                 <input id='folder-name-input' type="text" value={editingFolderName} onChange={(e) => setEditingFolderName(e.target.value)} autoFocus placeholder="Edit folder name" />
                                 <div id="folder-option">
-                                    <button onClick={saveEdit(folder)} title="Save" id="icon-button"><MdOutlineDone /></button>
+                                    <button onClick={() => saveEdit(folder)} title="Save" id="icon-button"><MdOutlineDone /></button>
                                     <button onClick={cancelEdit} title="Cancel" id="icon-button"><FaXmark /></button>
                                 </div>
                             </div>
