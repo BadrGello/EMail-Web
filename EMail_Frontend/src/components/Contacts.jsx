@@ -23,12 +23,17 @@ const EndPoints = {
     getContacts: "http://localhost:8080/api/contacts",
     deleteContact: "http://localhost:8080/api/contacts/delete",
     addContact: "http://localhost:8080/api/contacts/add",
-    editContact: "http://localhost:8080/api/contacts/edit"
+    editContact: "http://localhost:8080/api/contacts/edit",
+    updateEmail: "http://localhost:8080/api/contacts/updateEmail"
 };
 
 
 const Contacts = () => {
-    const [contacts, setContacts] = useState([]);
+    const [contacts, setContacts] = useState([{
+        name: "Student",
+        ID:"1",
+        emails: [{ email: "Student1@gmail.com"}, { email: "Student2@gmail.com"}],
+    }]);
     const [formVisible, setFormVisible] = useState(false);
     const [editingContact, setEditingContact] = useState(null);
     const [emailError, setEmailError] = useState("");
@@ -44,12 +49,13 @@ const Contacts = () => {
     //Contacts displayed
     const [contactForm, setContactForm] = useState({
         name: "",
+        ID:"",
         emails: [{ email: ""}],
     });
 
     useEffect(() => {
         fetchContacts();
-    }, []);
+    }, [sortType, sortOrder, filterBy, filterText]);
 
     //Fetch / Refresh / Sort / Filter
     const fetchContacts = async () => {
@@ -77,7 +83,7 @@ const Contacts = () => {
     };
 
     //Handle email update
-    const handleEmailUpdate = (index, key, value) => {
+    const handleEmailUpdate = async (index, key, value) => {
         const updatedEmails = [...contactForm.emails];
         updatedEmails[index][key] = value;
 
@@ -144,10 +150,14 @@ const Contacts = () => {
     };
 
     //Delete Contact
-    const handleDeleteContact = async (id) => {
+    const handleDeleteContact = async (contactId) => {
         if (window.confirm("Delete contact?")) {
             try {
-                await axios.delete(`${EndPoints.deleteContact}/${id}`);
+                const response = await axios.post(EndPoints.deleteContact, {
+                    id: contactId,
+                    email: "",
+                });
+    
                 // setContacts(contacts.filter(contact => contact.id !== id));
                 // Best just to fetch all contacts again
                 fetchContacts();
@@ -283,20 +293,25 @@ const Contacts = () => {
 
             {/*Contacts List*/}
             {!formVisible && (
-                <ul>
+                <ul id='contact-list'>
                     {contacts.map((contact) => (
-                        <li key={contact.id} >
+                        <>
+                        <li key={contact.ID} >
                             <div id='contact-card'>
-                                <strong id='icon-button'><IoPersonCircleOutline id='icon'/> {contact.name}</strong>
-                                <ul>
+                                <div id='contact-name'><IoPersonCircleOutline id='icon'/> {contact.name} </div>
+                                <ul> 
                                     {contact.emails.map((emailObj, index) => (
                                         <li key={index} > {emailObj.email} </li>
                                     ))}
                                 </ul>
-                                <button  id='icon-button' onClick={() => { setFormVisible(true); setEditingContact(contact); setContactForm(contact); }}> <CgMoreVerticalAlt/> </button>
-                                <button onClick={() => handleDeleteContact(contact.id)} id='icon-button'><MdDeleteOutline/></button>
+                                <div id='contact-options'>
+                                    <button id='icon-button' onClick={() => { setFormVisible(true); setEditingContact(contact); setContactForm(contact); }}> <CgMoreVerticalAlt/> </button>
+                                    <button id='icon-button' onClick={() => handleDeleteContact(contact.ID)} ><MdDeleteOutline/></button>
+                                </div>
                             </div>
                         </li>
+                        <div id='list-seperator'></div>
+                        </>
                     ))}
                 </ul>
             )}

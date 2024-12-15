@@ -483,7 +483,7 @@ a:hover {
 
 /*_______________________________________________________________Start Folders Tab_______________________________________________________________*/
 
-#folders-card {
+#folders-card, #contact-card {
     /*background-color: aqua;*/
     height: 80px;
     display: flex;
@@ -495,7 +495,7 @@ a:hover {
     font-size: 18px;
 }
 
-#folders-card:hover {
+#folders-card:hover, #contact-card:hover {
     background-color: rgba(39, 41, 41, 0.205);
 }
 
@@ -506,17 +506,17 @@ a:hover {
     color: rgb(51, 52, 53);
 }
 
-#folder-option {
+#folder-option, #contact-options {
     position: absolute;
     right: 0;
     margin-right: 10px;
 }
 
-#folder-option svg{
+#folder-option svg, #contact-options svg{
     color: rgba(46, 45, 45, 0.87);
     transition: 0.3s ease-in;
 }
-#folder-option #icon-button:hover svg{
+#folder-option #icon-button:hover svg, #contact-options #icon-button:hover svg {
     color: rgb(219, 209, 209);
 }
 
@@ -539,7 +539,7 @@ a:hover {
 
 /*edit*/
 
-#folders-edit{
+#folders-edit {
     height: 80px;
     display: flex;
     margin: 15px 20px;    
@@ -635,4 +635,54 @@ a:hover {
 
 .list li input[type="checkbox"]:checked:hover::before{
     color: rgba(46, 45, 45, 0.445);
+}
+
+
+/*_______________________________________________________________End Emails List_______________________________________________________________*/
+
+
+
+/*_______________________________________________________________Start Contacts List_______________________________________________________________*/
+
+
+#contact-card {
+    cursor: default;
+    height: fit-content;
+    padding: 5px 0;
+}
+
+
+#contact-list {
+    padding: 0;
+    margin: 10px;
+}
+#contact-card li {
+    display: block;
+    margin: 20px 10px;
+    cursor:auto;
+}
+
+#contact-name {
+    height: fit-content;
+    padding: 10px;
+    font-size: 25px;
+    color: rgba(46, 45, 45, 0.87);
+}
+
+ul ul { /*the list of emails*/
+    margin-top: 30px;
+}
+
+#contact-options {
+    padding:20px 0;
+}
+
+
+.formContact input{
+    color: rgba(46, 45, 45, 0.87);
+    outline: 0;
+}
+
+.formContact input:focus {
+    background-color: rgba(216, 214, 214, 0.123);
 }
