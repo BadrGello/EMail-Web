@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 ////////////////*ICONS*///////////
 import { CgMoreVerticalAlt } from 'react-icons/cg';
@@ -50,7 +51,7 @@ const Contacts = () => {
     const [contactForm, setContactForm] = useState({
         name: "",
         ID:"",
-        emails: [{ email: ""}],
+        emails: [ {email:""}],
     });
 
     useEffect(() => {
@@ -71,6 +72,15 @@ const Contacts = () => {
                     filterText: filterText, 
                 }
             });
+            //response.data.emails = response.data.emails.map(email => ({email: email }))
+            response.data.forEach(contact => {
+                // Process emails array: Map each email in the emails array to an object
+                contact.emails = contact.emails.map(email => ({ email }));
+    
+                // Process mails array: Map each email in the mails array to an object
+                contact.mails = contact.mails.map(email => ({ email }));
+            });
+            console.log(response.data)
             setContacts(response.data);
         } catch (error) {
             console.error("Error fetching contacts:", error);
@@ -130,14 +140,29 @@ const Contacts = () => {
         try {
             if (editingContact !== null) {
                 //Editing existing contact
-                const response = await axios.post(EndPoints.editContact, { ...contactForm, id: editingContact.id });
+                const response = await axios.post(EndPoints.editContact, null , {
+                    params: {
+                        userName: userName,
+                        contactName: contactForm.name,
+                        contactID: editingContact.id,
+                        contactEmails:contactForm.emails.map(e => e.email).join(","),
+                    },
+                });
                 // setContacts(contacts.map(contact => contact.id === editingContact.id ? response.data : contact));
                 // Best just to fetch all contacts again
                 fetchContacts();
 
             } else {
                 //Adding new contact
-                const response = await axios.post(EndPoints.addContact, contactForm);
+                console.log(contactForm.emails.map(e => e.email).join(","));
+                const response = await axios.post(EndPoints.addContact,null , {
+                    params: {
+                        userName: userName,
+                        contactName: contactForm.name,
+                        contactID: uuidv4(),
+                        contactEmails:contactForm.emails.map(e => e.email).join(","),
+                    },
+                });
                 // setContacts([...contacts, response.data]);
                 // Best just to fetch all contacts again
                 fetchContacts();
@@ -151,11 +176,14 @@ const Contacts = () => {
 
     //Delete Contact
     const handleDeleteContact = async (contactId) => {
+        console.log(contactId);
         if (window.confirm("Delete contact?")) {
             try {
-                const response = await axios.post(EndPoints.deleteContact, {
-                    id: contactId,
-                    email: "",
+                const response = await axios.post(EndPoints.deleteContact,null, {
+                    params: {
+                        userName: userName,
+                        contactID: contactId,
+                    },
                 });
     
                 // setContacts(contacts.filter(contact => contact.id !== id));

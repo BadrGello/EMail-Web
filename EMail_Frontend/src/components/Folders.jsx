@@ -78,10 +78,12 @@ const Folders = ({ folders, setFolders }) => {
         }
         console.log("Editing.. ");
         try {
-            const response = await axios.post(EndPoints.editFolder, {
+            const response = await axios.post(EndPoints.editFolder, null, {
+                params: {
                 userName: userName,
                 folderName: oldFolderName,
                 newFolderName: newFolderName,
+            },
             });
             if (response.status === 200) {
                 fetchFolders(); //refresh

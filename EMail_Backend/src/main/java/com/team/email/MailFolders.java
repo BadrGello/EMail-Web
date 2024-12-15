@@ -103,7 +103,7 @@ public class MailFolders {
         for(int i=0;i<this.trashFolder.size();i++){
             if(this.trashFolder.get(i).getDate()==date){
                 returnedMail=this.trashFolder.get(i).regMail();
-                folderName=this.trashFolder.get(i).getFolderNameBeforeDelete();
+                folderName=this.trashFolder.get(i).getFolderBeforeDelete();
                 this.trashFolder.remove(i);
                 break;
             }
@@ -211,7 +211,7 @@ public class MailFolders {
             this.UserFolders.put(newFolder, UserFolders.get(oldFolder));
             this.UserFolders.remove(oldFolder);
             for(int i=0;i<this.sentFolder.size();i++){
-                if(this.trashFolder.get(i).getFolderNameBeforeDelete()==oldFolder){
+                if(this.trashFolder.get(i).getFolderBeforeDelete()==oldFolder){
                     this.trashFolder.add(this.sentFolder.get(i).trashMail(newFolder,this.trashFolder.get(i).getDeletedDate()));
                     this.sentFolder.remove(i);
                     break;
@@ -228,7 +228,7 @@ public class MailFolders {
         this.UserFolders.remove(folderName);
         System.out.println(this.UserFolders.keySet().size());
         for(int i=0;i<this.trashFolder.size();i++){
-            if(this.trashFolder.get(i).getFolderNameBeforeDelete()==folderName){
+            if(this.trashFolder.get(i).getFolderBeforeDelete()==folderName){
                 this.trashFolder.remove(i);
                 break;
             }

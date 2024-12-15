@@ -105,7 +105,7 @@ const DefualtFolder = () => {
         console.log("Fetching folders..");
         try {
             const response = await axios.get(EndPoints.getFolders, { params: { userName: userName } });
-            console.log(response)
+            
             setFolders(response.data);
         } catch (error) {
             console.error("Error fetching folders:", error);
@@ -149,7 +149,9 @@ const DefualtFolder = () => {
                     filterText: filterText, 
                 }
             });
-            setEmails(response.data.emails);  // Assuming response contains an array of emails
+            console.log("response of fetching=",response)
+
+            setEmails(response.data);  // Assuming response contains an array of emails
         } catch (error) {
             console.error("Error fetching emails:", error);
         }

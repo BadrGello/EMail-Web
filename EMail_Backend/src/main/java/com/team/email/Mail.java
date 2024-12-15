@@ -11,7 +11,7 @@ public class Mail {
     private String date;
     private String folderBeforeDelete;
     private String deletedDate;
-    Vector<Attachment> attachments;
+    private Vector<Attachment> attachments;
 
     public Mail() {
     }
@@ -54,19 +54,11 @@ public class Mail {
     public void setFolderBeforeDelete(String folderBeforeDelete) {
         this.folderBeforeDelete = folderBeforeDelete;
     }
+
     public void setDeletedDate(String deletedDate) {
         this.deletedDate = deletedDate;
     }
-
-    public Vector<String> getAttachments() {
-        return this.attachments;
-    }
-
-    public void setAttachments(Vector<String> attachments) {
-        this.attachments = attachments;
-    }
-
-    
+  
     public String getSender(){
         return this.sender;
     }
@@ -91,13 +83,14 @@ public class Mail {
         return this.date;
     }
     
-    public String getFolderNameBeforeDelete(){
-        return this.folderBeforeDelete;
-    }
 
     public String getDeletedDate(){
         return this.deletedDate;
     }  
+
+    public void setAttachment(Vector<Attachment> attachments) {
+        this.attachments = attachments;
+    }
     
     public Vector<Attachment> getAttachment(){
         return this.attachments;

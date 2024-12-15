@@ -166,6 +166,34 @@ public class proxy implements UserInterface {
         return this.user.getContacts();
     }
 
+    public void deletecontact(String Id){
+        this.user.getContacts().DeleteContact(Id);
+        try {
+            this.user.save();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public void editContact(String ID, String contactName ,Vector<String> mails){
+        this.user.getContacts().EditContact(ID, contactName, mails);
+        try {
+            this.user.save();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public void addContact(String ID,String contactName,Vector<String> UserNames){
+        this.user.getContacts().AddContact(ID, contactName, UserNames);
+        try {
+            this.user.save();
+        } catch (Exception ex) {
+        }
+    }
+
     public Set<String> getFolderNames(){
         return this.user.getMailFolders().getFolderNames();
     }
@@ -179,15 +207,19 @@ public class proxy implements UserInterface {
     }
     public static void main(String[] args) throws Exception {
         proxy p=new proxy();
-        //p.makeAccount("adham4", "0003");
-        p.loadUser("adham4");
+        p.makeAccount("adham4", "0003");
+        //p.loadUser("adham4");
+        //Vector<Attachment> a=new Vector<>();
+        //Vector<String> r=new Vector<>();
+       // p.sendMail(a, r, "subject", 2, "body", "date");
+        //System.out.println(p.getMailFolders().getSentFolder().get(0).getBody());
         //p.getMailFolders().getUserFolders().keySet();
         //Vector<String> s=new Vector<>();
         //s.add("null@gg.com");
         //p.getContacts().AddContact("1", "hello", s);
         //p.addUserFolder("adham2");
         //System.out.println(p.getContacts().getSortedContacts().get(0).getName());
-        p.getUser().save();
+       // p.getUser().save();
     }
 
 }
