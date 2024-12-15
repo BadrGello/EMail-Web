@@ -25,7 +25,7 @@ const Folders = ({ folders, setFolders }) => {
     const navigate = useNavigate();
     const userName = location.state.userName
 
-    const [editingFolderName, setEditingFolderName] = useState("");
+    const [oldFolderName, setOldFolderName] = useState("");
     const [addFolderOpen, setAddFolderOpen] = useState(false);
     const [newFolderName, setNewFolderName] = useState("");
     
@@ -72,7 +72,7 @@ const Folders = ({ folders, setFolders }) => {
 
     //Rename
     const saveEdit = async (folderName) => {
-        if (editingFolderName.trim() === "") {
+        if (newFolderName.trim() === "") {
             alert("Folder name cannot be empty.");
             return;
         }
@@ -80,8 +80,8 @@ const Folders = ({ folders, setFolders }) => {
         try {
             const response = await axios.post(EndPoints.editFolder, {
                 userName: userName,
-                folderName: folderName,
-                newFolderName: editingFolderName,
+                folderName: oldFolderName,
+                newFolderName: newFolderName,
             });
             if (response.status === 200) {
                 fetchFolders(); //refresh
@@ -94,11 +94,11 @@ const Folders = ({ folders, setFolders }) => {
 
 
     const cancelEdit = () => {
-        setEditingFolderName("");
+        setOldFolderName("");
     };
 
     const startEdit = (folder) => {
-        setEditingFolderName(folder);
+        setOldFolderName(folder);
     };
 
     const toggleAddFolder = () => {
@@ -135,9 +135,10 @@ const Folders = ({ folders, setFolders }) => {
             <div className="custom-folders">
                 {folders.map((folder) => (
                     <div key={folder} className="folder-item">
-                        {editingFolderName === folder ? (
+                        {oldFolderName === folder ? (
                             <div id="folders-edit">
-                                <input id='folder-name-input' type="text" value={editingFolderName} onChange={(e) => setEditingFolderName(e.target.value)} autoFocus placeholder="Edit folder name" />
+
+                                <input id='folder-name-input' type="text" value={newFolderName} onChange={(e) => setNewFolderName(e.target.value)} autoFocus placeholder="Edit folder name" />
                                 <div id="folder-option">
                                     <button onClick={() => saveEdit(folder)} title="Save" id="icon-button"><MdOutlineDone /></button>
                                     <button onClick={cancelEdit} title="Cancel" id="icon-button"><FaXmark /></button>
@@ -148,7 +149,7 @@ const Folders = ({ folders, setFolders }) => {
                             <div id="folders-card">
                                 <button onClick={() => navigate("/home", { replace: true, state: { userName, folder }, }) } id="folder-name" title={`Open ${folder}`} > {folder} </button>
                                 <div id='folder-option'>
-                                    <button onClick={() => startEdit(folder)} title="Edit" id="icon-button" > <CgMoreVerticalAlt /> </button>
+                                    <button onClick={() => { startEdit(folder); setNewFolderName(folder); }} title="Edit" id="icon-button" > <CgMoreVerticalAlt /> </button>
                                     <button onClick={() => deleteFolder(folder)} title="Delete" id="icon-button" > <FiTrash /> </button>
                                 </div>
                             </div>

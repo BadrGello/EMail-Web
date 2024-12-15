@@ -253,7 +253,7 @@ const Contacts = () => {
 
             {/*Add Contact button*/}
             {!formVisible && (
-                <button onClick={() => setFormVisible(true)} className='content-icon' id='icon-button'><IoMdAdd id='icon'/></button>
+                <button onClick={() => setFormVisible(true)} className='content-icon' id='icon-button' title="Add Contact"><IoMdAdd id='icon'/></button>
             )}
 
             {/*Add/Edit contact*/}
@@ -305,8 +305,8 @@ const Contacts = () => {
                                     ))}
                                 </ul>
                                 <div id='contact-options'>
-                                    <button id='icon-button' onClick={() => { setFormVisible(true); setEditingContact(contact); setContactForm(contact); }}> <CgMoreVerticalAlt/> </button>
-                                    <button id='icon-button' onClick={() => handleDeleteContact(contact.ID)} ><MdDeleteOutline/></button>
+                                    <button id='icon-button' onClick={() => { setFormVisible(true); setEditingContact(contact); setContactForm(contact); }} title="Edit Contact"> <CgMoreVerticalAlt/> </button>
+                                    <button id='icon-button' onClick={() => handleDeleteContact(contact.ID)} title="Delete Contact"><MdDeleteOutline/></button>
                                 </div>
                             </div>
                         </li>
