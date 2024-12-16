@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -53,13 +54,16 @@ public class Controller {
             emailVector.add(email);
         }
         Vector<Attachment> attachments = new Vector<>();
-        if (files != null) {
+        if(files == null) System.out.println("null files");
+        if (files != null && files.length >0) {
             for (int i = 0; i < files.length; i++) {
                 Attachment attachment = new Attachment();
                 attachment.setName(files[i].getOriginalFilename());
+                System.out.println(files[i].getOriginalFilename());
                 attachment.setType(files[i].getContentType());
                 attachment.setFile(files[i].getBytes());
                 attachments.add(attachment);
+                System.out.println((files[i].getSize()));
             }
         }
         try {

@@ -134,7 +134,7 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
     // Handle form submit
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         if (Object.keys(errors).length > 0) {
             // Check if there's exactly one error
             if (Object.keys(errors).length === 1) {
@@ -144,52 +144,51 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
             }
             return; // Stop further execution if there are errors
         }
-
-        if (isFormNotComplete()){
-            alert("Make sure you fill the following fields: To - Subject - Body ")
-            return
+    
+        if (isFormNotComplete()) {
+            alert("Make sure you fill the following fields: To - Subject - Body ");
+            return;
         }
-        
-        // send to backend userName and newformData (send email) and await a response
-
-
-        let newformData = {...formData}
+    
+        // Prepare the form data
+        let newformData = { ...formData };
         newformData.date = new Date().toISOString();
         newformData.id = newformData.date;
-
-        onEditOrSend("Send");  // Drafts Folder
-
-        const requestData = {
-            userName: userName,
-            formData: newformData,
-        };
-
-        console.log("Sending, " , requestData)
-        console.log(requestData.formData.to.join(","))
-
-        try {
-            const response = await axios.post(EndPoints.sendEmail,null,{
-               params:{
-                userName:userName,
-                //files:requestData.formData.attachments,
-                recipients:requestData.formData.to.join(","), 
-                subject:requestData.formData.subject,
-                priority: requestData.formData.priority ,
-                body:requestData.formData.body , 
-                date:requestData.formData.date,
-               } 
-            });// Send data to backend
     
-            console.log('Email sent:', response.data);
-            alert('Email sent successfully!');
+        onEditOrSend("Send"); // Drafts Folder
+    
+        const formDataToSend = new FormData();
+        formDataToSend.append("userName", userName);
+        formDataToSend.append("recipients", newformData.to.join(",")); // Join recipients into a comma-separated string
+        formDataToSend.append("subject", newformData.subject);
+        formDataToSend.append("priority", newformData.priority);
+        formDataToSend.append("body", newformData.body);
+        formDataToSend.append("date", newformData.date);
+    
+        // Add attachments to FormData
+        Array.from(newformData.attachments).forEach((file) => {
+            formDataToSend.append("files", file);
+        });
+    
+        console.log("Sending FormData:", formDataToSend);
+    
+        try {
+            // Send FormData to the backend
+            const response = await axios.post(EndPoints.sendEmail, formDataToSend, {
+                headers: {
+                    "Content-Type": "multipart/form-data", // Indicate multipart form data
+                },
+            });
+    
+            console.log("Email sent:", response.data);
+            alert("Email sent successfully!");
             closeModal();
         } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred while sending the email');
+            console.error("Error:", error.response?.data || error.message);
+            alert("An error occurred while sending the email");
         }
-        
-        
     };
+    
 
     const resetForm = () => {
         setFormData({
