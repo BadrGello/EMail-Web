@@ -11,10 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,13 +28,7 @@ public class Controller {
 
     @PostMapping("/sendEmail")
     @ResponseBody
-    public ResponseEntity<String> sendEmail(@RequestParam String userName,
-    @RequestParam MultipartFile[] files,
-    @RequestParam Vector<String> recipients,
-    @RequestParam String subject ,
-    @RequestParam String priority ,
-    @RequestParam String body,
-    @RequestParam String date) throws IOException{
+    public ResponseEntity<String> sendEmail(@RequestParam String userName,@RequestParam MultipartFile[] files,@RequestParam String recipients,@RequestParam String subject ,@RequestParam String priority ,@RequestParam String body,@RequestParam String date) throws IOException{
         System.out.print(priority);
         int intpriority=0;
         switch (priority) {
@@ -55,6 +47,11 @@ public class Controller {
             default:
                 throw new AssertionError();
         }
+        String[] emailsArray = recipients.split(",");
+        Vector<String> emailVector = new Vector<>();
+        for (String email : emailsArray) {
+            emailVector.add(email);
+        }
         Vector<Attachment> attachments = new Vector<>();
         if(files == null) System.out.println("null files");
         if (files != null && files.length >0) {
@@ -70,7 +67,7 @@ public class Controller {
         }
         try {
             appProxy.loadUser(userName);
-            appProxy.sendMail(attachments, recipients, subject, intpriority, body, date);
+            appProxy.sendMail(attachments, emailVector, subject, intpriority, body, date);
             return ResponseEntity.status(HttpStatus.OK).body("contact added successfully");
         }
         catch(Exception e){
