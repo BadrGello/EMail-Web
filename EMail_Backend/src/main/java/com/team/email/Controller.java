@@ -30,13 +30,13 @@ public class Controller {
 
     @PostMapping("/sendEmail")
     @ResponseBody
-    public ResponseEntity<String> sendEmail(@RequestPart("userName") String userName,
-    @RequestPart("attachments") MultipartFile[] files,
-    @RequestPart("to") Vector<String> recipients,
-    @RequestPart("subject") String subject ,
-    @RequestPart("priority") String priority ,
-    @RequestPart("body") String body,
-    @RequestPart("date") String date) throws IOException{
+    public ResponseEntity<String> sendEmail(@RequestParam String userName,
+    @RequestParam MultipartFile[] files,
+    @RequestParam Vector<String> recipients,
+    @RequestParam String subject ,
+    @RequestParam String priority ,
+    @RequestParam String body,
+    @RequestParam String date) throws IOException{
         System.out.print(priority);
         int intpriority=0;
         switch (priority) {
