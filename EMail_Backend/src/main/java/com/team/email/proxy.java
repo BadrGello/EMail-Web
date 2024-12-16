@@ -208,7 +208,7 @@ public class proxy implements UserInterface {
     }
     public static void main(String[] args) throws Exception {
         proxy p=new proxy();
-        p.makeAccount("adham4", "0003");
+        p.makeAccount("adham2@wad.com", "0003");
         //p.loadUser("adham4");
         //Vector<Attachment> a=new Vector<>();
         //Vector<String> r=new Vector<>();

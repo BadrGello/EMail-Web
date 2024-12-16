@@ -28,7 +28,30 @@ public class Controller {
 
     @PostMapping("/sendEmail")
     @ResponseBody
-    public ResponseEntity<String> sendEmail(@RequestParam String userName,@RequestParam MultipartFile[] files,@RequestParam Vector<String> recipients,@RequestParam String subject ,@RequestParam int priority ,@RequestParam String body,@RequestParam String date) throws IOException{
+    public ResponseEntity<String> sendEmail(@RequestParam String userName,@RequestParam MultipartFile[] files,@RequestParam String recipients,@RequestParam String subject ,@RequestParam String priority ,@RequestParam String body,@RequestParam String date) throws IOException{
+        System.out.print(priority);
+        int intpriority=0;
+        switch (priority) {
+            case "Low":
+                intpriority=4;    
+                break;
+            case "Normal":
+                intpriority=3;
+                break;  
+            case "High":
+                intpriority=2;
+                break;  
+            case "Urgent":
+                intpriority=1;
+                break;      
+            default:
+                throw new AssertionError();
+        }
+        String[] emailsArray = recipients.split(",");
+        Vector<String> emailVector = new Vector<>();
+        for (String email : emailsArray) {
+            emailVector.add(email);
+        }
         Vector<Attachment> attachments = new Vector<>();
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
@@ -41,7 +64,7 @@ public class Controller {
         }
         try {
             appProxy.loadUser(userName);
-            appProxy.sendMail(attachments, recipients, subject, priority, body, date);
+            appProxy.sendMail(attachments, emailVector, subject, intpriority, body, date);
             return ResponseEntity.status(HttpStatus.OK).body("contact added successfully");
         }
         catch(Exception e){

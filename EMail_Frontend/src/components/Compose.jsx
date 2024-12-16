@@ -165,9 +165,20 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
         };
 
         console.log("Sending, " , requestData)
+        console.log(requestData.formData.to.join(","))
 
         try {
-            const response = await axios.post(EndPoints.sendEmail, requestData); // Send data to backend
+            const response = await axios.post(EndPoints.sendEmail,null,{
+               params:{
+                userName:userName,
+                //files:requestData.formData.attachments,
+                recipients:requestData.formData.to.join(","), 
+                subject:requestData.formData.subject,
+                priority: requestData.formData.priority ,
+                body:requestData.formData.body , 
+                date:requestData.formData.date,
+               } 
+            });// Send data to backend
     
             console.log('Email sent:', response.data);
             alert('Email sent successfully!');
