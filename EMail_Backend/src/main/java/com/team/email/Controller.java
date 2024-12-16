@@ -1,5 +1,6 @@
 package com.team.email;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @CrossOrigin(origins ="http://localhost:5173")
@@ -85,6 +87,79 @@ public class Controller {
         .body(new Vector<>());
     }
 
+    @PostMapping("/deleteEmails")
+    @ResponseBody
+    public ResponseEntity<String> delteEmails(@RequestParam String userName,@RequestParam String folderName,@RequestParam String date) {
+        try {
+            appProxy.loadUser(userName);
+            if(folderName.equals("draft")||folderName.equals("trash")){
+                appProxy.deleteMail(folderName, date);
+            }
+            else{
+                System.out.println(LocalDate.now().toString());
+                appProxy.MoveToTrash(folderName, date,LocalDate.now().toString());
+            }
+            return ResponseEntity.status(HttpStatus.OK).body("mail deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting mail: " + e.getMessage());
+        }
+    }
+        
+    @PostMapping("/moveEmails")
+    @ResponseBody
+    public ResponseEntity<String> moveEmails(@RequestParam String userName,@RequestParam String folderName,@RequestParam String date,@RequestParam String newFolderName) {
+        try {
+            appProxy.loadUser(userName);
+            appProxy.moveToFolder(folderName, newFolderName, date);
+            return ResponseEntity.status(HttpStatus.OK).body("mail moved successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error moving mail: " + e.getMessage());
+        }
+    }
+
+///////////////////////////////////contacts methods///////////////////////////////////////////////////////////////////////////////////
+
+    @GetMapping("/contacts")
+    @ResponseBody
+    public ResponseEntity<Vector<Contact>> getContacts(@RequestParam String userName,@RequestParam String sortType,@RequestParam String sortOrder,@RequestParam String filterType,
+    @RequestParam String filterText) {
+        System.out.println("user:"+userName+"filter:"+sortType);
+        try {
+            appProxy.loadUser(userName);
+            switch (sortType) {
+                case "Name":
+                    appProxy.getContacts().SortContacts();
+                    break;
+                
+                case "Number of emails":
+                    appProxy.getContacts().SortContactsByNumberOfEmails();
+                    break;
+            }
+            if("Descendingly".equals(sortOrder)){
+                appProxy.getContacts().reverseOrder();
+            } 
+            if (filterText.equals("")){
+                System.out.println("not filtering");
+                return ResponseEntity.ok(this.appProxy.getContacts().getSortedContacts());
+            }
+
+                switch(filterType){
+                    case "Name":
+                        return ResponseEntity.ok(appProxy.getContacts().SearchContactsByName(filterText));
+                    case "Email":
+                        return ResponseEntity.ok(appProxy.getContacts().SearchContactsByEMail(filterText));
+                    case "All":
+                        return ResponseEntity.ok(appProxy.getContacts().SearchContactsByAll(filterText));
+                }
+                return ResponseEntity.ok(this.appProxy.getContacts().getSortedContacts());
+            
+        } catch (Exception e) {
+            // Log the error using a logging framework
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new Vector<>()); // Return an empty vector
+        }
+    }
+
     @PostMapping("/contacts/add")
     @ResponseBody
     public ResponseEntity<String> addContact(@RequestParam String userName,@RequestParam String contactName ,@RequestParam String contactID,@RequestParam String contactEmails){
@@ -139,47 +214,7 @@ public class Controller {
         }
     }
 
-    @GetMapping("/contacts")
-    @ResponseBody
-    public ResponseEntity<Vector<Contact>> getContacts(@RequestParam String userName,@RequestParam String sortType,@RequestParam String sortOrder,@RequestParam String filterType,
-    @RequestParam String filterText) {
-        System.out.println("user:"+userName+"filter:"+sortType);
-        try {
-            appProxy.loadUser(userName);
-            switch (sortType) {
-                case "Name":
-                    appProxy.getContacts().SortContacts();
-                    break;
-                
-                case "Number of emails":
-                    appProxy.getContacts().SortContactsByNumberOfEmails();
-                    break;
-            }
-            if("Descendingly".equals(sortOrder)){
-                appProxy.getContacts().reverseOrder();
-            } 
-            if (filterText.equals("")){
-                System.out.println("not filtering");
-                return ResponseEntity.ok(this.appProxy.getContacts().getSortedContacts());
-            }
-
-                switch(filterType){
-                    case "Name":
-                        return ResponseEntity.ok(appProxy.getContacts().SearchContactsByName(filterText));
-                    case "Email":
-                        return ResponseEntity.ok(appProxy.getContacts().SearchContactsByEMail(filterText));
-                    case "All":
-                        return ResponseEntity.ok(appProxy.getContacts().SearchContactsByAll(filterText));
-                }
-                return ResponseEntity.ok(this.appProxy.getContacts().getSortedContacts());
-            
-        } catch (Exception e) {
-            // Log the error using a logging framework
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new Vector<>()); // Return an empty vector
-        }
-    }
-    
+//////////////////folders methods///////////////////////////////////////////////////////////////
 
     @GetMapping("/folders")
     @ResponseBody
@@ -239,6 +274,8 @@ public class Controller {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding folder: " + e.getMessage());
         }
     }
+
+////////////////////////// login and signup ////////////////////////////////////////////
 
     @PostMapping("/login")
     @ResponseBody
