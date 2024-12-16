@@ -19,7 +19,7 @@ const DefualtFolder = () => {
         {
             id: 1,
             sender: 'badr',
-            to: ['bobly@ex.com', 'whoa@no.com'],
+            recipients: ['bobly@ex.com', 'whoa@no.com'],
             subject: 'Meeting Reminder',
             date: '2024-12-05',
             body: 'Don\'t forget our meeting tomorrow at 10 AM.',
@@ -30,7 +30,7 @@ const DefualtFolder = () => {
         {
             id: 2,
             sender: 'bob@example.com',
-            to: null,
+            recipients: null,
             subject: 'Urgent: Submit Documents',
             date: '2024-12-04',
             body: 'Please submit the required documents by EOD.',
@@ -41,7 +41,7 @@ const DefualtFolder = () => {
         {
             id: 3,
             sender: 'carol@example.com',
-            to: null,
+            recipients: null,
             subject: 'Invoice #12345',
             date: '2024-12-03',
             body: 'Here is your invoice for the recent transaction.',
@@ -52,7 +52,7 @@ const DefualtFolder = () => {
         {
             id: 4,
             sender: 'dave@example.com',
-            to: null,
+            recipients: null,
             subject: 'Party Invitation',
             date: '2024-12-01',
             body: 'You are invited to a party at my place!',
@@ -63,7 +63,7 @@ const DefualtFolder = () => {
         {
             id: 5,
             sender: 'eve@example.com',
-            to: null,
+            recipients: null,
             subject: 'Black Friday Deals!',
             date: '2024-11-29',
             body: 'Check out our exclusive Black Friday deals.',
@@ -74,7 +74,7 @@ const DefualtFolder = () => {
         {
             id: 6,
             sender: 'frank@example.com',
-            to: null,
+            recipients: null,
             subject: 'Re: Project Updates',
             date: '2024-12-02',
             body: 'Here are the updates on the project status.',
@@ -116,7 +116,7 @@ const DefualtFolder = () => {
     const handleSelectEmail = (emailId) => {
         setSelectedEmails(prevSelected => 
             prevSelected.includes(emailId) 
-                ? prevSelected.filter(id => id !== emailId) 
+                ? prevSelected.filter(date => date !== emailId) 
                 : [...prevSelected, emailId]
         );
     };
@@ -281,14 +281,14 @@ const DefualtFolder = () => {
                         // )
                         .map((email) => (
                             <>
-                            <li key={email.id}>
+                            <li key={email.date}>
                                 <input 
                                     type="checkbox" 
-                                    checked={selectedEmails.includes(email.id)} 
-                                    onChange={() => handleSelectEmail(email.id)} 
+                                    checked={selectedEmails.includes(email.date)} 
+                                    onChange={() => handleSelectEmail(email.date)} 
                                 />
                                 <span onClick={() => handleEmailClick(email)}>
-                                    {email.subject} - {email.sender === userName ? "To: " + email.to.join(', ') : "From: " + email.sender} - {email.date}
+                                    {email.subject} - {email.sender === userName ? "To: " + email.recipients.join(', ') : "From: " + email.sender} - {email.date}
                                 </span>
                             </li>
                             <div id='list-seperator'></div>

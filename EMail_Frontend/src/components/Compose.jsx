@@ -116,10 +116,28 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
             formData: newformData,
         };
 
-        console.log("Drafting, " , requestData)
+        const formDataToSend = new FormData();
+        formDataToSend.append("userName", userName);
+        formDataToSend.append("recipients", newformData.to.join(",")); // Join recipients into a comma-separated string
+        formDataToSend.append("subject", newformData.subject);
+        formDataToSend.append("priority", newformData.priority);
+        formDataToSend.append("body", newformData.body);
+        formDataToSend.append("date", newformData.date);
+    
+        // Add attachments to FormData
+        Array.from(newformData.attachments).forEach((file) => {
+            formDataToSend.append("files", file);
+        });
+    
+        console.log("Sending FormData:", formDataToSend);
 
         try {
-            const response = await axios.post(EndPoints.sendDraft, requestData); // Send data to backend
+            // const response = await axios.post(EndPoints.sendDraft, requestData); // Send data to backend
+            const response = await axios.post(EndPoints.sendEmail, formDataToSend, {
+                headers: {
+                    "Content-Type": "multipart/form-data", // Indicate multipart form data
+                },
+            });
     
             console.log('Draft saved:', response.data);
             alert('Email saved to drafts!');

@@ -25,7 +25,7 @@ const EmailModal = ({ email, isOpen, onClose, userName }) => {
                     <strong>
                         {email?.sender === userName ? 'To:' : 'From:'}
                     </strong>{' '}
-                    {email?.sender === userName ? email?.to.join(', ') : email?.sender}
+                    {email?.sender === userName ? email?.recipients.join(', ') : email?.sender}
                 </Typography>
                 </Typography>
                 <Typography variant="body1">
@@ -43,12 +43,12 @@ const EmailModal = ({ email, isOpen, onClose, userName }) => {
                 <Typography variant="body2" paragraph>
                     {email?.body}
                 </Typography>
-                {email?.attachments?.length > 0 && (
+                {email?.attachment?.length > 0 && (
                     <div>
                         <Typography variant="body1" gutterBottom>
                             <strong>Attachments:</strong>
                         </Typography>
-                        {email.attachments.map((attachment, index) => (
+                        {email.attachment.map((attachment, index) => (
                             <Button
                                 key={index}
                                 onClick={() => handleDownload(attachment)}

@@ -7,10 +7,10 @@ import axios from "axios";
 const FormData = {
     id: null,
     sender: '',
-    to: [''],
+    recipients: [''],
     subject: '',
     body: '',
-    attachments: [],
+    attachment: [],
     priority: 'Normal',
     date: '',
 }
@@ -28,30 +28,30 @@ const Drafts = () => {
     const [drafts, setDrafts] = useState([{
         id: '2024-12-08T10:00:00Z',
         sender: 'john.doe@example.com',
-        to: ['jane.doe@example.com'],
+        recipients: ['jane.doe@example.com'],
         subject: 'Meeting Reminder',
         body: 'Just a reminder about the meeting tomorrow at 10 AM.',
-        attachments: ['agenda.pdf', 'location-map.jpg'],
+        attachment: ['agenda.pdf', 'location-map.jpg'],
         priority: 'High',
         date: '2024-12-08T10:00:00Z'
       },
       {
         id: '2024-12-07T14:30:00Z',
         sender: 'alice.smith@example.com',
-        to: ['bob.jones@example.com'],
+        recipients: ['bob.jones@example.com'],
         subject: 'Project Update',
         body: 'Here’s the latest update on the project.',
-        attachments: [],
+        attachment: [],
         priority: 'Normal',
         date: '2024-12-07T14:30:00Z'
       },
       {
         id: '2024-12-06T09:15:00Z',
         sender: 'mark.brown@example.com',
-        to: ['linda.green@example.com', 'idk@idk', 'yesss'],
+        recipients: ['linda.green@example.com', 'idk@idk', 'yesss'],
         subject: 'Invoice for Services Rendered',
         body: 'Please find attached the invoice for your recent project.',
-        attachments: [{
+        attachment: [{
             "name": "file1.txt",
             "size": 1024,
             "type": "text/plain",
@@ -106,13 +106,13 @@ const Drafts = () => {
 
         alert("Edited or Sent, Should Be Removed From Drafts Folder")
         console.log(currentDraft)
-        handleDelete([currentDraft.id])
+        handleDelete([currentDraft.date])
     }
 
     const handleSelectDraft = (draftId) => {
         setSelectedDrafts(prevSelected => 
             prevSelected.includes(draftId) 
-                ? prevSelected.filter(id => id !== draftId) 
+                ? prevSelected.filter(date => date !== draftId) 
                 : [...prevSelected, draftId]
         );
     };
@@ -244,14 +244,14 @@ const Drafts = () => {
                     {drafts
                         .map((draft) => (
                             <>
-                            <li key={draft.id}>
+                            <li key={draft.date}>
                                 <input 
                                     type="checkbox" 
-                                    checked={selectedDrafts.includes(draft.id)} 
-                                    onChange={() => handleSelectDraft(draft.id)} 
+                                    checked={selectedDrafts.includes(draft.date)} 
+                                    onChange={() => handleSelectDraft(draft.date)} 
                                 />
                                 <span onClick={() => handleDraftClick(draft)}>
-                                    {draft.to} - {draft.subject} - {draft.date}
+                                    {draft.recipients} - {draft.subject} - {draft.date}
                                 </span>
                             </li>
                             <div id='list-seperator'></div>
