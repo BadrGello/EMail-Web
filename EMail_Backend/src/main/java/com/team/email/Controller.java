@@ -1,5 +1,6 @@
 package com.team.email;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -24,10 +26,19 @@ public class Controller {
     proxy appProxy=proxy.getInstance();
 
 
-    @GetMapping("/sendEmail")
+    @PostMapping("/sendEmail")
     @ResponseBody
-    public ResponseEntity<String> sendEmail(@RequestParam String userName,@RequestParam Vector<Attachment> attachments,@RequestParam Vector<String> recipients,@RequestParam String subject ,@RequestParam int priority ,@RequestParam String body,@RequestParam String date){
-        
+    public ResponseEntity<String> sendEmail(@RequestParam String userName,@RequestParam MultipartFile[] files,@RequestParam Vector<String> recipients,@RequestParam String subject ,@RequestParam int priority ,@RequestParam String body,@RequestParam String date) throws IOException{
+        Vector<Attachment> attachments = new Vector<>();
+        if (files != null) {
+            for (int i = 0; i < files.length; i++) {
+                Attachment attachment = new Attachment();
+                attachment.setName(files[i].getOriginalFilename());
+                attachment.setType(files[i].getContentType());
+                attachment.setFile(files[i].getBytes());
+                attachments.add(attachment);
+            }
+        }
         try {
             appProxy.loadUser(userName);
             appProxy.sendMail(attachments, recipients, subject, priority, body, date);
