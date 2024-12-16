@@ -58,6 +58,7 @@ public class User implements UserInterface {
     
 
     public void recievMail(Mail mail){
+        System.out.println(userName);
         this.mailFolders.getInboxFolder().add(mail);
         try{
         this.save();
