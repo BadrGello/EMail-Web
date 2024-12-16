@@ -28,7 +28,8 @@ public class Controller {
 
     @PostMapping("/sendEmail")
     @ResponseBody
-    public ResponseEntity<String> sendEmail(@RequestParam String userName,@RequestParam MultipartFile[] files,@RequestParam String recipients,@RequestParam String subject ,@RequestParam String priority ,@RequestParam String body,@RequestParam String date) throws IOException{
+    public ResponseEntity<String> sendEmail(@RequestParam String userName,@RequestParam(required = false) MultipartFile[] files,@RequestParam String recipients,@RequestParam String subject ,@RequestParam String priority ,@RequestParam String body,@RequestParam String date) throws IOException{
+        System.out.println("entered");
         System.out.print(priority);
         int intpriority=0;
         switch (priority) {
