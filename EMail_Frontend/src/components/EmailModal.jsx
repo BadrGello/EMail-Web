@@ -4,9 +4,14 @@ import { Modal, Box, Typography, Button } from '@mui/material';
 const EmailModal = ({ email, isOpen, onClose, userName }) => {
     const handleDownload = (attachment) => {
         const link = document.createElement('a');
-        link.href = attachment; // Replace with real file URL
-        link.download = attachment.split('/').pop(); // Extract file name
+        // Create a Blob URL from the base64-encoded file
+        const blob = new Blob([new Uint8Array(atob(attachment.file).split("").map(char => char.charCodeAt(0)))], { type: attachment.type });
+        const url = URL.createObjectURL(blob);
+        
+        link.href = url;
+        link.download = attachment.name; // Use the file name from attachment object
         link.click();
+        URL.revokeObjectURL(url); // Clean up the URL object after use
     };
 
     return (
@@ -49,13 +54,14 @@ const EmailModal = ({ email, isOpen, onClose, userName }) => {
                             <strong>Attachments:</strong>
                         </Typography>
                         {email.attachment.map((attachment, index) => (
+                            
                             <Button
                                 key={index}
                                 onClick={() => handleDownload(attachment)}
                                 variant="contained"
                                 sx={{ marginBottom: '8px' }}
                             >
-                                Download {attachment.split('/').pop()}
+                                Download {attachment.name}
                             </Button>
                         ))}
                     </div>

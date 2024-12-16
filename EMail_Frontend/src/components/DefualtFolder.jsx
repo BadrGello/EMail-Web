@@ -150,6 +150,7 @@ const DefualtFolder = () => {
                 }
             });
             console.log("response of fetching=",response)
+            // console.log("attachment",response.data[0].attachment[0])
 
             setEmails(response.data);  // Assuming response contains an array of emails
         } catch (error) {
