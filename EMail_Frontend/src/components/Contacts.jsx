@@ -334,7 +334,7 @@ const Contacts = () => {
                                 </ul>
                                 <div id='contact-options'>
                                     <button id='icon-button' onClick={() => { setFormVisible(true); setEditingContact(contact); setContactForm(contact); }} title="Edit Contact"> <CgMoreVerticalAlt/> </button>
-                                    <button id='icon-button' onClick={() => handleDeleteContact(contact.ID)} title="Delete Contact"><MdDeleteOutline/></button>
+                                    <button id='icon-button' onClick={() => handleDeleteContact(contact.id)} title="Delete Contact"><MdDeleteOutline/></button>
                                 </div>
                             </div>
                         </li>

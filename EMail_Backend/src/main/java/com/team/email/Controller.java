@@ -76,6 +76,56 @@ public class Controller {
         }
     }
 
+    @PostMapping("/sendDraft")
+    @ResponseBody
+    public ResponseEntity<String> sendDraft(@RequestParam(required = false) String userName,@RequestParam(required = false) MultipartFile[] files,@RequestParam(required = false) String recipients,@RequestParam(required = false) String subject ,@RequestParam(required = false) String priority ,@RequestParam(required = false) String body,@RequestParam(required = false) String date) throws IOException{
+        System.out.println("entered");
+        System.out.print(priority);
+        int intpriority=0;
+        switch (priority) {
+            case "Low":
+                intpriority=4;    
+                break;
+            case "Normal":
+                intpriority=3;
+                break;  
+            case "High":
+                intpriority=2;
+                break;  
+            case "Urgent":
+                intpriority=1;
+                break;      
+            default:
+                throw new AssertionError();
+        }
+        String[] emailsArray = recipients.split(",");
+        Vector<String> emailVector = new Vector<>();
+        for (String email : emailsArray) {
+            emailVector.add(email);
+        }
+        Vector<Attachment> attachments = new Vector<>();
+        if(files == null) System.out.println("null files");
+        if (files != null && files.length >0) {
+            for (int i = 0; i < files.length; i++) {
+                Attachment attachment = new Attachment();
+                attachment.setName(files[i].getOriginalFilename());
+                System.out.println(files[i].getOriginalFilename());
+                attachment.setType(files[i].getContentType());
+                attachment.setFile(files[i].getBytes());
+                attachments.add(attachment);
+                System.out.println((files[i].getSize()));
+            }
+        }
+        try {
+            appProxy.loadUser(userName);
+            appProxy.makeDraft(attachments, date, emailVector, subject, intpriority, body, date);
+            return ResponseEntity.status(HttpStatus.OK).body("contact added successfully");
+        }
+        catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding contact: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/getEmails")
     @ResponseBody
     public ResponseEntity<Vector<Mail>> getFolder(@RequestParam String userName,@RequestParam String folderName,@RequestParam String sortType,@RequestParam String sortOrder,@RequestParam String filterType,@RequestParam String filterText){
