@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Import Link here
 import axios from 'axios';
 
+
 function SignUp() {
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
@@ -12,9 +13,12 @@ function SignUp() {
         e.preventDefault();
         try {
             // send to backend email and password and await a response
-            const response = await axios.post('http://localhost:8080/api/signup', {
+            console.log(userName);
+            const response = await axios.post('http://localhost:8080/api/signup',null,{
+                params: {
                 email: userName,
                 password: password,
+                }
             });
 
             alert('Sign-up successful!');

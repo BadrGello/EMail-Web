@@ -15,7 +15,6 @@ import com.team.email.User.UserBuilder;
 public class proxy implements UserInterface {
     private static final proxy AppProxy=new proxy();
     private User user;
-    private boolean access=false;
     private Vector<String> UserNames;
     private Vector<String> passwords;
 
@@ -35,22 +34,24 @@ public class proxy implements UserInterface {
 
     }
 
-    public void getAccess(String userName,String password){
+    public Boolean getAccess(String userName,String password){
+        Boolean access=false;
         if(!UserNames.contains(userName)){
-            this.access=false;
+            access=false;
             System.out.println("there is no user name");
         }
         else{
             int index=UserNames.indexOf(userName);
             if(password.equals(passwords.get(index))){
-                this.access=true;
+                access=true;
                 System.out.println("Access granted");
             }
             else {
-                this.access=false;
+                access=false;
                 System.out.println("wrong password");
             }
         }
+        return access;
     }
 
     public void loadUser(String userName) {

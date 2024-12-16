@@ -3,6 +3,11 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Import Link here
 import axios from 'axios';
 
+const EndPoints = {
+    Base: "http://localhost:8080/api",
+    Login: "http://localhost:8080/api/login",
+};
+
 function Login() {
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
@@ -13,10 +18,12 @@ function Login() {
         try {
             // send to backend email and password and await a response
             // Comment this if there's no connection to backend
-            // const response = await axios.post('http://localhost:8080/api/login', {
-            //     email: userName,
-            //     password: password,
-            // });
+             const response = await axios.post(EndPoints.Login,null, {
+                params: {
+                 email: userName,
+                 password: password,
+                }
+             });
 
             alert('Login successful!');
             navigate('/home', {replace: true, state:{userName}})

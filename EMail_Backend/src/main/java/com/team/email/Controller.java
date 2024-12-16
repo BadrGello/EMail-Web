@@ -239,4 +239,38 @@ public class Controller {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding folder: " + e.getMessage());
         }
     }
+
+    @PostMapping("/login")
+    @ResponseBody
+    public ResponseEntity<Boolean> login(@RequestParam String email,@RequestParam String password){
+        try { 
+            if(appProxy.getAccess(email, password)){
+                return ResponseEntity.status(HttpStatus.OK).body(true);
+            }
+            else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
+        
+        }
+        catch (Exception e) {
+            // Log the stack trace of the exception
+            System.out.print(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
+        }
+    }
+
+    @PostMapping("/signup")
+    @ResponseBody
+    public ResponseEntity<String> signUp(@RequestParam String email,@RequestParam String password){
+        try { 
+            System.out.println(email);
+            appProxy.makeAccount(email, password);
+            return ResponseEntity.status(HttpStatus.OK).body("Folder added successfully");
+        
+        }
+        catch (Exception e) {
+            // Log the stack trace of the exception
+            System.out.print(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding folder: " + e.getMessage());
+        }
+    }
 }
