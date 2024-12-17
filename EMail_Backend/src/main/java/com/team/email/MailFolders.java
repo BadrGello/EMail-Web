@@ -309,10 +309,11 @@ public class MailFolders {
     public void reverseOrder(){
         int start=0;
         int end = this.sortedMails.size()-1;
+        System.out.println("hello");
         while (start < end) {
-            Mail temp = sortedMails.get(start);
-            sortedMails.set(start, sortedMails.get(end));
-            sortedMails.set(end, temp);
+            Mail temp = this.sortedMails.get(start);
+            this.sortedMails.set(start, this.sortedMails.get(end));
+            this.sortedMails.set(end, temp);
             start++;
             end--;
         }

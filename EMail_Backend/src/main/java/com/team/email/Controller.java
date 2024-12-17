@@ -142,7 +142,7 @@ public class Controller {
     @GetMapping("/getEmails")
     @ResponseBody
     public ResponseEntity<Vector<Mail>> getFolder(@RequestParam String userName,@RequestParam String folderName,@RequestParam String sortType,@RequestParam String sortOrder,@RequestParam String filterType,@RequestParam String filterText){
-        System.out.println("fetching mails");
+        System.out.println("fetching mails "+folderName);
         appProxy.loadUser(userName);
         System.out.println("load done");
         switch(sortType){
@@ -163,13 +163,15 @@ public class Controller {
                 break;
         }
         System.out.println("sort done");
-        if(sortOrder=="Descendingly"){
+        if(sortOrder.equals("Descendingly")){
             appProxy.getUser().getMailFolders().reverseOrder();
         }
-        if(filterText!=""){
+        if(!filterText.equals("")){
+            System.out.println(filterType);
             Vector<String> text =new Vector<>();
-            switch(sortType){
+            switch(filterType){
                 case "All":
+                    System.out.println("searching in all");
                     return ResponseEntity.ok( appProxy.getUser().getMailFolders().searchByAll(filterText, folderName));
                     
                 case "Subject":

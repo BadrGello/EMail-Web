@@ -19,7 +19,7 @@ const EndPoints = {
     Base: "http://localhost:8080/api",
     deleteDrafts: "http://localhost:8080/api" + '/deleteEmails',
     getDrafts: "http://localhost:8080/api" + '/getEmails', //refresh, sort and filter
-
+    
     getFolders: "http://localhost:8080/api/folders",
 }
 
@@ -124,8 +124,8 @@ const Drafts = () => {
 
         console.log(
                 {
-                    user: userName,
-                    folder: currentFolder,
+                    userName: userName,
+                    folderName: currentFolder,
 
                     sortType: sortType,
                     sortOrder: sortOrder,
@@ -137,8 +137,8 @@ const Drafts = () => {
         try {
             const response = await axios.get(EndPoints.getDrafts, {
                 params: {
-                    user: userName,
-                    folder: currentFolder,
+                    userName: userName,
+                    folderName: "draft",
 
                     sortType: sortType,
                     sortOrder: sortOrder,
@@ -146,7 +146,8 @@ const Drafts = () => {
                     filterText: filterText, 
                 }
             });
-            setDrafts(response.data.emails);  // Assuming response contains an array of drafts
+            console.log("response of fetching=",response)
+            setDrafts(response.data);  // Assuming response contains an array of drafts
         } catch (error) {
             console.error("Error fetching drafts:", error);
         }
