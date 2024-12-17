@@ -208,8 +208,17 @@ public class proxy implements UserInterface {
     }
     public static void main(String[] args) throws Exception {
         proxy p=new proxy();
-        p.makeAccount("adham2@wad.com", "0003");
-        //p.loadUser("adham4");
+        Vector<String> r=new Vector();
+        r.add("adham1@user.com");
+        //p.makeAccount("try@contact.com", "123456");
+        p.loadUser("try@contact.com");
+        p.addContact("1", "adham", r);
+        p.loadUser("adham1@user.com");
+        r=new Vector();
+        r.add("try@contact.com");
+        p.sendMail(new Vector<>(), r, "trying", 1, "this amazing", "55");
+        p.loadUser("try@contact.com");
+        System.out.println(p.getUser().getContacts().getContacts().get(0).getMails().get(0).getBody());
         //Vector<Attachment> a=new Vector<>();
         //Vector<String> r=new Vector<>();
        // p.sendMail(a, r, "subject", 2, "body", "date");

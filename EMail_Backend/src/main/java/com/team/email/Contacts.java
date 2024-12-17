@@ -6,10 +6,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
+import org.checkerframework.common.returnsreceiver.qual.This;
+
 public class Contacts {
     private Vector<Contact> contacts=new Vector<>();
     private Vector<Contact> sortedContacts=new Vector<>();
-
 
     public Contacts() {
     }
@@ -18,8 +19,8 @@ public class Contacts {
         //load data from dataBase when sign in
     }
     
-    public void AddContact(String ID, String contactName ,Vector<String> mails){
-        Contact newContact = new Contact(ID, contactName, mails);
+    public void AddContact(String ID, String contactName ,Vector<String> emails){
+        Contact newContact = new Contact(ID, contactName, emails);
         contacts.add(newContact);
         //should save at dataBase
     }
@@ -74,7 +75,7 @@ public class Contacts {
     public Vector<Contact> SearchContactsByEMail(String Mail){
         Vector<Contact> searchContacts = new Vector<>();
         for(int i=0;i<this.sortedContacts.size();i++){
-            Vector<String> contactMails=this.sortedContacts.get(i).getMails();
+            Vector<String> contactMails=this.sortedContacts.get(i).getEmails();
             for(int j=0;j<contactMails.size();j++){
                 if(isThisNameInSearch(Mail,contactMails.get(j))){
                     searchContacts.add(this.sortedContacts.get(i));
@@ -93,7 +94,7 @@ public class Contacts {
                 System.out.println(text+" in "+this.sortedContacts.get(i).getName());
             }
             else {
-                Vector<String> contactMails=this.sortedContacts.get(i).getMails();
+                Vector<String> contactMails=this.sortedContacts.get(i).getEmails();
                 for(int j=0;j<contactMails.size();j++){
                     if(isThisNameInSearch(text,contactMails.get(j))){
                         searchContacts.add(this.sortedContacts.get(i));
@@ -149,6 +150,14 @@ public class Contacts {
             end--;
         }
         
+    }
+
+    public Contact returnThisContact(String ID){
+        for(Contact contact :this.contacts ){
+            if(contact.getID().equals(ID))
+            return contact;
+        }
+        return new Contact();
     }
 
     public Vector<Contact> getContacts(){

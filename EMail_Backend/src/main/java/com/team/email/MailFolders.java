@@ -2,6 +2,9 @@ package com.team.email;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +20,7 @@ public class MailFolders {
     private Vector<Mail> draftFolder =new Vector<>();
     private Vector<Mail> trashFolder =new Vector<>();
     private Map<String,Vector<Mail>> UserFolders =new HashMap<>();
-    private Vector<Mail> sortedMails=new Vector<>();;
+    private Vector<Mail> sortedMails=new Vector<>();
     
 
     public MailFolders() {
@@ -257,12 +260,25 @@ public class MailFolders {
                 break;
 
             case "trash" :
+                checkTrash();
                 tempMails=(Vector<Mail>) this.trashFolder.clone();
                 break;
             default:
                 tempMails=(Vector<Mail>) this.UserFolders.get(folderName).clone();
         }
         return tempMails;
+    }
+
+    public void checkTrash(){
+        for(Mail mail:this.trashFolder){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate savedDate = LocalDate.parse(mail.getDeletedDate(), formatter);
+            LocalDate currentDate = LocalDate.now();
+            long daysBetween = ChronoUnit.DAYS.between(savedDate, currentDate);
+            if (daysBetween >= 30) {
+                this.trashFolder.remove(mail);
+            } 
+        }
     }
 
 //////////////////sort Methods///////////////////////////////////////
@@ -384,100 +400,6 @@ public class MailFolders {
         return searchMails;
     }
     
-    public Vector<Mail> searchByDate(String date,String folderName){
-        Vector<Mail> searchMails=new Vector<>();
-        Vector<Mail> tempMails =this.sortedMails;
-
-        for(int i=0;i<tempMails.size();i++){
-            if( this.isThisNameInSearch(date, tempMails.get(i).getDate())){
-                searchMails.add(tempMails.get(i));
-            }
-        }
-        return searchMails;
-         
-    }
-
-    public Vector<Mail> searchBySender(String sender,String folderName){
-        Vector<Mail> searchMails=new Vector<>();
-        Vector<Mail> tempMails =this.sortedMails;
-
-        for(int i=0;i<tempMails.size();i++){
-            if( this.isThisNameInSearch(sender, tempMails.get(i).getSender())){
-                searchMails.add(tempMails.get(i));
-                break;
-            }
-        }
-        return searchMails;
-         
-    }
-
-    public Vector<Mail> searchByRecivers(String reciver,String folderName){
-        Vector<Mail> searchMails=new Vector<>();
-        Vector<Mail> tempMails =this.sortedMails;
-
-        for(int i=0;i<tempMails.size();i++){
-            for(int j=0;j<tempMails.get(i).getRecipients().size();j++){
-                if( this.isThisNameInSearch(reciver, tempMails.get(i).getRecipients().get(j))){
-                    searchMails.add(tempMails.get(i));
-                }
-            }
-        }
-        return searchMails;
-         
-    }
-
-    public Vector<Mail> searchByImportance(int priority,String folderName){
-        Vector<Mail> searchMails=new Vector<>();
-        Vector<Mail> tempMails =this.sortedMails;
-
-        for(int i=0;i<tempMails.size();i++){
-            if(tempMails.get(i).getPriority()==priority){
-                searchMails.add(tempMails.get(i));
-            }
-        }
-        return searchMails;
-    }
-
-    public Vector<Mail> searchBySubject(String subject,String folderName){
-        Vector<Mail> searchMails=new Vector<>();
-        Vector<Mail> tempMails =this.sortedMails;
-        
-        for(int i=0;i<tempMails.size();i++){
-            if( this.isThisNameInSearch(subject, tempMails.get(i).getSubject())){
-                searchMails.add(tempMails.get(i));
-            }
-        }
-        return searchMails;
-         
-    }
-
-    public Vector<Mail> searchByBody(String body,String folderName){
-        Vector<Mail> searchMails=new Vector<>();
-        Vector<Mail> tempMails =this.sortedMails;
-
-        for(int i=0;i<tempMails.size();i++){
-            if( this.isThisNameInSearch(body, tempMails.get(i).getBody())){
-                searchMails.add(tempMails.get(i));
-            }
-        }
-        return searchMails;
-         
-    }
-
-    public Vector<Mail> searchByAttachment(String attachment,String folderName){
-        Vector<Mail> searchMails=new Vector<>();
-        Vector<Mail> tempMails =this.sortedMails;
-
-        for(int i=0;i<tempMails.size();i++){
-            for(int j=0;j<tempMails.get(i).getAttachment().size();j++){
-                if( this.isThisNameInSearch(attachment, tempMails.get(i).getAttachment().get(j).getName())){
-                    searchMails.add(tempMails.get(i));
-                    break;
-                }
-            }
-        }
-        return searchMails;
-    }
 
 ///////////////filter methods//////////////////////////////////////
     public Vector<Mail> filterBySender (Vector<Mail> mails, String senders){

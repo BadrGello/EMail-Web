@@ -336,6 +336,57 @@ public class Controller {
         }
     }
 
+    @GetMapping("/getContactMails")
+    @ResponseBody
+    public ResponseEntity<Vector<Mail>> getContactMails(@RequestParam String userName,@RequestParam String contactID,@RequestParam String sortType,@RequestParam String sortOrder,@RequestParam String filterType,@RequestParam String filterText){
+        appProxy.loadUser(userName);
+        Contact thisContact=appProxy.getUser().getContacts().returnThisContact(contactID);
+        System.out.println("load done");
+        switch(sortType){
+            case "Date":
+                thisContact.sortByDate();
+                break;
+            case "Priority":
+                thisContact.sortByImportance();
+                break;
+            case "Sender":
+                thisContact.sortBySender();
+                break;
+            case "Subject":
+                thisContact.sortBySubject();
+                break;
+            case "Body":
+                thisContact.sortByBody();
+                break;
+        }
+        System.out.println("sort done");
+        if(sortOrder.equals("Descendingly")){
+            appProxy.getUser().getMailFolders().reverseOrder();
+        }
+        if(!filterText.equals("")){
+            System.out.println(filterType);
+            Vector<String> text =new Vector<>();
+            switch(filterType){
+                case "All":
+                    System.out.println("searching in all");
+                    return ResponseEntity.ok( thisContact.searchByAll(filterText));
+                    
+                case "Subject":
+                    return ResponseEntity.ok(thisContact.filterBySubject( thisContact.getMails(), filterText));
+                    
+                case "Sender":
+                    return ResponseEntity.ok(thisContact.filterBySender( thisContact.getMails(), filterText));
+                          
+            }
+        }
+        else{
+            return ResponseEntity.ok( thisContact.getMails());
+        }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(new Vector<>());
+    }
+
+
 //////////////////folders methods///////////////////////////////////////////////////////////////
 
     @GetMapping("/folders")

@@ -25,7 +25,8 @@ const EndPoints = {
     deleteContact: "http://localhost:8080/api/contacts/delete",
     addContact: "http://localhost:8080/api/contacts/add",
     editContact: "http://localhost:8080/api/contacts/edit",
-    updateEmail: "http://localhost:8080/api/contacts/updateEmail"
+    updateEmail: "http://localhost:8080/api/contacts/updateEmail",
+    getContactMail: "http://localhost:8080/api/contacts/getContactMail"
 };
 
 
@@ -52,6 +53,7 @@ const Contacts = () => {
         name: "",
         ID:"",
         emails: [ {email:""}],
+        mails:[],
     });
 
     // useEffect(() => {

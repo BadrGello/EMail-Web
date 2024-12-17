@@ -1,6 +1,7 @@
 package com.team.email;
 
 
+import java.util.Collections;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
@@ -9,6 +10,7 @@ public class Contact {
     private String ID;
     private String Name;
     private Vector<String> Emails=new Vector<>();
+    private Vector<Mail> mails=new Vector<>();
 
     public Contact() {
     }
@@ -27,7 +29,12 @@ public class Contact {
     public void setEmails(Vector<String> Emails) {
         this.Emails = Emails;
     }
-
+    public void setMails(Vector<Mail> mails) {
+        this.mails = mails;
+    }
+    public Vector<Mail> getMails(){
+        return this.mails;
+    }
     public Contact(String Id,String name,Vector<String> Mails){
         if(ValidMails(Mails)){
             this.ID=Id;
@@ -48,11 +55,6 @@ public class Contact {
     public String getName(){
         return this.Name;
     }
-
-    public Vector<String> getMails(){
-        return this.Emails;
-    }
-
     private void AddEmail(String mail){
         if(this.ValidMail(mail) && !this.Emails.contains(mail) ){
             this.Emails.add(mail);
@@ -81,4 +83,143 @@ public class Contact {
             return this;
         }    
     }
+    
+    public void deleteContactMail(String date){
+        for(Mail mail:this.mails){
+            if(mail.getDate().equals(date)){
+                this.mails.remove(mail);
+            }
+        }
+    }
+    //////////////////sort Methods///////////////////////////////////////
+
+    public void sortByDate(){
+        sorter sorter=new sorter();
+        Collections.sort(this.mails, sorter.DateCompare());
+        
+    }
+
+    public void sortBySender(){
+        sorter sorter=new sorter();
+
+        Collections.sort(this.mails, sorter.SenderCompare());
+        
+    }
+
+
+    public void sortByImportance(){
+        sorter sorter=new sorter();
+
+        Collections.sort(this.mails, sorter.ImportanceCompare());
+    }
+
+    public void sortBySubject(){
+        sorter sorter=new sorter();
+
+        Collections.sort(this.mails, sorter.SubjectCompare());
+        
+    }
+
+    public void sortByBody(){
+        sorter sorter=new sorter();
+
+        Collections.sort(this.mails, sorter.BodyCompare());
+        
+    }
+    public void reverseOrder(){
+        int start=0;
+        int end = this.mails.size()-1;
+        System.out.println("hello");
+        while (start < end) {
+            Mail temp = this.mails.get(start);
+            this.mails.set(start, this.mails.get(end));
+            this.mails.set(end, temp);
+            start++;
+            end--;
+        }
+    }
+
+/////////////////search Methods/////////////////////////////////////
+
+    private boolean isThisNameInSearch(String SearchText,String mailText){
+        SearchText=SearchText.toLowerCase();
+        mailText=mailText.toLowerCase();
+        if(SearchText.length()>mailText.length()){
+            return false;
+        }
+        else{
+            for(int i=0;i<=mailText.length()-SearchText.length();i++){
+                String s=mailText.substring(i, i+SearchText.length());
+                if(s.equals(SearchText)){
+                    return true;
+                }
+            }
+                return false;
+        }
+
+    }
+
+    public Vector<Mail> searchByAll(String text){
+        Vector<Mail> searchMails=new Vector<>();
+        Vector<Mail> tempMails =this.mails;
+        for(int i=0;i<tempMails.size();i++){
+
+            if( this.isThisNameInSearch(text, tempMails.get(i).getDate())){
+                searchMails.add(tempMails.get(i));
+            }
+
+            else if( this.isThisNameInSearch(text, tempMails.get(i).getSender())){
+                searchMails.add(tempMails.get(i));
+            }
+
+            else if( this.isThisNameInSearch(text, tempMails.get(i).getSubject())){
+                searchMails.add(tempMails.get(i));
+            }
+
+            else if( this.isThisNameInSearch(text, tempMails.get(i).getBody())){
+                searchMails.add(tempMails.get(i));
+            }
+
+            else{
+            int j=0;
+            for(j=0;j<tempMails.get(i).getRecipients().size();j++){
+                if( this.isThisNameInSearch(text, tempMails.get(i).getRecipients().get(j))){
+                    searchMails.add(tempMails.get(i));
+                    break;
+                }
+            }
+            if(j==tempMails.get(i).getAttachment().size()){
+            for(j=0;j<tempMails.get(i).getAttachment().size();j++){
+                if( this.isThisNameInSearch(text, tempMails.get(i).getAttachment().get(j).getName())){
+                    searchMails.add(tempMails.get(i));
+                    break;
+                }
+            }
+            }
+            
+        }
+        }
+        return searchMails;
+    }
+    
+
+///////////////filter methods//////////////////////////////////////
+    public Vector<Mail> filterBySender (Vector<Mail> mails, String senders){
+        System.out.println("sender is "+senders);
+        SenderCriteria senderCriteria = new SenderCriteria();
+        Vector<Mail> filtered = senderCriteria.meetCriteria(mails, senders);
+        return filtered;
+    }
+
+    public Vector<Mail> filterBySubject (Vector<Mail> mails, String subjects){
+        System.out.println("subject is "+subjects);
+        SubjectCriteria subjectCriteria = new SubjectCriteria();
+        Vector<Mail> filtered = subjectCriteria.meetCriteria(mails, subjects);
+        System.out.println(filtered.size());
+        return filtered;
+    }
+    
+    
+     
+///////////////return folders methods//////////////////////////////    
 }

@@ -60,6 +60,14 @@ public class User implements UserInterface {
     public void recievMail(Mail mail){
         System.out.println(userName);
         this.mailFolders.getInboxFolder().add(mail);
+        for(Contact contact:this.getContacts().getContacts()){
+            for(String email:contact.getEmails()){
+                if(mail.getSender().equals(email)){
+                    contact.getMails().add(mail);
+                    break;
+                }
+            }
+        }
         try{
         this.save();
         }
