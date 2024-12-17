@@ -124,7 +124,7 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
             formDataToSend.append("files", file);
         });
     
-        console.log("Sending FormData:", formDataToSend);
+        console.log("Sending FormData:", formDataToSend.get("files"));
 
         try {
             // const response = await axios.post(EndPoints.sendDraft, requestData); // Send data to backend
@@ -169,7 +169,7 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
         newformData.id = newformData.date;
     
         onEditOrSend("Send"); // Drafts Folder
-    
+        console.log("ASADASDASDADS", newformData)
         const formDataToSend = new FormData();
         formDataToSend.append("userName", userName);
         formDataToSend.append("recipients", newformData.recipients.join(",")); // Join recipients into a comma-separated string
@@ -183,7 +183,7 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
             formDataToSend.append("files", file);
         });
     
-        console.log("Sending FormData:", formDataToSend);
+        console.log("Sending FormData:", formDataToSend.get("files"));
     
         try {
             // Send FormData to the backend
