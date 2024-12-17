@@ -180,7 +180,24 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
     // Handle form submit
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+        
+        // Handle if the email to send is draft and the user didn't interact with the to: fields, they may be wrong but the validator isn't invoked, so we validate before sending
+        for (let index = 0; index < formData.recipients.length; index++) {
+            const email = formData.recipients[index];
+            const updatedErrors = { ...errors };
+        
+            // Validate email
+            if (!emailValidator(email) && email.trim() !== '') {
+                updatedErrors[`to-${index}`] = 'Invalid email address';
+                setErrors(updatedErrors);
+                return;
+
+            } else {
+                delete updatedErrors[`to-${index}`];
+                setErrors(updatedErrors);
+            }
+        }
+
         if (Object.keys(errors).length > 0) {
             // Check if there's exactly one error
             if (Object.keys(errors).length === 1) {

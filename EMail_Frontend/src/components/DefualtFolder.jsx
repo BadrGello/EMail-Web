@@ -15,6 +15,8 @@ const EndPoints = {
     moveEmailsFromTrash: "http://localhost:8080/api" + '/moveEmailsFromTrash',
 }
 
+const PAGE_SIZE = 6; // Maximum emails per page
+
 const DefualtFolder = () => {
     // If "sender" is userName, it'll display To: recipients
     const [emails, setEmails] = useState([
@@ -30,6 +32,8 @@ const DefualtFolder = () => {
     const [filterBy, setFilterBy] = useState('All');
     const [filterText, setFilterText] = useState('');
     
+    const [currentPage, setCurrentPage] = useState(1); // Pagination state
+
     useEffect(() => {
         handleRefresh();
     }, [userName, currentFolder]);
@@ -130,6 +134,7 @@ const DefualtFolder = () => {
 
             // Set the state once with the updated email
             setEmails(updatedEmails);
+            setCurrentPage(1); // Reset to the first page after refresh
 
         } catch (error) {
             console.error("Error fetching emails:", error);
@@ -255,6 +260,22 @@ const DefualtFolder = () => {
     };
 
 
+    const totalPages = Math.ceil(emails.length / PAGE_SIZE);
+
+    // Get emails for the current page
+    const paginatedEmails = emails.slice(
+        (currentPage - 1) * PAGE_SIZE,
+        currentPage * PAGE_SIZE
+    );
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) setCurrentPage(currentPage - 1);
+    };
+
     return (
         <>
             
@@ -284,6 +305,25 @@ const DefualtFolder = () => {
                 User is {userName} and Folder is {currentFolder}
             </div> */}
 
+            {/* Pagination Controls */}
+            <div className="pagination-container">
+                    <button className="pagination-button"
+                        onClick={handlePreviousPage}
+                        disabled={currentPage === 1}
+                    >
+                        ←
+                    </button>
+                    <span>
+                        Page {currentPage} of {totalPages}
+                    </span>
+                    <button className="pagination-button"
+                        onClick={handleNextPage}
+                        disabled={currentPage === totalPages}
+                    >
+                        →
+                    </button>
+            </div>
+
             {/* Email List */}
             <div className='list'>
                 <ul>
@@ -298,7 +338,7 @@ const DefualtFolder = () => {
                         <span>Select All</span>
                     </li>
 
-                    {emails
+                    {paginatedEmails
                         // .filter(email => 
                         //     email[filterBy]?.toLowerCase().includes(filterText.toLowerCase())
                         // )
@@ -320,6 +360,7 @@ const DefualtFolder = () => {
                         
                 </ul>
             </div>
+
 
             <EmailModal 
                 email={currentEmail} 
