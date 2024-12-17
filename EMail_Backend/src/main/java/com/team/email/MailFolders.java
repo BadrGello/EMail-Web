@@ -51,16 +51,18 @@ public class MailFolders {
     }
 
     public void makeDraft(Vector<Attachment> attachments,String sender,Vector<String> recipients,String subject ,int priority ,String body,String date){
+        System.out.println("double enter");
         Mail mail =new Mail(attachments,sender,recipients,subject, priority, body,date,"","");
         this.draftFolder.add(mail);
         //save it in database in sender (dont save it in recipients)
     }
 
     public void MoveToTrash(String folderName,String date,String DeleteDate){
+        System.out.println("deleting "+folderName);
         switch (folderName) {
             case "sent":
             for(int i=0;i<this.sentFolder.size();i++){
-                if(this.sentFolder.get(i).getDate()==date){
+                if(this.sentFolder.get(i).getDate().equals(date)){
                     this.trashFolder.add(this.sentFolder.get(i).trashMail(folderName, DeleteDate));
                     this.sentFolder.remove(i);
                     break;
@@ -69,7 +71,7 @@ public class MailFolders {
                 break;
              case"inbox":
              for(int i=0;i<this.inboxFolder.size();i++){
-                if(this.inboxFolder.get(i).getDate()==date){
+                if(this.inboxFolder.get(i).getDate().equals(date)){
                     this.trashFolder.add(this.inboxFolder.get(i).trashMail(folderName, DeleteDate));
                     this.inboxFolder.remove(i);
                     break;
@@ -78,7 +80,7 @@ public class MailFolders {
                 break;
             case "draft":
             for(int i=0;i<this.draftFolder.size();i++){
-                if(this.draftFolder.get(i).getDate()==date){
+                if(this.draftFolder.get(i).getDate().equals(date)){
                     this.trashFolder.add(this.draftFolder.get(i).trashMail(folderName, DeleteDate));
                     this.draftFolder.remove(i);
                     break;
@@ -87,7 +89,7 @@ public class MailFolders {
                 break;
             default:
             for(int i=0;i<this.UserFolders.get(folderName).size();i++){
-                if(this.UserFolders.get(folderName).get(i).getDate()==date){
+                if(this.UserFolders.get(folderName).get(i).getDate().equals(date)){
                     this.trashFolder.add(this.UserFolders.get(folderName).get(i).trashMail(folderName, DeleteDate));
                     this.UserFolders.get(folderName).remove(i);
                     break;
@@ -101,7 +103,7 @@ public class MailFolders {
         Mail returnedMail=null;
         String folderName="";
         for(int i=0;i<this.trashFolder.size();i++){
-            if(this.trashFolder.get(i).getDate()==date){
+            if(this.trashFolder.get(i).getDate().equals(date)){
                 returnedMail=this.trashFolder.get(i).regMail();
                 folderName=this.trashFolder.get(i).getFolderBeforeDelete();
                 this.trashFolder.remove(i);
@@ -131,7 +133,7 @@ public class MailFolders {
         switch (folderName) {
             case "draft":
                 for(int i=0;i<this.draftFolder.size();i++){
-                    if(this.draftFolder.get(i).getDate()==date){
+                    if(this.draftFolder.get(i).getDate().equals(date)){
                         this.draftFolder.remove(i);
                         break;
                     }
@@ -139,8 +141,9 @@ public class MailFolders {
                 break;
 
             case "trash":
+            System.out.println("trashhhhhh");
             for(int i=0;i<this.trashFolder.size();i++){
-                if(this.trashFolder.get(i).getDate()==date){
+                if(this.trashFolder.get(i).getDate().equals(date)){
                     this.trashFolder.remove(i);
                     break;
                 }
@@ -156,7 +159,7 @@ public class MailFolders {
         switch (oldFolder) {
             case "sent":
             for(int i=0;i<this.sentFolder.size();i++){
-                if(this.sentFolder.get(i).getDate()==date){
+                if(this.sentFolder.get(i).getDate().equals(date)){
                     this.UserFolders.get(newFolder).add(this.sentFolder.get(i));
                     this.sentFolder.remove(i);
                     break;
@@ -165,7 +168,7 @@ public class MailFolders {
                 break;
              case"inbox":
              for(int i=0;i<this.inboxFolder.size();i++){
-                if(this.inboxFolder.get(i).getDate()==date){
+                if(this.inboxFolder.get(i).getDate().equals(date)){
                     this.UserFolders.get(newFolder).add(this.inboxFolder.get(i));
                     this.inboxFolder.remove(i);
                     break;
@@ -174,7 +177,7 @@ public class MailFolders {
                 break;
             case "draft":
             for(int i=0;i<this.draftFolder.size();i++){
-                if(this.draftFolder.get(i).getDate()==date){
+                if(this.draftFolder.get(i).getDate().equals(date)){
                     this.UserFolders.get(newFolder).add(this.draftFolder.get(i));
                     this.draftFolder.remove(i);
                     break;
@@ -183,7 +186,7 @@ public class MailFolders {
                 break;
             default:
             for(int i=0;i<this.UserFolders.get(oldFolder).size();i++){
-                if(this.UserFolders.get(oldFolder).get(i).getDate()==date){
+                if(this.UserFolders.get(oldFolder).get(i).getDate().equals(date)){
                     this.UserFolders.get(newFolder).add(this.UserFolders.get(oldFolder).get(i));
                     this.UserFolders.get(oldFolder).remove(i);
                     break;
@@ -211,7 +214,7 @@ public class MailFolders {
             this.UserFolders.put(newFolder, UserFolders.get(oldFolder));
             this.UserFolders.remove(oldFolder);
             for(int i=0;i<this.sentFolder.size();i++){
-                if(this.trashFolder.get(i).getFolderBeforeDelete()==oldFolder){
+                if(this.trashFolder.get(i).getFolderBeforeDelete().equals(oldFolder)){
                     this.trashFolder.add(this.sentFolder.get(i).trashMail(newFolder,this.trashFolder.get(i).getDeletedDate()));
                     this.sentFolder.remove(i);
                     break;
@@ -228,7 +231,7 @@ public class MailFolders {
         this.UserFolders.remove(folderName);
         System.out.println(this.UserFolders.keySet().size());
         for(int i=0;i<this.trashFolder.size();i++){
-            if(this.trashFolder.get(i).getFolderBeforeDelete()==folderName){
+            if(this.trashFolder.get(i).getFolderBeforeDelete().equals(folderName)){
                 this.trashFolder.remove(i);
                 break;
             }

@@ -165,11 +165,13 @@ const DefualtFolder = () => {
         console.log("Move To Folder ", folder, " the following emails: ", selectedEmails)
 
         try {
-            const response = await axios.post(EndPoints.moveEmails, {
-                user: userName,
-                folder: currentFolder,
-    
-                emailIds: selectedEmails,  // Send the list of selected emails IDs to move
+            const response = await axios.post(EndPoints.moveEmails, null ,{
+                params:{
+                userName: userName,
+                folderName: currentFolder,
+                newFolderName:folder,
+                dates: selectedEmails.toString(),  // Send the list of selected emails IDs to move
+                },
             });
             if (response.status === 200) {
                 handleRefresh();
@@ -184,14 +186,16 @@ const DefualtFolder = () => {
 
     // Done
     const handleDelete = async () => {
-        console.log("Delete", selectedEmails)
+        console.log("Delete", selectedEmails.toString())
 
         try {
-            const response = await axios.post(EndPoints.deleteEmails, {
-                user: userName,
-                folder: currentFolder,
+            const response = await axios.post(EndPoints.deleteEmails, null,{
+                params:{
+                userName: userName,
+                folderName: currentFolder,
     
-                emailIds: selectedEmails,  // Send the list of selected draft IDs to delete
+                dates: selectedEmails.toString(),  // Send the list of selected draft IDs to delete
+                }
             });
             if (response.status === 200) {
                 handleRefresh();

@@ -133,7 +133,7 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
 
         try {
             // const response = await axios.post(EndPoints.sendDraft, requestData); // Send data to backend
-            const response = await axios.post(EndPoints.sendEmail, formDataToSend, {
+            const response = await axios.post(EndPoints.sendDraft, formDataToSend, {
                 headers: {
                     "Content-Type": "multipart/form-data", // Indicate multipart form data
                 },

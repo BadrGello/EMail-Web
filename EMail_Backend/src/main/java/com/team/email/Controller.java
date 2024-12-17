@@ -79,8 +79,8 @@ public class Controller {
     @PostMapping("/sendDraft")
     @ResponseBody
     public ResponseEntity<String> sendDraft(@RequestParam(required = false) String userName,@RequestParam(required = false) MultipartFile[] files,@RequestParam(required = false) String recipients,@RequestParam(required = false) String subject ,@RequestParam(required = false) String priority ,@RequestParam(required = false) String body,@RequestParam(required = false) String date) throws IOException{
-        System.out.println("entered");
-        System.out.print(priority);
+        System.out.println("enter");
+        System.out.println(priority);
         int intpriority=0;
         switch (priority) {
             case "Low":
@@ -98,11 +98,15 @@ public class Controller {
             default:
                 throw new AssertionError();
         }
-        String[] emailsArray = recipients.split(",");
+        System.out.println("priority done");
         Vector<String> emailVector = new Vector<>();
+        if(recipients!=null){
+        String[] emailsArray = recipients.split(",");
         for (String email : emailsArray) {
             emailVector.add(email);
         }
+        }
+        System.out.println("email vector done");
         Vector<Attachment> attachments = new Vector<>();
         if(files == null) System.out.println("null files");
         if (files != null && files.length >0) {
@@ -116,9 +120,18 @@ public class Controller {
                 System.out.println((files[i].getSize()));
             }
         }
+        if(body==null){
+            body="";
+            System.out.println("null body");
+        }
+        if(subject==null){
+            subject="";
+            System.out.println("null subject");
+        }
         try {
             appProxy.loadUser(userName);
-            appProxy.makeDraft(attachments, date, emailVector, subject, intpriority, body, date);
+            System.out.println(userName);
+            appProxy.makeDraft(attachments, userName, emailVector, subject, intpriority, body, date);
             return ResponseEntity.status(HttpStatus.OK).body("contact added successfully");
         }
         catch(Exception e){
@@ -131,7 +144,6 @@ public class Controller {
     public ResponseEntity<Vector<Mail>> getFolder(@RequestParam String userName,@RequestParam String folderName,@RequestParam String sortType,@RequestParam String sortOrder,@RequestParam String filterType,@RequestParam String filterText){
         System.out.println("fetching mails");
         appProxy.loadUser(userName);
-        System.out.println(appProxy.getMailFolders().getSentFolder().get(0).getBody());
         System.out.println("load done");
         switch(sortType){
             case "Date":
@@ -177,16 +189,21 @@ public class Controller {
 
     @PostMapping("/deleteEmails")
     @ResponseBody
-    public ResponseEntity<String> delteEmails(@RequestParam String userName,@RequestParam String folderName,@RequestParam String date) {
+    public ResponseEntity<String> delteEmails(@RequestParam String userName,@RequestParam String folderName,@RequestParam String[] dates) {
+        System.out.println("delete "+dates.length);
         try {
             appProxy.loadUser(userName);
+            for(String date:dates){
+                System.out.println("number of times");
             if(folderName.equals("draft")||folderName.equals("trash")){
+                System.out.println("trash");
                 appProxy.deleteMail(folderName, date);
             }
             else{
                 System.out.println(LocalDate.now().toString());
                 appProxy.MoveToTrash(folderName, date,LocalDate.now().toString());
             }
+        }
             return ResponseEntity.status(HttpStatus.OK).body("mail deleted successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting mail: " + e.getMessage());
@@ -195,9 +212,10 @@ public class Controller {
         
     @PostMapping("/moveEmails")
     @ResponseBody
-    public ResponseEntity<String> moveEmails(@RequestParam String userName,@RequestParam String folderName,@RequestParam String date,@RequestParam String newFolderName) {
+    public ResponseEntity<String> moveEmails(@RequestParam String userName,@RequestParam String folderName,@RequestParam String[] dates,@RequestParam String newFolderName) {
         try {
             appProxy.loadUser(userName);
+            for(String date:dates)
             appProxy.moveToFolder(folderName, newFolderName, date);
             return ResponseEntity.status(HttpStatus.OK).body("mail moved successfully");
         } catch (Exception e) {
