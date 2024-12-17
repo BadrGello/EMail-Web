@@ -481,14 +481,17 @@ public class MailFolders {
 
 ///////////////filter methods//////////////////////////////////////
     public Vector<Mail> filterBySender (Vector<Mail> mails, String senders){
+        System.out.println("sender is "+senders);
         SenderCriteria senderCriteria = new SenderCriteria();
         Vector<Mail> filtered = senderCriteria.meetCriteria(mails, senders);
         return filtered;
     }
 
     public Vector<Mail> filterBySubject (Vector<Mail> mails, String subjects){
+        System.out.println("subject is "+subjects);
         SubjectCriteria subjectCriteria = new SubjectCriteria();
         Vector<Mail> filtered = subjectCriteria.meetCriteria(mails, subjects);
+        System.out.println(filtered.size());
         return filtered;
     }
     

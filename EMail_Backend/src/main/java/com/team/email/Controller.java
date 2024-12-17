@@ -193,6 +193,7 @@ public class Controller {
     @ResponseBody
     public ResponseEntity<String> delteEmails(@RequestParam String userName,@RequestParam String folderName,@RequestParam String[] dates) {
         System.out.println("delete "+dates.length);
+        System.out.println("thisssssssssssssssssssssssssssssssssssssss");
         try {
             appProxy.loadUser(userName);
             for(String date:dates){
@@ -219,6 +220,19 @@ public class Controller {
             appProxy.loadUser(userName);
             for(String date:dates)
             appProxy.moveToFolder(folderName, newFolderName, date);
+            return ResponseEntity.status(HttpStatus.OK).body("mail moved successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error moving mail: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/moveEmailsFromTrash")
+    @ResponseBody
+    public ResponseEntity<String> returnEmailsFromTrash(@RequestParam String userName,@RequestParam String folderName,@RequestParam String[] dates) {
+        try {
+            appProxy.loadUser(userName);
+            for(String date:dates)
+            appProxy.returnFromTrash(date);
             return ResponseEntity.status(HttpStatus.OK).body("mail moved successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error moving mail: " + e.getMessage());

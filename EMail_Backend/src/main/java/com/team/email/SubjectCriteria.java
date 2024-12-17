@@ -7,8 +7,8 @@ public class SubjectCriteria implements Criteria{
         @Override
         public Vector<Mail> meetCriteria (Vector<Mail> mails ,  String  subject){
  
-                for(Mail mail : mails){            
-                    if(mail.getSender().equalsIgnoreCase(subject)){
+                for(Mail mail : mails){        
+                    if(mail.getSubject().equalsIgnoreCase(subject)){
                         filteredSubjects.add(mail);
                     }
            }

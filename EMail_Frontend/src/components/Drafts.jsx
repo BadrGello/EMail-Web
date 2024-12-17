@@ -153,11 +153,13 @@ const Drafts = () => {
         console.log("Deleting.. ", drafts);
         
         try {
-            const response = await axios.post(EndPoints.deleteDrafts, {
-                user: userName,
-                folder: currentFolder,
+            const response = await axios.post(EndPoints.deleteDrafts, null,{
+                params:{
+                userName: userName,
+                folderName: "draft",
     
-                emailIds: drafts,  // Send the list of selected draft IDs to delete
+                dates: drafts.toString(),  // Send the list of selected draft IDs to delete
+                }
             });
             if (response.status === 200) {
                 handleRefresh();
