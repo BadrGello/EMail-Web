@@ -23,6 +23,7 @@ const EndPoints = {
     getFolders: "http://localhost:8080/api/folders",
 }
 
+const PAGE_SIZE = 6; // Maximum emails per page
 
 const Drafts = () => {
     const [drafts, setDrafts] = useState([]);  // Initialize with an empty array
@@ -39,6 +40,8 @@ const Drafts = () => {
 
     const [modalOpen, setModalOpen] = useState(false); // State to control the modal visibility
     
+    const [currentPage, setCurrentPage] = useState(1); // Pagination state
+
     useEffect(() => {
         handleRefresh();
     }, [userName]);
@@ -135,6 +138,7 @@ const Drafts = () => {
 
             // Set the state once with the updated drafts
             setDrafts(updatedDrafts);
+            setCurrentPage(1); // Reset to the first page after refresh
 
         } catch (error) {
             console.error("Error fetching drafts:", error);
@@ -205,6 +209,23 @@ const Drafts = () => {
         setModalOpen(true);     // Open modal
     };
 
+
+    const totalPages = Math.ceil(drafts.length / PAGE_SIZE);
+
+    // Get emails for the current page
+    const paginatedDrafts = drafts.slice(
+        (currentPage - 1) * PAGE_SIZE,
+        currentPage * PAGE_SIZE
+    );
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) setCurrentPage(currentPage - 1);
+    };
+
     return (
         <>
             <EmailToolBar 
@@ -231,6 +252,25 @@ const Drafts = () => {
                 User is {userName} and Folder is {currentFolder}
             </div> */}
 
+            {/* Pagination Controls */}
+            <div className="pagination-container">
+                    <button className="pagination-button"
+                        onClick={handlePreviousPage}
+                        disabled={currentPage === 1}
+                    >
+                        ←
+                    </button>
+                    <span>
+                        Page {currentPage} of {totalPages}
+                    </span>
+                    <button className="pagination-button"
+                        onClick={handleNextPage}
+                        disabled={currentPage === totalPages}
+                    >
+                        →
+                    </button>
+            </div>
+
             {/* Draft List */}
             <div className='list'>
                 <ul>
@@ -245,7 +285,7 @@ const Drafts = () => {
                         <span>Select All</span>
                     </li>
 
-                    {drafts
+                    {paginatedDrafts
                         .map((draft) => (
                             <>
                             <li key={draft.date}>
