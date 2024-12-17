@@ -117,25 +117,30 @@ const Drafts = () => {
                 }
             });
             console.log("response of fetching=",response)
-            setDrafts(response.data);  // Assuming response contains an array of drafts
+
+            // Define the priority mapping
+            const priorityMapping = {
+                1: 'Urgent',
+                2: 'High',
+                3: 'Normal',
+                4: 'Low',
+            };
+
+            // Assuming the response contains an array of drafts
+            const updatedDrafts = response.data.map(draft => ({
+                ...draft,
+                // Map the priority number to the corresponding string
+                priority: priorityMapping[draft.priority] || draft.priority // Default to current value if no match
+            }));
+
+            // Set the state once with the updated drafts
+            setDrafts(updatedDrafts);
+
         } catch (error) {
             console.error("Error fetching drafts:", error);
         }
 
-        // The recieved drafts has the priority field as number, so convert it to text
-        const priorityMapping = {
-            1 : 'Urgent',
-            2 : 'High',
-            3 : 'Normal',
-            4 : 'Low',
-        };
-    
-        // Convert the priority string to the corresponding number for each draft
-        setDrafts(drafts.map(draft => ({
-            ...draft,
-            priority: priorityMapping[draft.priority] || draft.priority // Default to current value if no match
-        })))
-
+        
         // fetchFolders();
     };
 

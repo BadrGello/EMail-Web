@@ -112,25 +112,28 @@ const DefualtFolder = () => {
             console.log("response of fetching=",response)
             // console.log("attachment",response.data[0].attachment[0])
 
-            setEmails(response.data);  // Assuming response contains an array of emails
+
+            // Define the priority mapping
+            const priorityMapping = {
+                1: 'Urgent',
+                2: 'High',
+                3: 'Normal',
+                4: 'Low',
+            };
+
+            // Assuming the response contains an array of email
+            const updatedEmails = response.data.map(email => ({
+                ...email,
+                // Map the priority number to the corresponding string
+                priority: priorityMapping[email.priority] || email.priority // Default to current value if no match
+            }));
+
+            // Set the state once with the updated email
+            setEmails(updatedEmails);
+
         } catch (error) {
             console.error("Error fetching emails:", error);
         }
-
-
-        // The recieved emails has the priority field as number, so convert it to text
-        const priorityMapping = {
-            1 : 'Urgent',
-            2 : 'High',
-            3 : 'Normal',
-            4 : 'Low',
-        };
-    
-        // Convert the priority string to the corresponding number for each draft
-        setEmails(emails.map(email => ({
-            ...email,
-            priority: priorityMapping[email.priority] || email.priority // Default to current value if no match
-        })))
 
         fetchFolders();
     };

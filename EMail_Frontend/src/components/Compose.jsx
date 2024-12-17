@@ -75,17 +75,17 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
 
         setErrors(updatedErrors);
 
-        setFormData({ ...formData, to: updatedTo });
+        setFormData({ ...formData, recipients: updatedTo });
     };
 
     // Add another "To:" field
     const addAnotherTo = () => {
-        setFormData({ ...formData, to: [...formData.recipients, ''] });
+        setFormData({ ...formData, recipients: [...formData.recipients, ''] });
     };
 
     const removeToField = (index) => {
         const updatedTo = formData.recipients.filter((_, i) => i !== index);
-        setFormData({ ...formData, to: updatedTo });
+        setFormData({ ...formData, recipients: updatedTo });
     };
 
     const handleMoveToDraft = async () => {
@@ -207,7 +207,7 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
         setFormData({
             id: null,
             sender: userName,
-            to: [''],
+            recipients: [''],
             subject: '',
             body: '',
             attachment: [],
