@@ -54,9 +54,9 @@ const Contacts = () => {
         emails: [ {email:""}],
     });
 
-    useEffect(() => {
-        fetchContacts();
-    }, [sortType, sortOrder, filterBy, filterText]);
+    // useEffect(() => {
+    //     fetchContacts();
+    // }, [sortType, sortOrder, filterBy, filterText]);
 
     //Fetch / Refresh / Sort / Filter
     const fetchContacts = async () => {

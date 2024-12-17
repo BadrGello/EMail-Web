@@ -14,10 +14,10 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
     const [formData, setFormData] = useState({
         id: null,
         sender: userName,
-        to: [''], //recipients
+        recipients: [''], //recipients
         subject: '',
         body: '',
-        attachments: [],
+        attachment: [],
         priority: 'Normal',
         folder: 'inbox',
         date: '',
@@ -43,16 +43,16 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
 
     const isFormEmpty = () => {
         return (
-            formData.to.every(email => email.trim() === '') &&
+            formData.recipients.every(email => email.trim() === '') &&
             formData.subject.trim() === '' &&
             formData.body.trim() === '' &&
-            formData.attachments.length === 0
+            formData.attachment.length === 0
         );
     };
 
     const isFormNotComplete = () => {
         return (
-            formData.to.every(email => email.trim() === '') ||
+            formData.recipients.every(email => email.trim() === '') ||
             formData.subject.trim() === '' ||
             formData.body.trim() === ''
         );
@@ -62,7 +62,7 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
 
     // Handle the change for dynamic fields (To: email addresses)
     const handleToChange = (index, value) => {
-        const updatedTo = [...formData.to];
+        const updatedTo = [...formData.recipients];
         updatedTo[index] = value;
 
         // Validate the email address
@@ -80,11 +80,11 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
 
     // Add another "To:" field
     const addAnotherTo = () => {
-        setFormData({ ...formData, to: [...formData.to, ''] });
+        setFormData({ ...formData, to: [...formData.recipients, ''] });
     };
 
     const removeToField = (index) => {
-        const updatedTo = formData.to.filter((_, i) => i !== index);
+        const updatedTo = formData.recipients.filter((_, i) => i !== index);
         setFormData({ ...formData, to: updatedTo });
     };
 
@@ -111,21 +111,16 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
 
         onEditOrSend("Edit"); // Drafts Folder function
 
-        const requestData = {
-            userName: userName,
-            formData: newformData,
-        };
-
         const formDataToSend = new FormData();
         formDataToSend.append("userName", userName);
-        formDataToSend.append("recipients", newformData.to.join(",")); // Join recipients into a comma-separated string
+        formDataToSend.append("recipients", newformData.recipients.join(",")); // Join recipients into a comma-separated string
         formDataToSend.append("subject", newformData.subject);
         formDataToSend.append("priority", newformData.priority);
         formDataToSend.append("body", newformData.body);
         formDataToSend.append("date", newformData.date);
     
-        // Add attachments to FormData
-        Array.from(newformData.attachments).forEach((file) => {
+        // Add attachment to FormData
+        Array.from(newformData.attachment).forEach((file) => {
             formDataToSend.append("files", file);
         });
     
@@ -177,14 +172,14 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
     
         const formDataToSend = new FormData();
         formDataToSend.append("userName", userName);
-        formDataToSend.append("recipients", newformData.to.join(",")); // Join recipients into a comma-separated string
+        formDataToSend.append("recipients", newformData.recipients.join(",")); // Join recipients into a comma-separated string
         formDataToSend.append("subject", newformData.subject);
         formDataToSend.append("priority", newformData.priority);
         formDataToSend.append("body", newformData.body);
         formDataToSend.append("date", newformData.date);
     
-        // Add attachments to FormData
-        Array.from(newformData.attachments).forEach((file) => {
+        // Add attachment to FormData
+        Array.from(newformData.attachment).forEach((file) => {
             formDataToSend.append("files", file);
         });
     
@@ -215,7 +210,7 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
             to: [''],
             subject: '',
             body: '',
-            attachments: [],
+            attachment: [],
             priority: 'Normal',
             date: '',
         });
@@ -273,7 +268,7 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label>To:</label>
-                            {formData.to.map((email, index) => (
+                            {formData.recipients.map((email, index) => (
                                 <div key={index}>
                                     <TextField
                                         label={`Recipient ${index + 1}`}
@@ -285,7 +280,7 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
                                         error={!!errors[`to-${index}`]}
                                         helperText={errors[`to-${index}`]}
                                     />
-                                    {formData.to.length > 1 && (
+                                    {formData.recipients.length > 1 && (
                                         <Button
                                             type="button"
                                             variant="outlined"
@@ -296,7 +291,7 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
                                             Delete
                                         </Button>
                                     )}
-                                    {index === formData.to.length - 1 && (
+                                    {index === formData.recipients.length - 1 && (
                                         <Button
                                             type="button"
                                             variant="outlined"
@@ -336,11 +331,11 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
                                 type="file"
                                 className="form-control"
                                 multiple
-                                onChange={(e) => setFormData({ ...formData, attachments: e.target.files })}
+                                onChange={(e) => setFormData({ ...formData, attachment: e.target.files })}
                             />
-                            {formData.attachments.length > 0 && (
+                            {formData.attachment.length > 0 && (
                                 <ul>
-                                    {Array.from(formData.attachments).map((file, index) => (
+                                    {Array.from(formData.attachment).map((file, index) => (
                                         <li key={index}>{file.name}</li>
                                     ))}
                                 </ul>

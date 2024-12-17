@@ -11,77 +11,13 @@ const EndPoints = {
     moveEmails: "http://localhost:8080/api" + '/moveEmails',
 
     getFolders: "http://localhost:8080/api/folders",
+
+    moveEmailsFromTrash: "http://localhost:8080/api" + '/moveEmailsFromTrash',
 }
 
 const DefualtFolder = () => {
     // If "sender" is userName, it'll display To: recipients
     const [emails, setEmails] = useState([
-        {
-            id: 1,
-            sender: 'badr',
-            recipients: ['bobly@ex.com', 'whoa@no.com'],
-            subject: 'Meeting Reminder',
-            date: '2024-12-05',
-            body: 'Don\'t forget our meeting tomorrow at 10 AM.',
-            priority: 'Normal',
-            folder: 'inbox',
-            attachments: [],
-        },
-        {
-            id: 2,
-            sender: 'bob@example.com',
-            recipients: null,
-            subject: 'Urgent: Submit Documents',
-            date: '2024-12-04',
-            body: 'Please submit the required documents by EOD.',
-            priority: 'Urgent',
-            folder: 'inbox',
-            attachments: ['doc1.pdf', 'doc2.pdf', 'pic.png'],
-        },
-        {
-            id: 3,
-            sender: 'carol@example.com',
-            recipients: null,
-            subject: 'Invoice #12345',
-            date: '2024-12-03',
-            body: 'Here is your invoice for the recent transaction.',
-            priority: 'Normal',
-            folder: 'sent',
-            attachments: ['invoice12345.pdf'],
-        },
-        {
-            id: 4,
-            sender: 'dave@example.com',
-            recipients: null,
-            subject: 'Party Invitation',
-            date: '2024-12-01',
-            body: 'You are invited to a party at my place!',
-            priority: 'Low',
-            folder: 'drafts',
-            attachments: [],
-        },
-        {
-            id: 5,
-            sender: 'eve@example.com',
-            recipients: null,
-            subject: 'Black Friday Deals!',
-            date: '2024-11-29',
-            body: 'Check out our exclusive Black Friday deals.',
-            priority: 'Normal',
-            folder: 'trash',
-            attachments: [],
-        },
-        {
-            id: 6,
-            sender: 'frank@example.com',
-            recipients: null,
-            subject: 'Re: Project Updates',
-            date: '2024-12-02',
-            body: 'Here are the updates on the project status.',
-            priority: 'High',
-            folder: 'inbox',
-            attachments: ['update.docx'],
-        },
     ]);
 
     const location = useLocation()
@@ -98,7 +34,31 @@ const DefualtFolder = () => {
         handleRefresh();
     }, [userName, currentFolder]);
     
-    const [folders, setFolders] = useState(['college', 'games', 'important']); //List of custom folders
+    const [selectAll, setSelectAll] = useState(false);
+
+    // Function to handle the "Select All" checkbox change
+    const handleSelectAllChange = () => {
+        setSelectAll(!selectAll);
+        // Select or deselect all emails based on the checkbox state
+        if (!selectAll) {
+            // Select all emails
+            emails.forEach(email => {
+                if (!selectedEmails.includes(email.date)) {
+                    handleSelectEmail(email.date);
+                }
+            });
+        } else {
+            // Deselect all emails
+            emails.forEach(email => {
+                if (selectedEmails.includes(email.date)) {
+                    handleSelectEmail(email.date);
+                }
+            });
+        }
+    };
+
+
+    const [folders, setFolders] = useState([]); //List of custom folders
     // const [folders, setFolders] = useState([]); //List of custom folders
 
     const fetchFolders = async () => {
@@ -157,11 +117,54 @@ const DefualtFolder = () => {
             console.error("Error fetching emails:", error);
         }
 
+
+        // The recieved emails has the priority field as number, so convert it to text
+        const priorityMapping = {
+            1 : 'Urgent',
+            2 : 'High',
+            3 : 'Normal',
+            4 : 'Low',
+        };
+    
+        // Convert the priority string to the corresponding number for each draft
+        setEmails(emails.map(email => ({
+            ...email,
+            priority: priorityMapping[email.priority] || email.priority // Default to current value if no match
+        })))
+
         fetchFolders();
     };
 
     // Done
     const handleMoveToFolder = async (folder) => {
+
+        //If folder is trash
+        if (currentFolder === "trash"){
+            console.log("Move To Orginal Folders", " the following emails: ", selectedEmails)
+
+            try {
+                const response = await axios.post(EndPoints.moveEmailsFromTrash, null ,{
+                    params:{
+                    userName: userName,
+                    folderName: currentFolder,
+                    // newFolderName:folder,
+                    dates: selectedEmails.toString(),  // Send the list of selected emails IDs to move
+                    },
+                });
+                if (response.status === 200) {
+                    handleRefresh();
+                } else {
+                    console.error("Error moving emails");
+                }
+            } catch (error) {
+                console.error("Error moving emails:", error);
+            }
+
+            return
+        }
+
+
+        // Else; as noraml
         console.log("Move To Folder ", folder, " the following emails: ", selectedEmails)
 
         try {
@@ -271,15 +274,27 @@ const DefualtFolder = () => {
                 filterText={filterText}
 
                 folders={folders}
+                currentFolder={currentFolder}
             />
             
-            <div>
+            {/* <div>
                 User is {userName} and Folder is {currentFolder}
-            </div>
+            </div> */}
 
             {/* Email List */}
             <div className='list'>
                 <ul>
+
+                    {/* Select All checkbox */}
+                    <li>
+                        <input 
+                            type="checkbox" 
+                            checked={selectAll} 
+                            onChange={handleSelectAllChange} 
+                        />
+                        <span>Select All</span>
+                    </li>
+
                     {emails
                         // .filter(email => 
                         //     email[filterBy]?.toLowerCase().includes(filterText.toLowerCase())

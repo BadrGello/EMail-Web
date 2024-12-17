@@ -9,8 +9,34 @@ function SignUp() {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
+    
+    const [errorMessage, setErrorMessage] = useState('')
+
+    //Email validation regex
+    const emailValidator = (email) => {
+        const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return regex.test(email);
+    };
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        
+        setErrorMessage(''); // Reset error message
+
+        // Email validation
+        if (!emailValidator(userName)) {
+            setErrorMessage('Please enter a valid email address.');
+            return;
+        }
+
+        // Password validation (minimum length 6 characters)
+        if (password.length < 6) {
+            setErrorMessage('Password must be at least 6 characters long.');
+            return;
+        }
+
         try {
             // send to backend email and password and await a response
             console.log(userName);
@@ -53,7 +79,8 @@ function SignUp() {
                     />
                 </div>
                 <button type="submit" id='submit-button'>Sign Up</button>
-                    {/* Link to Login Page */}
+                {errorMessage && <div style={{ color: 'red' , textAlign: 'center' }}>{errorMessage}</div>}
+
                     
             </form>
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 
 ////////////////*ICONS*///////////
@@ -9,15 +9,37 @@ import { MdDriveFileMove } from "react-icons/md";
 
 
 
-const EmailToolbar = ({ onRefreshClick, onMoveClick, onDeleteClick, onSortChange, onOrderChange, onFilterChange, onFilterTextChange, onSortClick, onFilterClick, onClearFilterClick, sortType, sortOrder, filterBy, filterText, folders }) => {
+const EmailToolbar = ({ onRefreshClick, onMoveClick, onDeleteClick, onSortChange, onOrderChange, onFilterChange, onFilterTextChange, onSortClick, onFilterClick, onClearFilterClick, sortType, sortOrder, filterBy, filterText, folders, currentFolder }) => {
     
     const [isDropdownVisible, setDropdownVisible] = useState(false);
+    const [MoveTitle, setMoveTitle] = useState("Move to")
+
+    useEffect(() => {
+        if (currentFolder === "drafts") {
+            setMoveTitle("");
+        }
+        else if (currentFolder === "trash"){
+            setMoveTitle("Move to original folders")
+        }
+        else {
+            setMoveTitle("Move to")
+        }
+    }, [currentFolder]);
+
 
     const toggleDropdown = () => {
-        if (folders === null){
+        if (currentFolder === "drafts"){
             alert("Can't move drafts to another folder")
             return
         }
+
+        if (currentFolder === "trash"){
+
+            onMoveClick(null);
+            
+            return
+        }
+
         setDropdownVisible((prev) => !prev);
     };
 
@@ -34,7 +56,7 @@ const EmailToolbar = ({ onRefreshClick, onMoveClick, onDeleteClick, onSortChange
 
             {/* Move Button with Dropdown */}
             <div id="move-folder" style={{ position: 'relative', display: 'inline-block' }}>
-                <button onClick={toggleDropdown} id='icon-button' title="Move">
+                <button onClick={toggleDropdown} id='icon-button' title={MoveTitle}>
                     <MdDriveFileMove id="icon" />
                 </button>
                 {isDropdownVisible && (

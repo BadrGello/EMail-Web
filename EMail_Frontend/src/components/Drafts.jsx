@@ -25,51 +25,7 @@ const EndPoints = {
 
 
 const Drafts = () => {
-    const [drafts, setDrafts] = useState([{
-        id: '2024-12-08T10:00:00Z',
-        sender: 'john.doe@example.com',
-        recipients: ['jane.doe@example.com'],
-        subject: 'Meeting Reminder',
-        body: 'Just a reminder about the meeting tomorrow at 10 AM.',
-        attachment: ['agenda.pdf', 'location-map.jpg'],
-        priority: 'High',
-        date: '2024-12-08T10:00:00Z'
-      },
-      {
-        id: '2024-12-07T14:30:00Z',
-        sender: 'alice.smith@example.com',
-        recipients: ['bob.jones@example.com'],
-        subject: 'Project Update',
-        body: 'Here’s the latest update on the project.',
-        attachment: [],
-        priority: 'Normal',
-        date: '2024-12-07T14:30:00Z'
-      },
-      {
-        id: '2024-12-06T09:15:00Z',
-        sender: 'mark.brown@example.com',
-        recipients: ['linda.green@example.com', 'idk@idk', 'yesss'],
-        subject: 'Invoice for Services Rendered',
-        body: 'Please find attached the invoice for your recent project.',
-        attachment: [{
-            "name": "file1.txt",
-            "size": 1024,
-            "type": "text/plain",
-            "lastModified": 1618457890000,
-            "lastModifiedDate": "Mon, 15 Mar 2021 17:24:50 GMT",
-            "webkitRelativePath": ""
-          },
-          {
-            "name": "file2.jpg",
-            "size": 2048,
-            "type": "image/jpeg",
-            "lastModified": 1618457891000,
-            "lastModifiedDate": "Mon, 15 Mar 2021 17:25:00 GMT",
-            "webkitRelativePath": ""
-          }],
-        priority: 'Normal',
-        date: '2024-12-06T09:15:00Z'
-      },]);  // Initialize with an empty array
+    const [drafts, setDrafts] = useState([]);  // Initialize with an empty array
 
     const location = useLocation();
     const userName = location.state.userName;
@@ -89,16 +45,30 @@ const Drafts = () => {
 
     const [folders, setFolders] = useState(null); //List of custom folders
 
-    // const fetchFolders = async () => {
-    //     console.log("Fetching folders..");
-    //     try {
-    //         const response = await axios.get(EndPoints.getFolders, { params: { user: userName } });
-    //         setFolders(response.data.folders);
-    //     } catch (error) {
-    //         console.error("Error fetching folders:", error);
-    //     }
-    // };
+    const [selectAll, setSelectAll] = useState(false);
 
+    // Function to handle the "Select All" checkbox change
+    const handleSelectAllChange = () => {
+        setSelectAll(!selectAll);
+        // Select or deselect all drafts based on the checkbox state
+        if (!selectAll) {
+            // Select all drafts
+            drafts.forEach(draft => {
+                if (!selectedDrafts.includes(draft.date)) {
+                    handleSelectDraft(draft.date);
+                }
+            });
+        } else {
+            // Deselect all drafts
+            drafts.forEach(draft => {
+                if (selectedDrafts.includes(draft.date)) {
+                    handleSelectDraft(draft.date);
+                }
+            });
+        }
+    };
+
+    
     // Done
     const handleEditOrSend = () => {
         // In both, remove from drafts folder
@@ -151,6 +121,20 @@ const Drafts = () => {
         } catch (error) {
             console.error("Error fetching drafts:", error);
         }
+
+        // The recieved drafts has the priority field as number, so convert it to text
+        const priorityMapping = {
+            1 : 'Urgent',
+            2 : 'High',
+            3 : 'Normal',
+            4 : 'Low',
+        };
+    
+        // Convert the priority string to the corresponding number for each draft
+        setDrafts(drafts.map(draft => ({
+            ...draft,
+            priority: priorityMapping[draft.priority] || draft.priority // Default to current value if no match
+        })))
 
         // fetchFolders();
     };
@@ -233,15 +217,27 @@ const Drafts = () => {
                 filterText={filterText}
 
                 folders={folders}
+                currentFolder={currentFolder}
             />
 
-            <div>
+            {/* <div>
                 User is {userName} and Folder is {currentFolder}
-            </div>
+            </div> */}
 
             {/* Draft List */}
             <div className='list'>
                 <ul>
+
+                    {/* Select All checkbox */}
+                    <li>
+                        <input 
+                            type="checkbox" 
+                            checked={selectAll} 
+                            onChange={handleSelectAllChange} 
+                        />
+                        <span>Select All</span>
+                    </li>
+
                     {drafts
                         .map((draft) => (
                             <>

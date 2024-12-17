@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Import Link here
 import axios from 'axios';
+import { use } from 'react';
 
 const EndPoints = {
     Base: "http://localhost:8080/api",
@@ -15,6 +16,7 @@ function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
             // send to backend email and password and await a response
             // Comment this if there's no connection to backend
@@ -57,6 +59,7 @@ function Login() {
                     />
                     </div>
                 <button type="submit" id='submit-button'>Login</button>
+
             </form>
             <p>
                 Don't have an account? <Link to="/signup">Sign Up</Link>
