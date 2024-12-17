@@ -336,11 +336,11 @@ public class Controller {
         }
     }
 
-    @GetMapping("/getContactMails")
+    @GetMapping("/contacts/getContactMails")
     @ResponseBody
-    public ResponseEntity<Vector<Mail>> getContactMails(@RequestParam String userName,@RequestParam String contactID,@RequestParam String sortType,@RequestParam String sortOrder,@RequestParam String filterType,@RequestParam String filterText){
+    public ResponseEntity<Vector<Mail>> getContactMails(@RequestParam String userName,@RequestParam String folderName,@RequestParam String sortType,@RequestParam String sortOrder,@RequestParam String filterType,@RequestParam String filterText){
         appProxy.loadUser(userName);
-        Contact thisContact=appProxy.getUser().getContacts().returnThisContact(contactID);
+        Contact thisContact=appProxy.getUser().getContacts().returnThisContact(folderName);
         System.out.println("load done");
         switch(sortType){
             case "Date":

@@ -13,6 +13,10 @@ const EndPoints = {
     getFolders: "http://localhost:8080/api/folders",
 
     moveEmailsFromTrash: "http://localhost:8080/api" + '/moveEmailsFromTrash',
+
+    getContactMail: "http://localhost:8080/api/contacts/getContactMails",
+    deleteContactMail: "http://localhost:8080/api/contacts/deleteContactMails",
+
 }
 
 const PAGE_SIZE = 6; // Maximum emails per page
@@ -25,6 +29,7 @@ const DefualtFolder = () => {
     const location = useLocation()
     const userName = location.state.userName
     const currentFolder = location.state?.folder ?? 'inbox'; // Default to 'inbox' if folder is null or undefined
+    const contactMailsMode = location.state?.contactMailsMode ?? false; // Default to 'inbox' if folder is null or undefined
 
     const [selectedEmails, setSelectedEmails] = useState([]);
     const [sortType, setSortType] = useState('Date');
@@ -102,7 +107,13 @@ const DefualtFolder = () => {
         )
 
         try {
-            const response = await axios.get(EndPoints.getEmails, {
+            let apiToSend = EndPoints.getEmails;
+            if (contactMailsMode == true){
+                apiToSend = EndPoints.getContactMail;
+            }
+
+
+            const response = await axios.get(apiToSend, {
                 params: {
                     userName: userName,
                     folderName: currentFolder,
@@ -200,7 +211,12 @@ const DefualtFolder = () => {
         console.log("Delete", selectedEmails.toString())
 
         try {
-            const response = await axios.post(EndPoints.deleteEmails, null,{
+            let apiToSend = EndPoints.deleteEmails;
+            if (contactMailsMode === true){
+                apiToSend = EndPoints.deleteContactMail;
+            }
+
+            const response = await axios.post(apiToSend, null,{
                 params:{
                 userName: userName,
                 folderName: currentFolder,
@@ -299,6 +315,8 @@ const DefualtFolder = () => {
 
                 folders={folders}
                 currentFolder={currentFolder}
+
+                contactMailsMode={contactMailsMode}
             />
             
             {/* <div>

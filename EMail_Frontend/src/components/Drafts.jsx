@@ -246,6 +246,8 @@ const Drafts = () => {
 
                 folders={folders}
                 currentFolder={currentFolder}
+
+                contactMailsMode={false}
             />
 
             {/* <div>

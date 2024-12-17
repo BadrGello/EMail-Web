@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 ////////////////*ICONS*///////////
 import { CgMoreVerticalAlt } from 'react-icons/cg';
-import { MdDeleteOutline,MdFilterAlt, MdFilterAltOff,MdSort, MdRefresh, MdOutlineDone } from "react-icons/md";
+import { MdDeleteOutline,MdFilterAlt, MdFilterAltOff,MdSort, MdRefresh, MdOutlineDone, MdDriveFileMove } from "react-icons/md";
 import { IoPersonCircleOutline, IoPersonAdd } from "react-icons/io5";
 import { IoMdAdd } from "react-icons/io";
 import { FaMinus } from "react-icons/fa";
@@ -26,16 +26,14 @@ const EndPoints = {
     addContact: "http://localhost:8080/api/contacts/add",
     editContact: "http://localhost:8080/api/contacts/edit",
     updateEmail: "http://localhost:8080/api/contacts/updateEmail",
-    getContactMail: "http://localhost:8080/api/contacts/getContactMail"
+
+    getContactMail: "http://localhost:8080/api/contacts/getContactMails",
+    deleteContactMail: "http://localhost:8080/api/contacts/deleteContactMails",
 };
 
 
 const Contacts = () => {
-    const [contacts, setContacts] = useState([{
-        name: "Student",
-        ID:"1",
-        emails: [{ email: "Student1@gmail.com"}, { email: "Student2@gmail.com"}],
-    }]);
+    const [contacts, setContacts] = useState([]);
     const [formVisible, setFormVisible] = useState(false);
     const [editingContact, setEditingContact] = useState(null);
     const [emailError, setEmailError] = useState("");
@@ -48,6 +46,8 @@ const Contacts = () => {
     const location = useLocation()
     const userName = location.state.userName
 
+    const navigate = useNavigate();
+
     //Contacts displayed
     const [contactForm, setContactForm] = useState({
         name: "",
@@ -56,9 +56,9 @@ const Contacts = () => {
         mails:[],
     });
 
-    // useEffect(() => {
-    //     fetchContacts();
-    // }, [sortType, sortOrder, filterBy, filterText]);
+    useEffect(() => {
+        fetchContacts();
+    }, [userName]);
 
     //Fetch / Refresh / Sort / Filter
     const fetchContacts = async () => {
@@ -229,6 +229,10 @@ const Contacts = () => {
         fetchContacts();
     };
     
+    const goToContactFolder = (contactId) => {
+        console.log("Contact Id (Go to mails folder)");
+        navigate("/home", {replace: true, state:{userName, folder:contactId, contactMailsMode: true}})
+    }
 
     return (
         <>
@@ -335,6 +339,7 @@ const Contacts = () => {
                                     ))}
                                 </ul>
                                 <div id='contact-options'>
+                                    <button id='icon-button' onClick={() => { goToContactFolder(contact.id); }} title="Open Mails From Contact"> <MdDriveFileMove/> </button>
                                     <button id='icon-button' onClick={() => { setFormVisible(true); setEditingContact(contact); setContactForm(contact); }} title="Edit Contact"> <CgMoreVerticalAlt/> </button>
                                     <button id='icon-button' onClick={() => handleDeleteContact(contact.id)} title="Delete Contact"><MdDeleteOutline/></button>
                                 </div>

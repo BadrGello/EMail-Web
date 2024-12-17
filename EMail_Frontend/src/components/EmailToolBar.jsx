@@ -9,12 +9,16 @@ import { MdDriveFileMove } from "react-icons/md";
 
 
 
-const EmailToolbar = ({ onRefreshClick, onMoveClick, onDeleteClick, onSortChange, onOrderChange, onFilterChange, onFilterTextChange, onSortClick, onFilterClick, onClearFilterClick, sortType, sortOrder, filterBy, filterText, folders, currentFolder }) => {
+const EmailToolbar = ({ onRefreshClick, onMoveClick, onDeleteClick, onSortChange, onOrderChange, onFilterChange, onFilterTextChange, onSortClick, onFilterClick, onClearFilterClick, sortType, sortOrder, filterBy, filterText, folders, currentFolder, contactMailsMode }) => {
     
     const [isDropdownVisible, setDropdownVisible] = useState(false);
     const [MoveTitle, setMoveTitle] = useState("Move to")
 
     useEffect(() => {
+        if (contactMailsMode === true){
+            setMoveTitle("Can't move from a contact's folder!")
+
+        }
         if (currentFolder === "drafts") {
             setMoveTitle("");
         }
@@ -28,6 +32,11 @@ const EmailToolbar = ({ onRefreshClick, onMoveClick, onDeleteClick, onSortChange
 
 
     const toggleDropdown = () => {
+        if (contactMailsMode === true){
+            alert("Can't move from a contact's folder!")
+            return
+        }
+
         if (currentFolder === "drafts"){
             alert("Can't move drafts to another folder")
             return
