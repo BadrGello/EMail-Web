@@ -22,7 +22,7 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
         folder: 'inbox',
         date: '',
     });
-    
+
     const emailValidator = (email) => {
         const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return regex.test(email);
@@ -34,8 +34,18 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
     // Set initial formData if it's provided (i.e., an existing draft) (drafts folder)
     useEffect(() => {
         if (initialFormData) {
-            setFormData(initialFormData);
-            setInitialFormState(initialFormData);
+
+            const normalizedAttachments = normalizeAttachments(initialFormData.attachment || []);
+            
+            // Create a new object with normalized attachments
+            const newInitialFormData = {
+                ...initialFormData,
+                attachment: normalizedAttachments, // Replace the attachments with normalized ones
+            };
+
+
+            setFormData(newInitialFormData);
+            setInitialFormState(newInitialFormData);
         }
     }, [initialFormData]);
 
@@ -88,6 +98,29 @@ const ComposeModal = ({ userName, closeModal, initialFormData, onEditOrSend }) =
         setFormData({ ...formData, recipients: updatedTo });
     };
 
+    function normalizeAttachments(attachments) {
+        return attachments.map((attachment) => {
+            // If the attachment is already a File object, return it
+            if (attachment instanceof File) {
+                return attachment;
+            }
+    
+            // If the attachment is in Base64 format, convert it to a File object
+            if (typeof attachment.file === "string" && typeof attachment.name === "string" && typeof attachment.type === "string") {
+                const binaryString = atob(attachment.file);
+                const binaryArray = new Uint8Array(binaryString.length);
+                for (let i = 0; i < binaryString.length; i++) {
+                    binaryArray[i] = binaryString.charCodeAt(i);
+                }
+                const blob = new Blob([binaryArray], { type: attachment.type });
+                return new File([blob], attachment.name, { type: attachment.type });
+            }
+    
+            // If the attachment is of an unknown format, throw an error or skip it
+            throw new Error("Unsupported attachment format");
+        });
+    }
+        
     const handleMoveToDraft = async () => {
 
          // Check if form data is unchanged from the initial draft (drafts folder)
