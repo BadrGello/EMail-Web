@@ -162,6 +162,12 @@ public class Controller {
                 appProxy.getUser().getMailFolders().sortByBody(folderName);
                 break;
         }
+        try {
+            appProxy.getUser().save();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
         System.out.println("sort done");
         if(sortOrder.equals("Descendingly")){
             appProxy.getUser().getMailFolders().reverseOrder();
@@ -340,28 +346,27 @@ public class Controller {
     @ResponseBody
     public ResponseEntity<Vector<Mail>> getContactMails(@RequestParam String userName,@RequestParam String folderName,@RequestParam String sortType,@RequestParam String sortOrder,@RequestParam String filterType,@RequestParam String filterText){
         appProxy.loadUser(userName);
-        Contact thisContact=appProxy.getUser().getContacts().returnThisContact(folderName);
         System.out.println("load done");
         switch(sortType){
             case "Date":
-                thisContact.sortByDate();
+                appProxy.getUser().getContacts().returnThisContact(folderName).sortByDate();
                 break;
             case "Priority":
-                thisContact.sortByImportance();
+                appProxy.getUser().getContacts().returnThisContact(folderName).sortByImportance();
                 break;
             case "Sender":
-                thisContact.sortBySender();
+                appProxy.getUser().getContacts().returnThisContact(folderName).sortBySender();
                 break;
             case "Subject":
-                thisContact.sortBySubject();
+                appProxy.getUser().getContacts().returnThisContact(folderName).sortBySubject();
                 break;
             case "Body":
-                thisContact.sortByBody();
+                appProxy.getUser().getContacts().returnThisContact(folderName).sortByBody();
                 break;
         }
         System.out.println("sort done");
         if(sortOrder.equals("Descendingly")){
-            appProxy.getUser().getMailFolders().reverseOrder();
+            appProxy.getUser().getContacts().returnThisContact(folderName).reverseOrder();
         }
         if(!filterText.equals("")){
             System.out.println(filterType);
@@ -369,23 +374,39 @@ public class Controller {
             switch(filterType){
                 case "All":
                     System.out.println("searching in all");
-                    return ResponseEntity.ok( thisContact.searchByAll(filterText));
+                    return ResponseEntity.ok( appProxy.getUser().getContacts().returnThisContact(folderName).searchByAll(filterText));
                     
                 case "Subject":
-                    return ResponseEntity.ok(thisContact.filterBySubject( thisContact.getMails(), filterText));
+                    return ResponseEntity.ok(appProxy.getUser().getContacts().returnThisContact(folderName).filterBySubject( appProxy.getUser().getContacts().returnThisContact(folderName).getMails(), filterText));
                     
                 case "Sender":
-                    return ResponseEntity.ok(thisContact.filterBySender( thisContact.getMails(), filterText));
+                    return ResponseEntity.ok(appProxy.getUser().getContacts().returnThisContact(folderName).filterBySender( appProxy.getUser().getContacts().returnThisContact(folderName).getMails(), filterText));
                           
             }
         }
         else{
-            return ResponseEntity.ok( thisContact.getMails());
+            return ResponseEntity.ok( appProxy.getUser().getContacts().returnThisContact(folderName).getMails());
         }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(new Vector<>());
     }
 
+    @PostMapping("/contacts/deleteContactMails")
+    @ResponseBody
+    public ResponseEntity<String> delteContactEmails(@RequestParam String userName,@RequestParam String folderName,@RequestParam String[] dates) {
+        try {
+            appProxy.loadUser(userName);
+            for(String date:dates){
+                System.out.println("number of times");
+                appProxy.getContacts().returnThisContact(folderName).deleteContactMail(date);
+                System.out.println("done delete");
+        }
+            appProxy.getUser().save();
+            return ResponseEntity.status(HttpStatus.OK).body("mail deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting mail: " + e.getMessage());
+        }
+    }
 
 //////////////////folders methods///////////////////////////////////////////////////////////////
 
@@ -473,14 +494,16 @@ public class Controller {
     public ResponseEntity<String> signUp(@RequestParam String email,@RequestParam String password){
         try { 
             System.out.println(email);
-            appProxy.makeAccount(email, password);
+            boolean MadeAccount=appProxy.makeAccount(email, password);
+            if(MadeAccount)
             return ResponseEntity.status(HttpStatus.OK).body("Folder added successfully");
-        
+            else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("this account is used ");
         }
         catch (Exception e) {
             // Log the stack trace of the exception
             System.out.print(e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding folder: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding account: " + e.getMessage());
         }
     }
 }

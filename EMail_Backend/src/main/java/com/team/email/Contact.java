@@ -85,11 +85,17 @@ public class Contact {
     }
     
     public void deleteContactMail(String date){
+        if(this.mails.size()!=1){
         for(Mail mail:this.mails){
             if(mail.getDate().equals(date)){
+                System.out.println("found the mail");
                 this.mails.remove(mail);
             }
         }
+    }
+    else {
+        this.mails.remove(0);
+    }
     }
     //////////////////sort Methods///////////////////////////////////////
 

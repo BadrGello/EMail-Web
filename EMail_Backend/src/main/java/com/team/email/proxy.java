@@ -65,7 +65,7 @@ public class proxy implements UserInterface {
 
     }
 
-    public void makeAccount(String userName,String password) {
+    public boolean makeAccount(String userName,String password) {
         ObjectMapper objectMapper = new ObjectMapper();
         if(!UserNames.contains(userName)){
             String currentDir = System.getProperty("user.dir");
@@ -99,12 +99,15 @@ public class proxy implements UserInterface {
                 catch (IOException e) {
                     System.out.println(e);
                 }
+                return true;
             } catch (IOException e) {
                 System.err.println("An error occurred while creating the folder: " + e.getMessage());
+                return false;
             }
         }
         else{
             System.out.print("this username is used");
+            return false;
         }
     }
 
@@ -205,31 +208,6 @@ public class proxy implements UserInterface {
 
     public static proxy getInstance(){
         return AppProxy;
-    }
-    public static void main(String[] args) throws Exception {
-        proxy p=new proxy();
-        Vector<String> r=new Vector();
-        r.add("adham1@user.com");
-        //p.makeAccount("try@contact.com", "123456");
-        p.loadUser("try@contact.com");
-        p.addContact("1", "adham", r);
-        p.loadUser("adham1@user.com");
-        r=new Vector();
-        r.add("try@contact.com");
-        p.sendMail(new Vector<>(), r, "trying", 1, "this amazing", "55");
-        p.loadUser("try@contact.com");
-        System.out.println(p.getUser().getContacts().getContacts().get(0).getMails().get(0).getBody());
-        //Vector<Attachment> a=new Vector<>();
-        //Vector<String> r=new Vector<>();
-       // p.sendMail(a, r, "subject", 2, "body", "date");
-        //System.out.println(p.getMailFolders().getSentFolder().get(0).getBody());
-        //p.getMailFolders().getUserFolders().keySet();
-        //Vector<String> s=new Vector<>();
-        //s.add("null@gg.com");
-        //p.getContacts().AddContact("1", "hello", s);
-        //p.addUserFolder("adham2");
-        //System.out.println(p.getContacts().getSortedContacts().get(0).getName());
-       // p.getUser().save();
     }
 
 }
