@@ -169,33 +169,18 @@ public class proxy implements UserInterface {
     public Contacts getContacts() {
         return this.user.getContacts();
     }
-
+    @Override
     public void deletecontact(String Id){
-        this.user.getContacts().DeleteContact(Id);
-        try {
-            this.user.save();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        this.user.deletecontact(Id);
     }
-
+    @Override
     public void editContact(String ID, String contactName ,Vector<String> mails){
-        this.user.getContacts().EditContact(ID, contactName, mails);
-        try {
-            this.user.save();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        this.user.editContact(ID, contactName, mails);
     }
 
+    @Override
     public void addContact(String ID,String contactName,Vector<String> UserNames){
-        this.user.getContacts().AddContact(ID, contactName, UserNames);
-        try {
-            this.user.save();
-        } catch (Exception ex) {
-        }
+        this.user.addContact(ID, contactName, UserNames);
     }
 
     public Set<String> getFolderNames(){

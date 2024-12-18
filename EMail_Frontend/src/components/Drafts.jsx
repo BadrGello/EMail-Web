@@ -77,7 +77,6 @@ const Drafts = () => {
         // In both, remove from drafts folder
         // send to back to delete the draft that was just sent/edited. (The rest of details should be already handled by Compose.jsx itself)
 
-        alert("Edited or Sent, Should Be Removed From Drafts Folder")
         console.log(currentDraft)
         handleDelete([currentDraft.date])
     }

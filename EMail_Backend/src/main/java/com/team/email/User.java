@@ -32,6 +32,40 @@ public class User implements UserInterface {
         this.mailFolders = builder.mailFolders;
 
     }
+
+    public String getUserName() {
+        return this.userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+
+    public Contacts getContacts() {
+        return this.contacts;
+    }
+
+    public void setContacts(Contacts contacts) {
+        this.contacts = contacts;
+    }
+
+    public MailFolders getMailFolders() {
+        return this.mailFolders;
+    }
+
+    public void setMailFolders(MailFolders mailFolders) {
+        this.mailFolders = mailFolders;
+    }
+
      public void save() throws Exception {
         String currentDir = System.getProperty("user.dir");
         currentDir =Paths.get(currentDir, "dataBase").toString(); 
@@ -176,40 +210,32 @@ public class User implements UserInterface {
             }
     }
 
-    public String getUserName() {
-        return this.userName;
+    @Override
+    public void editContact(String ID, String contactName ,Vector<String> mails){
+        this.getContacts().EditContact(ID, contactName, mails);
+        try {
+            this.save();
+        } catch (Exception ex) {
+        }
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    @Override
+    public void deletecontact(String Id){
+        this.getContacts().DeleteContact(Id);
+        try {
+            this.save();
+        } catch (Exception ex) {
+        }
     }
 
-    public String getPassword() {
-        return this.password;
+    @Override
+    public void addContact(String ID,String contactName,Vector<String> UserNames){
+        this.getContacts().AddContact(ID, contactName, UserNames);
+        try {
+            this.save();
+        } catch (Exception ex) {
+        }
     }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-
-    public Contacts getContacts() {
-        return this.contacts;
-    }
-
-    public void setContacts(Contacts contacts) {
-        this.contacts = contacts;
-    }
-
-    public MailFolders getMailFolders() {
-        return this.mailFolders;
-    }
-
-    public void setMailFolders(MailFolders mailFolders) {
-        this.mailFolders = mailFolders;
-    }
-    
-
 
 
     private static void validateSchema(File jsonFile) throws Exception {
@@ -251,26 +277,4 @@ public class User implements UserInterface {
 
     }
 
-    public static void main(String[] args) throws Exception {
-        //Contacts c=new Contacts();
-        //MailFolders f=new MailFolders();
-        //User.UserBuilder userBuilder=new UserBuilder("adham", "0000");
-        //userBuilder.setContacts(c);
-        //userBuilder.setMailFolders(f);
-        //User user1 = userBuilder.build();
-        //user1.setEmail("null@example.com");
-        //user1.setId("1");
-        //user1.save(".\\adham.json");
-        //User user = new User();
-        //user=user.load(".\\adham.json");
-        //System.out.println(user.getUserName());
-        User user1 = new User();
-        String recipient="adham";
-        user1=user1.load(recipient);
-        System.out.println("load done");
-        Vector<String> s=new Vector<>();
-        s.add("adham1");
-        //user1.sendMail(s , s, "", 1, "", "");
-
-    }
 }
