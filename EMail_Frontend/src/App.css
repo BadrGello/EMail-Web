@@ -285,6 +285,9 @@ a:hover {
 
 #icon-button:hover, .content-icon:hover {
     background-color: #37393b79;
+}
+
+#icon-button:hover svg, .content-icon:hover svg {
     color:rgb(240, 248, 255);
 }
 
@@ -508,6 +511,8 @@ a:hover {
 
 #folder-option, #contact-options {
     position: absolute;
+    display: flex;
+    padding: 10px 0;
     right: 0;
     margin-right: 10px;
 }
@@ -520,10 +525,19 @@ a:hover {
     color: rgb(219, 209, 209);
 }
 
-.add-folder-section #icon-button {
-    margin-top: 30px;
+.add-folder-icon{
+    margin: 30px;
     position: relative;
     left:0;
+}
+
+.add-folder-icon svg{
+    color: rgba(46, 45, 45, 0.87);
+    transition: 0.3s ease;
+}
+
+.add-folder-icon:hover svg{
+    color: rgba(46, 45, 45, 0.603);
 }
 
 .add-folder-section{
@@ -557,33 +571,40 @@ a:hover {
 /*_______________________________________________________________Start Emails List_______________________________________________________________*/
 
 .pagination-container {
+    position: absolute;
+    bottom:5%;
+    right:5%;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
     gap: 10px;
     font-family: Arial, sans-serif;
 }
 
 .pagination-button {
     display: flex;
+    padding: 0;
+    border:0;
+    background-color: transparent;
     justify-content: center;
     align-items: center;
-    width: 40px;
-    height: 40px;
-    border: 1px solid #ccc;
-    border-radius: 50%;
-    background-color: #f9f9f9;
-    color: #333;
-    font-size: 18px;
+    font-size: 30px;
     cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.pagination-button:hover {
+.pagination-button svg{
+    color: rgba(46, 45, 45, 0.87);
+    transition: 0.3s ease;
+}
+
+.pagination-button svg:hover {
+    color:rgb(240, 248, 255);
+}
+
+/*.pagination-button:hover {
     background-color: #007bff;
     color: white;
-}
+}*/
 
 .list ul {
     list-style-type: none;
@@ -701,11 +722,6 @@ a:hover {
 ul ul { /*the list of emails*/
     margin-top: 30px;
 }
-
-#contact-options {
-    padding:20px 0;
-}
-
 
 .formContact input{
     color: rgba(46, 45, 45, 0.87);

@@ -165,10 +165,11 @@ const Folders = ({ folders, setFolders }) => {
 
 
             {/*Add new folder button*/}
+            <button className="add-folder-icon" id="icon-button" onClick={toggleAddFolder} title="Add Folder">
+                <FaPlus />
+            </button>
             <div className="add-folder-section" id='folder-option'>
-                <button id="icon-button" onClick={toggleAddFolder} title="Add Folder">
-                    <FaPlus />
-                </button>
+                
 
                 {/*Add Folder Modal*/}
                 {addFolderOpen && (

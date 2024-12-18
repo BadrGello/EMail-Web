@@ -4,6 +4,11 @@ import EmailToolBar from './EmailToolBar';
 import EmailModal from './EmailModal';
 import axios from 'axios';
 
+////////////////*ICONS*///////////
+import { IoIosArrowDropleftCircle, IoIosArrowDroprightCircle } from "react-icons/io";
+//////////////////////////////////
+
+
 const EndPoints = {
     Base: "http://localhost:8080/api",
     deleteEmails: "http://localhost:8080/api" + '/deleteEmails',
@@ -329,7 +334,7 @@ const DefualtFolder = () => {
                         onClick={handlePreviousPage}
                         disabled={currentPage === 1}
                     >
-                        ←
+                        <IoIosArrowDropleftCircle />
                     </button>
                     <span>
                         Page {currentPage} of {totalPages}
@@ -338,7 +343,7 @@ const DefualtFolder = () => {
                         onClick={handleNextPage}
                         disabled={currentPage === totalPages}
                     >
-                        →
+                        <IoIosArrowDroprightCircle />
                     </button>
             </div>
 

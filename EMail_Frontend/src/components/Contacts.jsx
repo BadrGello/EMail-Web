@@ -8,7 +8,7 @@ import { CgMoreVerticalAlt } from 'react-icons/cg';
 import { MdDeleteOutline,MdFilterAlt, MdFilterAltOff,MdSort, MdRefresh, MdOutlineDone, MdDriveFileMove } from "react-icons/md";
 import { IoPersonCircleOutline, IoPersonAdd } from "react-icons/io5";
 import { IoMdAdd } from "react-icons/io";
-import { FaMinus } from "react-icons/fa";
+import { FaMinus, FaFolderOpen } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
 //////////////////////////////////
 
@@ -339,7 +339,7 @@ const Contacts = () => {
                                     ))}
                                 </ul>
                                 <div id='contact-options'>
-                                    <button id='icon-button' onClick={() => { goToContactFolder(contact.id); }} title="Open Mails From Contact"> <MdDriveFileMove/> </button>
+                                    <button id='icon-button' onClick={() => { goToContactFolder(contact.id); }} title="Open Mails From Contact"> <FaFolderOpen/> </button>
                                     <button id='icon-button' onClick={() => { setFormVisible(true); setEditingContact(contact); setContactForm(contact); }} title="Edit Contact"> <CgMoreVerticalAlt/> </button>
                                     <button id='icon-button' onClick={() => handleDeleteContact(contact.id)} title="Delete Contact"><MdDeleteOutline/></button>
                                 </div>
