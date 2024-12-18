@@ -44,8 +44,17 @@ const Drafts = () => {
     const [currentPage, setCurrentPage] = useState(1); // Pagination state
 
     useEffect(() => {
+
+        // Deselect all emails
+        // for (let i = 0; i < drafts.length; i++) {
+        //     const draft = drafts[i];
+        //     if (selectedDrafts.includes(draft.date)) {
+        //         handleSelectDraft(draft.date);
+        //     }
+        // }
+        setSelectedDrafts([])
         handleRefresh();
-    }, [userName]);
+    }, [userName, currentFolder]);
 
     const [folders, setFolders] = useState(null); //List of custom folders
 
@@ -294,7 +303,8 @@ const Drafts = () => {
                                 <input 
                                     type="checkbox" 
                                     checked={selectedDrafts.includes(draft.date)} 
-                                    onChange={() => handleSelectDraft(draft.date)} 
+                                    onChange={() => handleSelectDraft(draft.date)}
+                                    onClick={(e) => e.stopPropagation()} 
                                 />
                                 <span >
                                     {draft.recipients} - {draft.subject} - {format(new Date(draft.date), 'MMMM dd, yyyy hh:mm a')}

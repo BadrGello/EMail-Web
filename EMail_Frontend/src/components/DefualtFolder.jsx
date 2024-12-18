@@ -46,7 +46,18 @@ const DefualtFolder = () => {
     const [currentPage, setCurrentPage] = useState(1); // Pagination state
 
     useEffect(() => {
+
+        // Deselect all emails
+        // for (let i = 0; i < emails.length; i++) {
+        //     const email = emails[i];
+        //     if (selectedEmails.includes(email.date)) {
+        //         handleSelectEmail(email.date);
+        //     }
+        // }
+        setSelectedEmails([])
         handleRefresh();
+        
+        
     }, [userName, currentFolder]);
     
     const [selectAll, setSelectAll] = useState(false);
@@ -373,6 +384,7 @@ const DefualtFolder = () => {
                                     type="checkbox" 
                                     checked={selectedEmails.includes(email.date)} 
                                     onChange={() => handleSelectEmail(email.date)} 
+                                    onClick={(e) => e.stopPropagation()}
                                 />
                                 <span >
                                     {email.subject} - {email.sender === userName ? "To: " + email.recipients.join(', ') : "From: " + email.sender} - {format(new Date(email.date), 'MMMM dd, yyyy hh:mm a')}
