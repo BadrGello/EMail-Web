@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import EmailToolBar from './EmailToolBar';
 import ComposeModal from "./Compose";
 import axios from "axios";
+import { format } from 'date-fns';
 
 const FormData = {
     id: null,
@@ -290,14 +291,14 @@ const Drafts = () => {
                     {paginatedDrafts
                         .map((draft) => (
                             <>
-                            <li key={draft.date}>
+                            <li key={draft.date} onClick={() => handleDraftClick(draft)}>
                                 <input 
                                     type="checkbox" 
                                     checked={selectedDrafts.includes(draft.date)} 
                                     onChange={() => handleSelectDraft(draft.date)} 
                                 />
-                                <span onClick={() => handleDraftClick(draft)}>
-                                    {draft.recipients} - {draft.subject} - {draft.date}
+                                <span >
+                                    {draft.recipients} - {draft.subject} - {format(new Date(draft.date), 'MMMM dd, yyyy hh:mm a')}
                                 </span>
                             </li>
                             <div id='list-seperator'></div>

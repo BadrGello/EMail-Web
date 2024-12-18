@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import EmailToolBar from './EmailToolBar';
 import EmailModal from './EmailModal';
 import axios from 'axios';
+import { format } from 'date-fns';
 
 ////////////////*ICONS*///////////
 import { IoIosArrowDropleftCircle, IoIosArrowDroprightCircle } from "react-icons/io";
@@ -367,14 +368,14 @@ const DefualtFolder = () => {
                         // )
                         .map((email) => (
                             <>
-                            <li key={email.date}>
+                            <li key={email.date} onClick={() => handleEmailClick(email)}>
                                 <input 
                                     type="checkbox" 
                                     checked={selectedEmails.includes(email.date)} 
                                     onChange={() => handleSelectEmail(email.date)} 
                                 />
-                                <span onClick={() => handleEmailClick(email)}>
-                                    {email.subject} - {email.sender === userName ? "To: " + email.recipients.join(', ') : "From: " + email.sender} - {email.date}
+                                <span >
+                                    {email.subject} - {email.sender === userName ? "To: " + email.recipients.join(', ') : "From: " + email.sender} - {format(new Date(email.date), 'MMMM dd, yyyy hh:mm a')}
                                 </span>
                             </li>
                             <div id='list-seperator'></div>

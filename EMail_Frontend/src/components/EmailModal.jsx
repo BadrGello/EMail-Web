@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, Box, Typography, Button } from '@mui/material';
+import { format } from 'date-fns';
 
 const EmailModal = ({ email, isOpen, onClose, userName }) => {
     const handleDownload = (attachment) => {
@@ -34,7 +35,7 @@ const EmailModal = ({ email, isOpen, onClose, userName }) => {
                 </Typography>
                 </Typography>
                 <Typography variant="body1">
-                    <strong>Date:</strong> {email?.date}
+                    <strong>Date:</strong> {email?.date ? format(new Date(email?.date), 'MMMM dd, yyyy hh:mm a') : ''}
                 </Typography>
                 <Typography variant="body1">
                     <strong>Subject:</strong> {email?.subject}

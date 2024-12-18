@@ -51,8 +51,19 @@ function SignUp() {
             navigate("/")
         } 
         catch (error) {
-            console.error('Error signing up:', error.response?.data || error.message);
-            alert('Error signing up: ' + (error.response?.data?.message || error.message));
+            if (!error.response) {
+                // Network error (no response received)
+                console.error('Network error:', error.message);
+                alert('Network error');
+            } else if (error.response.status === 500) {
+                // Backend error with status code 500
+                console.error('Error from backend:', error.response.data);
+                alert('Signup failed: Email already exists');
+            } else {
+                // Other errors (e.g., 400, 401, etc.)
+                console.error('Other error:', error.response.data);
+                alert('Error: ' + (error.response.data?.message || error.message));
+            }
         }
     };
 
