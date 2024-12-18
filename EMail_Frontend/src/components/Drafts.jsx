@@ -45,15 +45,10 @@ const Drafts = () => {
 
     useEffect(() => {
 
-        // Deselect all emails
-        // for (let i = 0; i < drafts.length; i++) {
-        //     const draft = drafts[i];
-        //     if (selectedDrafts.includes(draft.date)) {
-        //         handleSelectDraft(draft.date);
-        //     }
-        // }
-        setSelectedDrafts([])
         handleRefresh();
+        setSelectedDrafts([])
+        setSelectAll(false)
+        
     }, [userName, currentFolder]);
 
     const [folders, setFolders] = useState(null); //List of custom folders

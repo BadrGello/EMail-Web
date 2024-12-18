@@ -47,16 +47,9 @@ const DefualtFolder = () => {
 
     useEffect(() => {
 
-        // Deselect all emails
-        // for (let i = 0; i < emails.length; i++) {
-        //     const email = emails[i];
-        //     if (selectedEmails.includes(email.date)) {
-        //         handleSelectEmail(email.date);
-        //     }
-        // }
-        setSelectedEmails([])
         handleRefresh();
-        
+        setSelectedEmails([])
+        setSelectAll(false)
         
     }, [userName, currentFolder]);
     
