@@ -28,7 +28,7 @@
           "description": "Sorted list of contacts"
         }
       },
-      "required": ["contacts"]
+      "required": []
     },
     "mailFolders": {
       "type": "object",
@@ -68,10 +68,10 @@
           "description": "Sorted list of mails"
         }
       },
-      "required": ["inboxFolder", "sentFolder", "draftFolder", "trashFolder"]
+      "required": []
     }
   },
-  "required": ["userName", "password", "contacts", "mailFolders"],
+  "required": ["userName", "password"],
   "additionalProperties": false,
   "definitions": {
     "Contact": {
@@ -85,7 +85,7 @@
           "description": "List of email addresses for the contact"
         }
       },
-      "required": ["ID", "Name"]
+      "required": []
     },
     "Mail": {
       "type": "object",
@@ -109,16 +109,23 @@
         },
         "deletedDate": {
           "type": "string",
-          "format": "date-time",
           "description": "Date when the mail was deleted"
         },
-        "attachments": {
-          "type": "array",
-          "items": { "type": "string", "description": "File path or name of the attachment" },
-          "description": "List of attachments in the mail"
-        }
-      },
-      "required": ["subject", "priority", "body", "sender", "recipients", "date"]
+        "Attachment": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string", "description": "Name of the attachment" },
+            "type": { "type": "string", "description": "Type of the attachment" },
+            "file": {
+              "type": "string",
+              "contentEncoding": "base64",
+              "description": "Binary file content encoded in base64"
+            }
+          },
+          "required": ["file"]
     }
   }
+    ,"required": ["subject","body","priority","date","recipients"]
+}
+}
 }

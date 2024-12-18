@@ -74,7 +74,7 @@ public class User implements UserInterface {
         ObjectMapper objectMapper = new ObjectMapper();
         File jsonFile = new File(filePath.toString());
         objectMapper.writeValue(jsonFile, this);
-        //validateSchema(jsonFile);
+        validateSchema(jsonFile);
 
         System.out.println("User saved");
     }
