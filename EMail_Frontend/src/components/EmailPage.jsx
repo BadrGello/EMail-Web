@@ -40,6 +40,12 @@ function EmailPage() {
     const [newFolderName, setNewFolderName] = useState("");
     const [addFolderOpen, setAddFolderOpen] = useState(false);
 
+    useEffect(() => {
+
+        fetchFolders();
+        
+    }, [userName]);
+
     const toggleAddFolder = () => {
         setAddFolderOpen(!addFolderOpen);
     };
