@@ -56,7 +56,7 @@ Facilitates **cloning** email objects, allowing multiple recipients to receive p
 More in the report.pdf!
 
 ## 📘 Contributors
-- Badr Elsayed - 22010664
-- Adham Anas - 22010601
-- Nour Khaled Mohamed - 22011319
-- Ali El-Deen Maher - 22010934
+- Badr Elsayed
+- Adham Anas
+- Nour Khaled Mohamed
+- Ali El-Deen Maher
