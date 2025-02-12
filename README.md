@@ -45,21 +45,21 @@ Facilitates **cloning** email objects, allowing multiple recipients to receive p
    npm run dev
 3. The frontend will be accessible at http://localhost:5173/.
 
-## 📷 UI Snapshots
+# 📷 UI Snapshots
 
-1️⃣ Sign Up Page
+# 1️⃣ Sign Up Page
 
 ![image](https://github.com/user-attachments/assets/d2d39d78-277b-4705-870e-266a5d438eeb)
 
-2️⃣ Login Page
+# 2️⃣ Login Page
 
 ![image](https://github.com/user-attachments/assets/94a794c9-8c64-430b-9248-757ce2975717)
 
-3️⃣ Inbox 
+# 3️⃣ Inbox 
 
 ![image](https://github.com/user-attachments/assets/2aa03b0f-3784-4975-961b-52544daa9e4b)
 
-More in [Report](Lab 04 Report.pdf)
+More in [Report](https://github.com/BadrGello/EMail-Web/blob/main/Lab%2004%20Report.pdf)
 
 ## 📘 Contributors
 - Badr Elsayed
